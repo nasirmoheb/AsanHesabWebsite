@@ -196,6 +196,45 @@
   100% { transform: translateX(-50%); }
 }
 
+@keyframes aurora {
+  0% { background-position: 0% 50%; }
+  25% { background-position: 50% 100%; }
+  50% { background-position: 100% 50%; }
+  75% { background-position: 50% 0%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(0, 127, 255, 0.1), 0 0 40px rgba(0, 127, 255, 0.05); }
+  50% { box-shadow: 0 0 30px rgba(0, 127, 255, 0.2), 0 0 60px rgba(0, 127, 255, 0.1); }
+}
+
+@keyframes data-flow {
+  0% { stroke-dashoffset: 20; }
+  100% { stroke-dashoffset: 0; }
+}
+
+.hero-aurora {
+  background: linear-gradient(
+    -45deg,
+    rgba(0, 71, 171, 0.03),
+    rgba(0, 127, 255, 0.06),
+    rgba(93, 173, 226, 0.04),
+    rgba(0, 71, 171, 0.02),
+    rgba(0, 127, 255, 0.05)
+  );
+  background-size: 400% 400%;
+  animation: aurora 15s ease infinite;
+}
+
+.glass-card-hover {
+  transition: all 0.4s cubic-bezier(0.25, 0.4, 0.25, 1);
+}
+.glass-card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 71, 171, 0.12), 0 0 0 1px rgba(0, 127, 255, 0.08);
+}
+
 html {
   scroll-behavior: smooth;
 }

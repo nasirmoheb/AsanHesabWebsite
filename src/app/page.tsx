@@ -43,6 +43,7 @@ import {
   Database,
   Monitor,
   Cpu,
+  Bell,
 } from "lucide-react";
 
 /* ═══════════════════════════════════════════
@@ -218,6 +219,402 @@ function GlowOrb({
         filter: "blur(80px)",
       }}
     />
+  );
+}
+
+/* ═══════════════════════════════════════════
+   HERO TILT CARD — CODE-ONLY DASHBOARD
+   ═══════════════════════════════════════════ */
+
+function LiveTransactionFeed() {
+  const transactions = [
+    { name: "فروشگاه نور الکترونیک", amount: "+۱۵,۵۰۰", type: "income", time: "۱۰:۳۰", icon: <Store className="w-2.5 h-2.5" /> },
+    { name: "خرید مواد اولیه", amount: "-۸,۲۰۰", type: "expense", time: "۱۱:۱۵", icon: <Truck className="w-2.5 h-2.5" /> },
+    { name: "فاکتور #۱۰۴۷", amount: "+۲۳,۰۰۰", type: "income", time: "۱۲:۰۰", icon: <Receipt className="w-2.5 h-2.5" /> },
+    { name: "حقوق کارمندان", amount: "-۴۵,۰۰۰", type: "expense", time: "۰۱:۳۰", icon: <Users className="w-2.5 h-2.5" /> },
+    { name: "سفارش آنلاین #۲۳۱", amount: "+۷,۸۰۰", type: "income", time: "۰۲:۴۵", icon: <Globe className="w-2.5 h-2.5" /> },
+    { name: "اجاره مغازه", amount: "-۱۲,۰۰۰", type: "expense", time: "۰۳:۰۰", icon: <Building2 className="w-2.5 h-2.5" /> },
+  ];
+
+  const [visibleCount, setVisibleCount] = useState(0);
+
+  useEffect(() => {
+    let count = 0;
+    const timer = setInterval(() => {
+      count += 1;
+      if (count > transactions.length) {
+        count = 0;
+      }
+      setVisibleCount(count);
+    }, 1200);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div className="space-y-1.5">
+      {transactions.map((tx, i) => (
+        <motion.div
+          key={i}
+          className="flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-white/5 transition-colors"
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: i < visibleCount ? 1 : 0, x: i < visibleCount ? 0 : 20, height: i < visibleCount ? "auto" : 0, paddingTop: i < visibleCount ? 6 : 0, paddingBottom: i < visibleCount ? 6 : 0 }}
+          transition={{ duration: 0.5, ease: [0.25, 0.4, 0.25, 1] }}
+        >
+          <div className={`w-6 h-6 rounded-md flex items-center justify-center shrink-0 ${tx.type === "income" ? "bg-emerald-500/15 text-emerald-400" : "bg-red-400/15 text-red-400"}`}>
+            {tx.icon}
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-[9px] text-gray-300 font-medium truncate">{tx.name}</p>
+          </div>
+          <div className="text-left shrink-0">
+            <p className={`text-[10px] font-bold ${tx.type === "income" ? "text-emerald-400" : "text-red-400"}`}>
+              {tx.amount} <span className="text-[7px] text-gray-500 font-normal">Afs</span>
+            </p>
+            <p className="text-[7px] text-gray-500 text-left">{tx.time}</p>
+          </div>
+        </motion.div>
+      ))}
+      {visibleCount >= transactions.length && (
+        <motion.div
+          className="flex items-center justify-center gap-1.5 pt-1"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+        >
+          <motion.div className="w-1 h-1 rounded-full bg-emerald-400" animate={{ scale: [1, 1.5, 1] }} transition={{ duration: 1.5, repeat: Infinity }} />
+          <span className="text-[7px] text-emerald-400/80 font-medium">واردات زنده</span>
+        </motion.div>
+      )}
+    </div>
+  );
+}
+
+function LiveInvoicePreview() {
+  const [step, setStep] = useState(0);
+  const steps = [
+    { label: "ثبت مشتری", sub: "محمد احمد رحیمی", icon: <Users className="w-3 h-3" />, progress: 30 },
+    { label: "افزودن اقلام", sub: "۳ قلم کالا", icon: <Layers className="w-3 h-3" />, progress: 60 },
+    { label: "تایید و ارسال", sub: "فاکتور #۱۰۴۷", icon: <CheckCircle2 className="w-3 h-3" />, progress: 100 },
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setStep((s) => (s + 1) % steps.length);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div className="bg-white rounded-xl p-2.5 md:p-3 border border-brand-pale/40 shadow-sm">
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center gap-2">
+          <div className="w-6 h-6 gradient-brand rounded-md flex items-center justify-center text-white">
+            <Receipt className="w-3 h-3" />
+          </div>
+          <div>
+            <p className="text-[9px] font-bold text-gray-800">فاکتور جدید</p>
+            <p className="text-[7px] text-gray-400">۱۴۰۴/۰۱/۱۵</p>
+          </div>
+        </div>
+        <span className="text-[7px] text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-full font-bold">
+          {steps[step].label}
+        </span>
+      </div>
+      {/* Progress bar */}
+      <div className="h-1 bg-gray-100 rounded-full mb-2 overflow-hidden">
+        <motion.div
+          className="h-full gradient-brand rounded-full"
+          animate={{ width: `${steps[step].progress}%` }}
+          transition={{ duration: 1.2, ease: [0.25, 0.4, 0.25, 1] }}
+        />
+      </div>
+      {/* Step indicators */}
+      <div className="flex items-center justify-between">
+        {steps.map((s, i) => (
+          <motion.div
+            key={i}
+            className="flex items-center gap-1"
+            animate={{ opacity: i <= step ? 1 : 0.35 }}
+            transition={{ duration: 0.4 }}
+          >
+            <div className={`w-4 h-4 rounded-full flex items-center justify-center ${i <= step ? "gradient-brand text-white" : "bg-gray-100 text-gray-400"}`}>
+              {i < step ? <CheckCircle2 className="w-2.5 h-2.5" /> : <span className="text-[7px] font-bold">{i + 1}</span>}
+            </div>
+            <span className="text-[7px] text-gray-600 hidden sm:block">{s.sub}</span>
+          </motion.div>
+        ))}
+      </div>
+      {/* Amount reveal */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={step}
+          initial={{ opacity: 0, y: 5 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -5 }}
+          className="mt-2 text-center"
+        >
+          <span className="text-xs text-gray-400">مبلغ کل: </span>
+          <span className="text-sm font-black text-brand-deep">۲۳,۰۰۰ <span className="text-[8px] text-gray-400 font-normal">افغانی</span></span>
+        </motion.div>
+      </AnimatePresence>
+    </div>
+  );
+}
+
+function AnimatedBarChart() {
+  const bars = [35, 55, 42, 72, 60, 85, 68, 90, 75, 95, 82, 100];
+  const months = ["حمل", "ثور", "جوزا", "سرطان", "اسد", "سنبله", "میزان", "عقرب", "قوس", "جدی", "دلو", "حوت"];
+
+  return (
+    <div className="flex items-end gap-[3px] h-full px-1">
+      {bars.map((h, i) => (
+        <div key={i} className="flex flex-col items-center gap-0.5 flex-1">
+          <motion.div
+            className="w-full rounded-t-sm min-w-[4px]"
+            style={{
+              background: i === bars.length - 1
+                ? "linear-gradient(180deg, #007FFF 0%, #0047AB 100%)"
+                : i >= bars.length - 3
+                ? "linear-gradient(180deg, #5DADE2 0%, #007FFF 100%)"
+                : "linear-gradient(180deg, #D6EEFF 0%, #5DADE2 100%)",
+            }}
+            initial={{ height: 0 }}
+            animate={{ height: `${h}%` }}
+            transition={{ duration: 0.8, delay: 0.8 + i * 0.06, ease: [0.25, 0.4, 0.25, 1] }}
+          />
+          <span className="text-[5px] text-gray-400 hidden md:block">{months[i]}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function AnimatedDonutChart() {
+  const segments = [
+    { value: 45, color: "#0047AB", label: "درآمد" },
+    { value: 25, color: "#007FFF", label: "هزینه" },
+    { value: 20, color: "#5DADE2", label: "سود" },
+    { value: 10, color: "#D6EEFF", label: "سایر" },
+  ];
+  let cumulative = 0;
+  const radius = 28;
+  const circumference = 2 * Math.PI * radius;
+
+  return (
+    <div className="flex items-center gap-3">
+      <svg viewBox="0 0 72 72" className="w-16 h-16 md:w-20 md:h-20">
+        {segments.map((seg, i) => {
+          const offset = (cumulative / 100) * circumference;
+          cumulative += seg.value;
+          const dashLength = (seg.value / 100) * circumference;
+          return (
+            <motion.circle
+              key={i}
+              cx="36" cy="36" r={radius}
+              fill="none"
+              stroke={seg.color}
+              strokeWidth="8"
+              strokeLinecap="round"
+              strokeDasharray={`${dashLength} ${circumference - dashLength}`}
+              strokeDashoffset={-offset}
+              transform="rotate(-90 36 36)"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 1 + i * 0.2 }}
+            />
+          );
+        })}
+        <text x="36" y="34" textAnchor="middle" fill="#0047AB" fontSize="10" fontWeight="800">۴۷٪</text>
+        <text x="36" y="44" textAnchor="middle" fill="#999" fontSize="5">سود</text>
+      </svg>
+      <div className="flex flex-col gap-1.5">
+        {segments.map((seg, i) => (
+          <div key={i} className="flex items-center gap-1.5">
+            <div className="w-2 h-2 rounded-full" style={{ background: seg.color }} />
+            <span className="text-[8px] md:text-[9px] text-gray-500">{seg.label}</span>
+            <span className="text-[8px] md:text-[9px] font-bold text-gray-700">{seg.value}٪</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function HeroTiltCard() {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const rotateY = ((e.clientX - centerX) / rect.width) * 8;
+    const rotateX = -((e.clientY - centerY) / rect.height) * 6;
+    setTilt({ x: rotateX, y: rotateY });
+  };
+
+  const handleMouseLeave = () => {
+    setTilt({ x: 0, y: 0 });
+  };
+
+  return (
+    <motion.div
+      ref={cardRef}
+      className="relative z-10 mx-auto w-[340px] sm:w-[420px] md:w-[520px]"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      initial={{ opacity: 0, y: 60, scale: 0.9 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 1, delay: 0.15, ease: [0.25, 0.4, 0.25, 1] }}
+      style={{ perspective: "1200px" }}
+    >
+      <motion.div
+        className="rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl shadow-brand-deep/20 border border-white/60 bg-white"
+        animate={{
+          rotateX: tilt.x,
+          rotateY: tilt.y,
+        }}
+        transition={{ type: "spring", stiffness: 150, damping: 20 }}
+      >
+        {/* Browser Chrome */}
+        <div className="bg-gradient-to-l from-gray-50 to-gray-100/80 border-b border-gray-200/60 px-3 py-2.5 flex items-center gap-2">
+          <div className="flex gap-1.5">
+            <div className="w-2.5 h-2.5 rounded-full bg-red-400/80" />
+            <div className="w-2.5 h-2.5 rounded-full bg-amber-400/80" />
+            <div className="w-2.5 h-2.5 rounded-full bg-emerald-400/80" />
+          </div>
+          <div className="flex-1 mx-2">
+            <div className="bg-white/80 rounded-lg px-3 py-1 text-[9px] text-gray-400 flex items-center gap-1.5 border border-gray-200/50" dir="ltr">
+              <Lock className="w-2.5 h-2.5 text-emerald-500" />
+              <span>app.asanhesab.af/dashboard</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Dashboard Content */}
+        <div className="p-3 md:p-4 space-y-3">
+          {/* Top Bar: Sidebar indicators + date */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 gradient-brand rounded-lg flex items-center justify-center">
+                <Calculator className="w-3 h-3 text-white" />
+              </div>
+              <div>
+                <p className="text-[10px] font-bold text-gray-800">داشبورد مدیریت</p>
+                <p className="text-[7px] text-gray-400">۱۴۰۴/۰۱/۱۵ - اسد</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <div className="px-2 py-0.5 bg-emerald-50 rounded-full text-[7px] text-emerald-600 font-bold">آنلاین</div>
+              <div className="w-5 h-5 rounded-full bg-brand-pale flex items-center justify-center">
+                <Bell className="w-2.5 h-2.5 text-brand-deep" />
+              </div>
+            </div>
+          </div>
+
+          {/* Mini KPI Row */}
+          <div className="grid grid-cols-3 gap-2">
+            {[
+              { label: "درآمد کل", value: "٨۵٠,٠٠٠", unit: "افغانی", color: "from-brand-deep to-brand-mid", icon: <TrendingUp className="w-2.5 h-2.5" /> },
+              { label: "فاکتورها", value: "١٢٤", unit: "عدد", color: "from-emerald-500 to-emerald-400", icon: <Receipt className="w-2.5 h-2.5" /> },
+              { label: "مشتریان", value: "٨٦", unit: "نفر", color: "from-amber-500 to-amber-400", icon: <Users className="w-2.5 h-2.5" /> },
+            ].map((kpi, i) => (
+              <motion.div
+                key={i}
+                className="bg-gray-50/80 rounded-xl p-2 md:p-2.5 border border-gray-100/80"
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 + i * 0.15 }}
+              >
+                <div className={`w-5 h-5 rounded-md bg-gradient-to-br ${kpi.color} flex items-center justify-center text-white mb-1.5`}>
+                  {kpi.icon}
+                </div>
+                <p className="text-[7px] text-gray-400">{kpi.label}</p>
+                <p className="text-xs md:text-sm font-black text-gray-900">{kpi.value} <span className="text-[7px] text-gray-400 font-normal">{kpi.unit}</span></p>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Charts Row: Bar Chart + Donut */}
+          <div className="grid grid-cols-5 gap-2">
+            {/* Bar chart */}
+            <motion.div
+              className="col-span-3 bg-gradient-to-b from-brand-surface/50 to-white rounded-xl p-2 md:p-3 border border-brand-pale/30"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.7 }}
+            >
+              <div className="flex items-center justify-between mb-1">
+                <p className="text-[8px] font-bold text-gray-700">نمودار درآمد ماهانه</p>
+                <span className="text-[7px] text-brand-mid font-bold bg-brand-pale/40 px-1.5 py-0.5 rounded-full">+۴۷٪</span>
+              </div>
+              <div className="h-16 md:h-20">
+                <AnimatedBarChart />
+              </div>
+            </motion.div>
+
+            {/* Donut chart */}
+            <motion.div
+              className="col-span-2 bg-white rounded-xl p-2 md:p-3 border border-gray-100/80"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.9 }}
+            >
+              <p className="text-[8px] font-bold text-gray-700 mb-1">ترکیب مالی</p>
+              <AnimatedDonutChart />
+            </motion.div>
+          </div>
+
+          {/* Bottom Row: Live Transactions + Invoice Preview */}
+          <div className="grid grid-cols-5 gap-2">
+            {/* Live Transaction Feed */}
+            <motion.div
+              className="col-span-3 bg-gradient-to-b from-[#0d1117] to-[#161b22] rounded-xl p-2.5 md:p-3 border border-gray-800/50 overflow-hidden"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.1 }}
+            >
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-1.5">
+                  <motion.div className="w-1.5 h-1.5 rounded-full bg-emerald-400" animate={{ scale: [1, 1.4, 1], opacity: [1, 0.5, 1] }} transition={{ duration: 2, repeat: Infinity }} />
+                  <p className="text-[8px] font-bold text-gray-300">واردات زنده حسابداری</p>
+                </div>
+                <span className="text-[7px] text-gray-500 bg-gray-800 px-1.5 py-0.5 rounded-full">امروز</span>
+              </div>
+              <LiveTransactionFeed />
+            </motion.div>
+
+            {/* Invoice Preview */}
+            <motion.div
+              className="col-span-2"
+              initial={{ opacity: 0, x: 15 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 1.3 }}
+            >
+              <LiveInvoicePreview />
+            </motion.div>
+          </div>
+        </div>
+
+        {/* Bottom glow */}
+        <div className="h-1 bg-gradient-to-l from-brand-deep via-brand-mid to-brand-light opacity-60" />
+      </motion.div>
+
+      {/* Ambient glow behind card */}
+      <div className="absolute -inset-4 rounded-[2rem] blur-2xl bg-gradient-to-br from-brand-mid/15 via-brand-deep/8 to-brand-light/10 -z-10" />
+
+      {/* Decorative corner accents */}
+      <motion.div
+        className="absolute -top-3 -right-3 w-6 h-6 border-t-2 border-r-2 border-brand-mid/40 rounded-tr-lg"
+        animate={{ opacity: [0.3, 0.7, 0.3] }}
+        transition={{ duration: 3, repeat: Infinity }}
+      />
+      <motion.div
+        className="absolute -bottom-3 -left-3 w-6 h-6 border-b-2 border-l-2 border-brand-mid/40 rounded-bl-lg"
+        animate={{ opacity: [0.5, 0.3, 0.5] }}
+        transition={{ duration: 3, repeat: Infinity }}
+      />
+    </motion.div>
   );
 }
 
@@ -558,12 +955,13 @@ export default function Home() {
         </AnimatePresence>
       </motion.nav>
 
-      {/* ══════════ HERO — ULTRA-CREATIVE SHOWCASE ══════════ */}
+      {/* ══════════ HERO — CODE-ONLY CREATIVE SHOWCASE ══════════ */}
       <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
         {/* Layered animated background */}
         <div className="absolute inset-0">
-          {/* Base gradient */}
+          {/* Base gradient + Aurora */}
           <div className="absolute inset-0 bg-gradient-to-bl from-[#f0f7ff] via-white to-[#e8f0fe]" />
+          <div className="absolute inset-0 hero-aurora" />
           {/* Animated mesh gradients */}
           <motion.div
             className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] rounded-full"
@@ -586,8 +984,8 @@ export default function Home() {
               animationDuration: "12s",
             }}
           />
-          {/* Animated grid lines */}
-          <svg className="absolute inset-0 w-full h-full opacity-[0.03]">
+          {/* Animated grid lines with perspective */}
+          <svg className="absolute inset-0 w-full h-full opacity-[0.03]" preserveAspectRatio="none">
             <defs>
               <pattern id="heroGrid" width="60" height="60" patternUnits="userSpaceOnUse">
                 <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#0047AB" strokeWidth="0.5" />
@@ -595,34 +993,82 @@ export default function Home() {
             </defs>
             <rect width="100%" height="100%" fill="url(#heroGrid)" />
           </svg>
-          {/* Floating particles */}
-          {[...Array(12)].map((_, i) => (
+          {/* Animated SVG mesh lines */}
+          <svg className="absolute inset-0 w-full h-full opacity-[0.06] hidden lg:block">
+            <motion.path
+              d="M0 200 Q 400 100 800 250 T 1600 200"
+              fill="none"
+              stroke="#007FFF"
+              strokeWidth="0.8"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: 1 }}
+              transition={{ duration: 3, delay: 0.5, ease: "easeInOut" }}
+            />
+            <motion.path
+              d="M0 400 Q 500 300 1000 450 T 1600 350"
+              fill="none"
+              stroke="#5DADE2"
+              strokeWidth="0.6"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: 1 }}
+              transition={{ duration: 3, delay: 1, ease: "easeInOut" }}
+            />
+            <motion.path
+              d="M0 600 Q 300 500 800 650 T 1600 550"
+              fill="none"
+              stroke="#0047AB"
+              strokeWidth="0.5"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: 1 }}
+              transition={{ duration: 3, delay: 1.5, ease: "easeInOut" }}
+            />
+          </svg>
+          {/* Floating particles with varying sizes */}
+          {[...Array(15)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute w-1 h-1 rounded-full bg-brand-mid/30"
+              className="absolute rounded-full bg-brand-mid/20"
               style={{
-                top: `${15 + (i * 7) % 70}%`,
-                left: `${10 + (i * 11) % 80}%`,
+                top: `${10 + (i * 7) % 80}%`,
+                left: `${5 + (i * 11) % 90}%`,
+                width: `${2 + (i % 3)}px`,
+                height: `${2 + (i % 3)}px`,
               }}
               animate={{
-                y: [0, -30, 0],
-                opacity: [0.2, 0.6, 0.2],
+                y: [0, -25 - (i % 2) * 15, 0],
+                opacity: [0.15, 0.5, 0.15],
                 scale: [1, 1.5, 1],
               }}
               transition={{
-                duration: 3 + (i % 3),
+                duration: 3 + (i % 4),
                 repeat: Infinity,
-                delay: i * 0.4,
+                delay: i * 0.3,
               }}
             />
           ))}
+          {/* Geometric accent shapes */}
+          <motion.div
+            className="absolute top-[15%] right-[8%] w-16 h-16 border border-brand-mid/10 rounded-xl hidden lg:block"
+            animate={{ rotate: [0, 90, 180, 270, 360], scale: [1, 1.1, 1] }}
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          />
+          <motion.div
+            className="absolute bottom-[20%] left-[5%] w-12 h-12 border border-brand-light/15 rounded-full hidden lg:block"
+            animate={{ rotate: [360, 0], y: [0, -10, 0] }}
+            transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+          />
+          <motion.div
+            className="absolute top-[60%] right-[12%] w-3 h-3 bg-brand-mid/10 rounded-full hidden lg:block"
+            animate={{ scale: [1, 2, 1], opacity: [0.1, 0.3, 0.1] }}
+            transition={{ duration: 4, repeat: Infinity }}
+          />
         </div>
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-10 md:py-16">
           <div className="grid lg:grid-cols-12 gap-10 items-center">
 
             {/* Left content — span 5 */}
-            <div className="lg:col-span-5 text-center lg:text-right order-2 lg:order-1">
+            <div className="lg:col-span-5 text-center lg:text-right order-1 lg:order-2">
               {/* Badge */}
               <FadeIn>
                 <motion.div
@@ -783,177 +1229,219 @@ export default function Home() {
               </FadeIn>
             </div>
 
-            {/* Right content — ultra-creative visual showcase span 7 */}
-            <div className="lg:col-span-7 relative order-1 lg:order-2">
+            {/* Right content — CODE-ONLY CREATIVE HERO VISUAL span 7 */}
+            <div className="lg:col-span-7 relative order-2 lg:order-1">
               <div className="relative">
-                {/* Glowing backdrop */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] h-[80%] rounded-[2rem] blur-3xl bg-brand-mid/15" />
 
-                {/* Main visual container */}
-                <ParallaxSection speed={0.12}>
-                  <div className="relative">
-                    {/* Rotating ring behind image */}
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85%] h-[85%]">
-                      <motion.div
-                        className="w-full h-full rounded-3xl border-2 border-dashed border-brand-pale/50"
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
-                      />
-                    </div>
-                    {/* Counter-rotating ring */}
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[95%] h-[90%]">
-                      <motion.div
-                        className="w-full h-full rounded-[2rem] border border-brand-light/20"
-                        animate={{ rotate: -360 }}
-                        transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
-                      />
-                    </div>
+                {/* ── Floating 3D Aura Rings ── */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+                  <motion.div
+                    className="w-[420px] h-[420px] md:w-[520px] md:h-[520px] rounded-full border border-brand-pale/30"
+                    animate={{ rotate: 360, scale: [1, 1.03, 1] }}
+                    transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+                  />
+                  <motion.div
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] md:w-[440px] md:h-[440px] rounded-full border border-dashed border-brand-light/25"
+                    animate={{ rotate: -360 }}
+                    transition={{ duration: 55, repeat: Infinity, ease: "linear" }}
+                  />
+                  <motion.div
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] h-[280px] md:w-[360px] md:h-[360px] rounded-full border border-brand-mid/15"
+                    animate={{ rotate: 360, scale: [1, 0.97, 1] }}
+                    transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                  />
+                </div>
 
-                    {/* Main dashboard image card */}
+                {/* ── Glowing Mesh Background ── */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85%] h-[85%] rounded-[2.5rem] blur-[80px] bg-gradient-to-br from-brand-mid/20 via-brand-deep/10 to-brand-light/15 pointer-events-none" />
+
+                {/* ── Main 3D Tilt Card ── */}
+                <HeroTiltCard />
+
+                {/* ── Floating Node Network (Connecting Dots) ── */}
+                <div className="absolute inset-0 pointer-events-none hidden lg:block">
+                  <svg className="absolute inset-0 w-full h-full" style={{ zIndex: 5 }}>
+                    <defs>
+                      <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#007FFF" stopOpacity="0.3" />
+                        <stop offset="100%" stopColor="#5DADE2" stopOpacity="0.08" />
+                      </linearGradient>
+                    </defs>
+                    {/* Animated connecting lines */}
+                    <motion.line x1="15%" y1="20%" x2="45%" y2="35%" stroke="url(#lineGrad)" strokeWidth="1" animate={{ opacity: [0.2, 0.6, 0.2] }} transition={{ duration: 4, repeat: Infinity }} />
+                    <motion.line x1="75%" y1="15%" x2="55%" y2="40%" stroke="url(#lineGrad)" strokeWidth="1" animate={{ opacity: [0.3, 0.7, 0.3] }} transition={{ duration: 3.5, repeat: Infinity, delay: 0.5 }} />
+                    <motion.line x1="85%" y1="70%" x2="60%" y2="55%" stroke="url(#lineGrad)" strokeWidth="1" animate={{ opacity: [0.15, 0.5, 0.15] }} transition={{ duration: 5, repeat: Infinity, delay: 1 }} />
+                    <motion.line x1="20%" y1="80%" x2="40%" y2="60%" stroke="url(#lineGrad)" strokeWidth="1" animate={{ opacity: [0.2, 0.55, 0.2] }} transition={{ duration: 4.5, repeat: Infinity, delay: 1.5 }} />
+                  </svg>
+                  {/* Animated data nodes */}
+                  {[{ x: "15%", y: "20%", d: 0 }, { x: "75%", y: "15%", d: 0.8 }, { x: "85%", y: "70%", d: 1.6 }, { x: "20%", y: "80%", d: 2.4 }, { x: "45%", y: "35%", d: 0.4 }, { x: "55%", y: "40%", d: 1.2 }, { x: "60%", y: "55%", d: 2 }, { x: "40%", y: "60%", d: 2.8 }].map((node, i) => (
                     <motion.div
-                      className="relative rounded-3xl overflow-hidden shadow-2xl shadow-brand-deep/15 border border-white/50"
-                      style={{ perspective: "1000px" }}
-                      initial={{ opacity: 0, y: 50, rotateY: -8, rotateX: 5 }}
-                      animate={{ opacity: 1, y: 0, rotateY: 0, rotateX: 0 }}
-                      transition={{ duration: 1.2, delay: 0.2, ease: [0.25, 0.4, 0.25, 1] }}
+                      key={i}
+                      className="absolute w-2 h-2 rounded-full bg-brand-mid/60"
+                      style={{ left: node.x, top: node.y }}
+                      animate={{
+                        scale: [1, 1.8, 1],
+                        opacity: [0.4, 0.9, 0.4],
+                      }}
+                      transition={{ duration: 3, repeat: Infinity, delay: node.d }}
+                    />
+                  ))}
+                </div>
+
+                {/* ── Orbiting Feature Icons on Circular Path ── */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-0 h-0 hidden lg:block" style={{ zIndex: 10 }}>
+                  {[
+                    { Icon: Calculator, dist: 210, duration: 28, size: "w-10 h-10", bg: "gradient-brand", delay: 0 },
+                    { Icon: CalendarDays, dist: 240, duration: 38, size: "w-9 h-9", bg: "bg-white border border-brand-pale/50", delay: 3, iconColor: "text-brand-mid" },
+                    { Icon: Wallet, dist: 190, duration: 32, size: "w-8 h-8", bg: "bg-amber-50 border border-amber-200/50", delay: 6, iconColor: "text-amber-500" },
+                    { Icon: BarChart3, dist: 260, duration: 45, size: "w-9 h-9", bg: "bg-white border border-brand-pale/50", delay: 1.5, iconColor: "text-brand-deep" },
+                    { Icon: Shield, dist: 225, duration: 34, size: "w-7 h-7", bg: "bg-emerald-50 border border-emerald-200/50", delay: 4.5, iconColor: "text-emerald-500" },
+                  ].map((item, i) => (
+                    <motion.div
+                      key={i}
+                      className={`${item.size} ${item.bg} rounded-xl shadow-lg flex items-center justify-center absolute`}
+                      animate={{ rotate: i % 2 === 0 ? 360 : -360 }}
+                      transition={{ duration: item.duration, repeat: Infinity, ease: "linear", delay: item.delay * 0.1 }}
+                      style={{ transformOrigin: `${item.dist}px center` }}
                     >
-                      <div className="absolute inset-0 bg-gradient-to-t from-brand-deep/10 to-transparent z-10 pointer-events-none" />
-                      <img
-                        src="/hero-accounting.png"
-                        alt="آسان حساب - نرم‌افزار حسابداری"
-                        className="w-full relative"
-                      />
+                      <item.Icon className={`w-4 h-4 ${item.iconColor || "text-white"}`} />
                     </motion.div>
+                  ))}
+                </div>
 
-                    {/* Floating logo badge — top left */}
-                    <motion.div
-                      className="absolute -top-3 -right-3 md:top-4 md:-right-4 z-20"
-                      initial={{ opacity: 0, scale: 0, rotate: -20 }}
-                      animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                      transition={{ delay: 0.8, type: "spring", stiffness: 200 }}
-                    >
-                      <motion.div
-                        className="relative"
-                        animate={{ y: [0, -8, 0] }}
-                        transition={{ duration: 4, repeat: Infinity }}
-                      >
-                        <div className="w-16 h-16 rounded-2xl bg-white shadow-xl shadow-brand-deep/15 p-1 border border-brand-pale/40">
-                          <img
-                            src="/logo-asanhesab.png"
-                            alt="آسان حساب"
-                            className="w-full h-full rounded-xl object-contain"
-                          />
-                        </div>
-                        {/* Pulse */}
+                {/* ── Floating Stat Cards ── */}
+                {/* Revenue Card — top right */}
+                <motion.div
+                  className="absolute -top-2 right-0 md:top-2 md:-right-2 z-20"
+                  initial={{ opacity: 0, scale: 0, rotate: 12 }}
+                  animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                  transition={{ delay: 1, type: "spring", stiffness: 180 }}
+                >
+                  <motion.div
+                    className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl shadow-brand-deep/10 p-4 border border-brand-pale/40"
+                    style={{ animation: "float 6s ease-in-out infinite" }}
+                    whileHover={{ scale: 1.1 }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-11 h-11 gradient-brand rounded-xl flex items-center justify-center shadow-md shadow-brand-mid/20">
+                        <TrendingUp className="w-5 h-5 text-white" />
+                      </div>
+                      <div>
+                        <p className="text-[10px] text-gray-400 font-medium">رشد درآمد</p>
+                        <p className="text-xl font-black text-brand-deep">+۴۷٪</p>
+                      </div>
+                    </div>
+                    {/* Mini sparkline */}
+                    <svg viewBox="0 0 80 24" className="w-full h-5 mt-2">
+                      <motion.path
+                        d="M0 20 L12 16 L24 18 L36 10 L48 12 L60 4 L72 6 L80 2"
+                        fill="none"
+                        stroke="#007FFF"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        initial={{ pathLength: 0 }}
+                        animate={{ pathLength: 1 }}
+                        transition={{ duration: 2, delay: 1.5, ease: "easeOut" }}
+                      />
+                      <motion.path
+                        d="M0 20 L12 16 L24 18 L36 10 L48 12 L60 4 L72 6 L80 2 L80 24 L0 24Z"
+                        fill="url(#sparkFill)"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 1, delay: 2.5 }}
+                      />
+                      <defs>
+                        <linearGradient id="sparkFill" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor="#007FFF" stopOpacity="0.2" />
+                          <stop offset="100%" stopColor="#007FFF" stopOpacity="0" />
+                        </linearGradient>
+                      </defs>
+                    </svg>
+                  </motion.div>
+                </motion.div>
+
+                {/* Rating Card — bottom left */}
+                <motion.div
+                  className="absolute -bottom-2 left-0 md:bottom-4 md:-left-6 z-20"
+                  initial={{ opacity: 0, scale: 0, rotate: -8 }}
+                  animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                  transition={{ delay: 1.3, type: "spring", stiffness: 180 }}
+                >
+                  <motion.div
+                    className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl shadow-brand-deep/10 p-4 border border-brand-pale/40"
+                    style={{ animation: "float 7s ease-in-out infinite 1.5s" }}
+                    whileHover={{ scale: 1.1 }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-11 h-11 bg-amber-50 rounded-xl flex items-center justify-center">
+                        <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
+                      </div>
+                      <div>
+                        <p className="text-[10px] text-gray-400 font-medium">رضایت مشتری</p>
+                        <p className="text-xl font-black text-gray-900">۴.۹/۵</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-0.5 mt-2">
+                      {[100, 100, 100, 100, 80].map((w, i) => (
                         <motion.div
-                          className="absolute inset-0 rounded-2xl border-2 border-brand-mid/30"
-                          animate={{ scale: [1, 1.4], opacity: [0.5, 0] }}
-                          transition={{ duration: 2, repeat: Infinity }}
+                          key={i}
+                          className="h-1.5 rounded-full bg-amber-400"
+                          initial={{ width: 0 }}
+                          animate={{ width: `${w}%` }}
+                          transition={{ duration: 0.8, delay: 1.8 + i * 0.1, ease: "easeOut" }}
                         />
-                      </motion.div>
-                    </motion.div>
-
-                    {/* Floating stat: Revenue — bottom right */}
-                    <motion.div
-                      className="absolute -bottom-4 right-4 md:bottom-6 md:right-8 z-20"
-                      initial={{ opacity: 0, y: 20, scale: 0.8 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      transition={{ delay: 1, type: "spring" }}
-                    >
-                      <motion.div
-                        className="bg-white rounded-2xl shadow-xl shadow-brand-deep/10 p-4 border border-brand-pale/40"
-                        style={{ animation: "float 6s ease-in-out infinite" }}
-                        whileHover={{ scale: 1.08, boxShadow: "0 20px 40px rgba(0,71,171,0.15)" }}
-                      >
-                        <div className="flex items-center gap-3">
-                          <div className="w-11 h-11 gradient-brand rounded-xl flex items-center justify-center">
-                            <TrendingUp className="w-5 h-5 text-white" />
-                          </div>
-                          <div>
-                            <p className="text-[10px] text-gray-400">رشد درآمد</p>
-                            <p className="text-xl font-black text-brand-deep">+۴۷٪</p>
-                          </div>
-                        </div>
-                      </motion.div>
-                    </motion.div>
-
-                    {/* Floating stat: Rating — top right area */}
-                    <motion.div
-                      className="absolute top-8 right-8 z-20 hidden md:block"
-                      initial={{ opacity: 0, y: -20, scale: 0.8 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      transition={{ delay: 1.2, type: "spring" }}
-                    >
-                      <motion.div
-                        className="bg-white rounded-2xl shadow-xl shadow-brand-deep/10 p-3.5 border border-brand-pale/40"
-                        style={{ animation: "float 7s ease-in-out infinite 1.5s" }}
-                        whileHover={{ scale: 1.08 }}
-                      >
-                        <div className="flex items-center gap-2.5">
-                          <div className="w-10 h-10 bg-amber-50 rounded-xl flex items-center justify-center">
-                            <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-                          </div>
-                          <div>
-                            <p className="text-[10px] text-gray-400">رضایت</p>
-                            <p className="text-lg font-black text-gray-900">۴.۹/۵</p>
-                          </div>
-                        </div>
-                      </motion.div>
-                    </motion.div>
-
-                    {/* Floating mini card: Invoice — bottom left */}
-                    <motion.div
-                      className="absolute -bottom-4 left-4 md:bottom-10 md:-left-4 z-20 hidden sm:block"
-                      initial={{ opacity: 0, x: -20, scale: 0.8 }}
-                      animate={{ opacity: 1, x: 0, scale: 1 }}
-                      transition={{ delay: 1.4, type: "spring" }}
-                    >
-                      <motion.div
-                        className="bg-white rounded-2xl shadow-xl shadow-brand-deep/10 p-3.5 border border-brand-pale/40"
-                        style={{ animation: "float 8s ease-in-out infinite 2s" }}
-                        whileHover={{ scale: 1.08 }}
-                      >
-                        <div className="flex items-center gap-2.5">
-                          <div className="w-10 h-10 gradient-brand rounded-xl flex items-center justify-center">
-                            <Receipt className="w-4 h-4 text-white" />
-                          </div>
-                          <div>
-                            <p className="text-[10px] text-gray-400">فاکتور امروز</p>
-                            <p className="text-lg font-black text-brand-deep">۱۲ عدد</p>
-                          </div>
-                        </div>
-                      </motion.div>
-                    </motion.div>
-
-                    {/* Orbiting icons */}
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-0 h-0 hidden lg:block">
-                      <motion.div
-                        className="w-9 h-9 gradient-brand rounded-xl shadow-lg flex items-center justify-center"
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-                        style={{ transformOrigin: "180px center" }}
-                      >
-                        <Calculator className="w-4 h-4 text-white" />
-                      </motion.div>
-                      <motion.div
-                        className="w-8 h-8 bg-white rounded-lg shadow-lg flex items-center justify-center border border-brand-pale/40"
-                        animate={{ rotate: -360 }}
-                        transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
-                        style={{ transformOrigin: "200px center" }}
-                      >
-                        <CalendarDays className="w-3.5 h-3.5 text-brand-mid" />
-                      </motion.div>
-                      <motion.div
-                        className="w-7 h-7 bg-amber-50 rounded-lg shadow-lg flex items-center justify-center border border-amber-200/40"
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-                        style={{ transformOrigin: "160px center" }}
-                      >
-                        <Wallet className="w-3 h-3 text-amber-500" />
-                      </motion.div>
+                      ))}
                     </div>
-                  </div>
-                </ParallaxSection>
+                  </motion.div>
+                </motion.div>
+
+                {/* Invoice Card — top left */}
+                <motion.div
+                  className="absolute top-4 -left-2 md:top-8 md:-left-8 z-20 hidden sm:block"
+                  initial={{ opacity: 0, x: -30, scale: 0.8 }}
+                  animate={{ opacity: 1, x: 0, scale: 1 }}
+                  transition={{ delay: 1.5, type: "spring" }}
+                >
+                  <motion.div
+                    className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl shadow-brand-deep/10 p-3.5 border border-brand-pale/40"
+                    style={{ animation: "float 8s ease-in-out infinite 2s" }}
+                    whileHover={{ scale: 1.1 }}
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-10 h-10 gradient-brand rounded-xl flex items-center justify-center shadow-md shadow-brand-mid/20">
+                        <Receipt className="w-4 h-4 text-white" />
+                      </div>
+                      <div>
+                        <p className="text-[10px] text-gray-400 font-medium">فاکتور امروز</p>
+                        <p className="text-lg font-black text-brand-deep">۱۲ عدد</p>
+                      </div>
+                    </div>
+                  </motion.div>
+                </motion.div>
+
+                {/* Security Card — bottom right */}
+                <motion.div
+                  className="absolute -bottom-4 right-4 md:bottom-0 md:right-0 z-20 hidden md:block"
+                  initial={{ opacity: 0, y: 20, scale: 0.8 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ delay: 1.7, type: "spring" }}
+                >
+                  <motion.div
+                    className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl shadow-brand-deep/10 p-3 border border-brand-pale/40"
+                    style={{ animation: "float 9s ease-in-out infinite 2.5s" }}
+                    whileHover={{ scale: 1.1 }}
+                  >
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 bg-emerald-50 rounded-lg flex items-center justify-center">
+                        <Shield className="w-3.5 h-3.5 text-emerald-500" />
+                      </div>
+                      <div>
+                        <p className="text-[9px] text-gray-400">SSL امن</p>
+                        <p className="text-xs font-bold text-emerald-600">محافظت شده</p>
+                      </div>
+                    </div>
+                  </motion.div>
+                </motion.div>
               </div>
             </div>
           </div>
