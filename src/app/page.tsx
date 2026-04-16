@@ -466,7 +466,7 @@ function HeroTiltCard() {
   return (
     <motion.div
       ref={cardRef}
-      className="relative z-10 mx-auto w-[340px] sm:w-[420px] md:w-[520px]"
+      className="relative z-10 mx-auto w-[300px] sm:w-[380px] md:w-[440px]"
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       initial={{ opacity: 0, y: 60, scale: 0.9 }}
@@ -497,8 +497,8 @@ function HeroTiltCard() {
           </div>
         </div>
 
-        {/* Dashboard Content */}
-        <div className="p-3 md:p-4 space-y-3">
+        {/* Dashboard Content — Compact */}
+        <div className="p-2.5 md:p-3 space-y-2">
           {/* Top Bar: Sidebar indicators + date */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -519,7 +519,7 @@ function HeroTiltCard() {
           </div>
 
           {/* Mini KPI Row */}
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-3 gap-1.5">
             {[
               { label: "درآمد کل", value: "٨۵٠,٠٠٠", unit: "افغانی", color: "from-brand-deep to-brand-mid", icon: <TrendingUp className="w-2.5 h-2.5" /> },
               { label: "فاکتورها", value: "١٢٤", unit: "عدد", color: "from-emerald-500 to-emerald-400", icon: <Receipt className="w-2.5 h-2.5" /> },
@@ -527,7 +527,7 @@ function HeroTiltCard() {
             ].map((kpi, i) => (
               <motion.div
                 key={i}
-                className="bg-gray-50/80 rounded-xl p-2 md:p-2.5 border border-gray-100/80"
+                className="bg-gray-50/80 rounded-xl p-1.5 md:p-2 border border-gray-100/80"
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 + i * 0.15 }}
@@ -542,10 +542,10 @@ function HeroTiltCard() {
           </div>
 
           {/* Charts Row: Bar Chart + Donut */}
-          <div className="grid grid-cols-5 gap-2">
+          <div className="grid grid-cols-5 gap-1.5">
             {/* Bar chart */}
             <motion.div
-              className="col-span-3 bg-gradient-to-b from-brand-surface/50 to-white rounded-xl p-2 md:p-3 border border-brand-pale/30"
+              className="col-span-3 bg-gradient-to-b from-brand-surface/50 to-white rounded-xl p-1.5 md:p-2 border border-brand-pale/30"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.7 }}
@@ -554,14 +554,14 @@ function HeroTiltCard() {
                 <p className="text-[8px] font-bold text-gray-700">نمودار درآمد ماهانه</p>
                 <span className="text-[7px] text-brand-mid font-bold bg-brand-pale/40 px-1.5 py-0.5 rounded-full">+۴۷٪</span>
               </div>
-              <div className="h-16 md:h-20">
+              <div className="h-14 md:h-16">
                 <AnimatedBarChart />
               </div>
             </motion.div>
 
             {/* Donut chart */}
             <motion.div
-              className="col-span-2 bg-white rounded-xl p-2 md:p-3 border border-gray-100/80"
+              className="col-span-2 bg-white rounded-xl p-1.5 md:p-2 border border-gray-100/80"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.9 }}
@@ -572,10 +572,10 @@ function HeroTiltCard() {
           </div>
 
           {/* Bottom Row: Live Transactions + Invoice Preview */}
-          <div className="grid grid-cols-5 gap-2">
+          <div className="grid grid-cols-5 gap-1.5">
             {/* Live Transaction Feed */}
             <motion.div
-              className="col-span-3 bg-gradient-to-b from-[#0d1117] to-[#161b22] rounded-xl p-2.5 md:p-3 border border-gray-800/50 overflow-hidden"
+              className="col-span-3 bg-gradient-to-b from-[#0d1117] to-[#161b22] rounded-xl p-2 md:p-2.5 border border-gray-800/50 overflow-hidden"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.1 }}
@@ -1073,8 +1073,8 @@ export default function Home() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="grid lg:grid-cols-12 gap-8 lg:gap-10 items-center">
 
-            {/* Left content — span 5 */}
-            <div className="lg:col-span-5 text-center lg:text-right order-1 lg:order-2">
+            {/* Left content — span 7 on desktop for wider text */}
+            <div className="lg:col-span-7 text-center lg:text-right order-1 lg:order-2" style={{ direction: 'rtl' }}>
               {/* Badge */}
               <FadeIn>
                 <motion.div
@@ -1093,76 +1093,94 @@ export default function Home() {
                 </motion.div>
               </FadeIn>
 
-              {/* Heading — creative staggered animation */}
+              {/* Heading — ultra creative with floating accents */}
               <FadeIn delay={0.1}>
-                <h1 className="mb-6" style={{ lineHeight: 1.05 }}>
-                  {/* Line 1: حسابداری — dark, large */}
-                  <motion.span
-                    className="block text-gray-900"
-                    style={{ fontSize: "clamp(2.8rem, 7vw, 5.5rem)", letterSpacing: "-0.02em" }}
-                    initial={{ opacity: 0, x: 50, filter: "blur(8px)" }}
-                    animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-                    transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.4, 0.25, 1] }}
-                  >
-                    حسابداری
-                  </motion.span>
+                <div className="relative mb-6" style={{ direction: 'rtl' }}>
+                  {/* Decorative floating shapes around heading */}
+                  <motion.div
+                    className="absolute -top-4 -right-2 md:-top-6 md:-right-6 w-10 h-10 md:w-14 md:h-14 rounded-2xl border-2 border-brand-mid/15 hidden sm:block"
+                    animate={{ rotate: [0, 90, 180, 270, 360], scale: [1, 1.1, 1] }}
+                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                  />
+                  <motion.div
+                    className="absolute -top-2 -left-3 md:-top-3 md:-left-8 w-6 h-6 md:w-8 md:h-8 rounded-full bg-brand-light/30 hidden sm:block"
+                    animate={{ y: [0, -8, 0], scale: [1, 1.2, 1] }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  />
+                  <motion.div
+                    className="absolute bottom-4 -right-6 md:bottom-2 md:-right-10 w-4 h-4 md:w-6 md:h-6 rounded-lg bg-brand-mid/10 hidden sm:block"
+                    animate={{ rotate: [0, -45, 0, 45, 0], y: [0, -5, 0] }}
+                    transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                  />
 
-                  {/* Line 2: را آسان — gradient, with animated underline */}
-                  <motion.span
-                    className="block relative mt-1"
-                    style={{ fontSize: "clamp(3.2rem, 8.5vw, 6.5rem)", letterSpacing: "-0.03em" }}
-                    initial={{ opacity: 0, x: 50, filter: "blur(8px)" }}
-                    animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-                    transition={{ duration: 0.8, delay: 0.45, ease: [0.25, 0.4, 0.25, 1] }}
-                  >
-                    <span className="text-gradient-hero">را آسان</span>
-                    {/* Animated gradient underline */}
+                  <h1 style={{ lineHeight: 1.05 }}>
+                    {/* Line 1: حسابداری — dark, massive */}
                     <motion.span
-                      className="absolute -bottom-2 right-0 h-[6px] w-full rounded-full"
-                      style={{
-                        background: "linear-gradient(90deg, #0047AB 0%, #007FFF 40%, #5DADE2 70%, #D6EEFF 100%)",
-                      }}
-                      initial={{ scaleX: 0, originX: 1, opacity: 0 }}
-                      animate={{ scaleX: 1, opacity: 0.6 }}
-                      transition={{ duration: 1, delay: 1, ease: [0.25, 0.4, 0.25, 1] }}
-                    />
-                    {/* Secondary thinner underline for depth */}
-                    <motion.span
-                      className="absolute -bottom-[10px] right-4 h-[3px] rounded-full"
-                      style={{
-                        background: "linear-gradient(90deg, transparent 0%, #007FFF 30%, #5DADE2 100%)",
-                        width: "60%",
-                      }}
-                      initial={{ scaleX: 0, originX: 1, opacity: 0 }}
-                      animate={{ scaleX: 1, opacity: 0.3 }}
-                      transition={{ duration: 1.2, delay: 1.2, ease: [0.25, 0.4, 0.25, 1] }}
-                    />
-                  </motion.span>
-
-                  {/* Line 3: کنید! — dark with sparkle */}
-                  <motion.span
-                    className="block relative mt-1 text-gray-900"
-                    style={{ fontSize: "clamp(2.8rem, 7vw, 5.5rem)", letterSpacing: "-0.02em" }}
-                    initial={{ opacity: 0, x: 50, filter: "blur(8px)" }}
-                    animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-                    transition={{ duration: 0.8, delay: 0.7, ease: [0.25, 0.4, 0.25, 1] }}
-                  >
-                    کنید!
-                    {/* Animated sparkle burst around exclamation */}
-                    <motion.span
-                      className="inline-block mr-1 relative"
-                      animate={{ rotate: [0, 10, 0, -10, 0] }}
-                      transition={{ duration: 3, delay: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                      className="block font-black text-gray-900 relative inline-block"
+                      style={{ fontSize: "clamp(2.8rem, 7.5vw, 5.8rem)", letterSpacing: "-0.02em" }}
+                      initial={{ opacity: 0, x: 50, filter: "blur(10px)" }}
+                      animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+                      transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.4, 0.25, 1] }}
                     >
-                      <Sparkles className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-brand-mid/30 -mt-1" />
+                      حسابداری
                     </motion.span>
-                  </motion.span>
-                </h1>
+
+                    {/* Line 2: را آسان — gradient hero, bigger, animated underline */}
+                    <motion.span
+                      className="block relative mt-1"
+                      style={{ fontSize: "clamp(3.4rem, 9vw, 7rem)", letterSpacing: "-0.03em" }}
+                      initial={{ opacity: 0, x: 50, filter: "blur(10px)" }}
+                      animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+                      transition={{ duration: 0.8, delay: 0.45, ease: [0.25, 0.4, 0.25, 1] }}
+                    >
+                      <span className="text-gradient-hero font-black">را آسان</span>
+                      {/* Animated gradient underline */}
+                      <motion.span
+                        className="absolute -bottom-2 right-0 h-[7px] w-full rounded-full"
+                        style={{
+                          background: "linear-gradient(90deg, #0047AB 0%, #007FFF 40%, #5DADE2 70%, #D6EEFF 100%)",
+                        }}
+                        initial={{ scaleX: 0, originX: 1, opacity: 0 }}
+                        animate={{ scaleX: 1, opacity: 0.55 }}
+                        transition={{ duration: 1, delay: 1, ease: [0.25, 0.4, 0.25, 1] }}
+                      />
+                      {/* Secondary thinner underline for depth */}
+                      <motion.span
+                        className="absolute -bottom-[11px] right-4 h-[3px] rounded-full"
+                        style={{
+                          background: "linear-gradient(90deg, transparent 0%, #007FFF 30%, #5DADE2 100%)",
+                          width: "55%",
+                        }}
+                        initial={{ scaleX: 0, originX: 1, opacity: 0 }}
+                        animate={{ scaleX: 1, opacity: 0.25 }}
+                        transition={{ duration: 1.2, delay: 1.2, ease: [0.25, 0.4, 0.25, 1] }}
+                      />
+                    </motion.span>
+
+                    {/* Line 3: کنید! — dark with animated sparkle */}
+                    <motion.span
+                      className="block relative mt-1"
+                      initial={{ opacity: 0, x: 50, filter: "blur(10px)" }}
+                      animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+                      transition={{ duration: 0.8, delay: 0.7, ease: [0.25, 0.4, 0.25, 1] }}
+                    >
+                      <span className="font-black text-gray-900" style={{ fontSize: "clamp(2.8rem, 7.5vw, 5.8rem)", letterSpacing: "-0.02em" }}>کنید!</span>
+                      {/* Animated sparkle burst */}
+                      <motion.span
+                        className="inline-block mr-1 relative"
+                        animate={{ rotate: [0, 12, 0, -12, 0] }}
+                        transition={{ duration: 3, delay: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                      >
+                        <Sparkles className="w-9 h-9 sm:w-11 sm:h-11 md:w-14 md:h-14 text-brand-mid/25 -mt-1" />
+                      </motion.span>
+                    </motion.span>
+                  </h1>
+                </div>
               </FadeIn>
 
               {/* Description */}
               <FadeIn delay={0.2}>
-                <p className="text-base md:text-lg text-gray-500 leading-relaxed mb-8 max-w-md mx-auto lg:mx-0 lg:mr-0">
+                <p className="text-base md:text-lg text-gray-500 leading-relaxed mb-8 max-w-lg mx-auto lg:mx-0 lg:mr-0">
                   اولین نرم‌افزار حسابداری به{" "}
                   <span className="text-brand-deep font-bold">زبان دری</span> با{" "}
                   <span className="text-brand-deep font-bold">تقویم هجری شمسی</span>.
@@ -1258,8 +1276,8 @@ export default function Home() {
               </FadeIn>
             </div>
 
-            {/* Right content — CODE-ONLY CREATIVE HERO VISUAL span 7 */}
-            <div className="lg:col-span-7 relative order-2 lg:order-1">
+            {/* Right content — CODE-ONLY CREATIVE HERO VISUAL span 5 */}
+            <div className="lg:col-span-5 relative order-2 lg:order-1">
               <div className="relative">
 
                 {/* ── Floating 3D Aura Rings ── */}
@@ -1499,21 +1517,39 @@ export default function Home() {
           </FadeIn>
         </div>
 
-        {/* Scroll indicator */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 md:mt-16">
+        {/* Creative Scroll Indicator */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 md:mt-14">
           <motion.div
-            className="flex flex-col items-center gap-2"
-            animate={{ y: [0, 6, 0] }}
-            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+            className="flex flex-col items-center gap-3"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.5, duration: 1 }}
           >
-            <span className="text-[10px] text-gray-400 tracking-[0.2em] font-medium">اسکرول</span>
-            <div className="w-5 h-9 border-2 border-gray-300/60 rounded-full flex justify-center pt-2">
+            {/* Mouse icon */}
+            <motion.div
+              className="relative w-7 h-11 rounded-[14px] border-2 border-brand-mid/40 flex justify-center pt-2"
+              animate={{ y: [0, 5, 0] }}
+              transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+            >
+              {/* Scroll wheel */}
               <motion.div
-                className="w-1 h-1.5 bg-brand-mid rounded-full"
-                animate={{ y: [0, 10, 0], opacity: [1, 0.3, 1] }}
+                className="w-1 h-2.5 bg-brand-mid rounded-full"
+                animate={{ y: [0, 8, 0], opacity: [0.8, 0.2, 0.8], scaleY: [1, 0.5, 1] }}
                 transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
               />
-            </div>
+              {/* Top fade */}
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1 h-1.5 rounded-full bg-brand-mid/30" />
+            </motion.div>
+            {/* Arrow chevrons */}
+            <motion.div
+              className="flex flex-col items-center gap-0.5"
+              animate={{ opacity: [0.3, 0.8, 0.3] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <svg width="12" height="7" viewBox="0 0 12 7" fill="none">
+                <path d="M1 1L6 6L11 1" stroke="#007FFF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </motion.div>
           </motion.div>
         </div>
       </section>
