@@ -466,20 +466,13 @@ export default function Home() {
               className="flex items-center gap-3"
               whileHover={{ scale: 1.02 }}
             >
-              <div className="relative">
-                <div className="w-11 h-11 gradient-brand rounded-full flex items-center justify-center shadow-lg shadow-brand-mid/30">
-                  <img
-                    src="/logo-asanhesab.png"
-                    alt="آسان حساب"
-                    className="w-8 h-8 rounded-full object-cover"
-                  />
-                </div>
-                <motion.div
-                  className="absolute inset-0 gradient-brand rounded-full opacity-0"
-                  whileHover={{ scale: 1.3, opacity: 0.3 }}
-                  transition={{ duration: 0.3 }}
-                />
-              </div>
+              <motion.img
+                src="/logo-asanhesab.png"
+                alt="آسان حساب"
+                className="w-11 h-11 rounded-full shadow-lg shadow-brand-mid/25"
+                whileHover={{ rotate: [0, -10, 10, 0] }}
+                transition={{ duration: 0.5 }}
+              />
               <div>
                 <span className="text-xl font-black text-gradient">آسان حساب</span>
                 <span className="text-[10px] text-gray-400 block -mt-0.5 tracking-wider">
@@ -565,47 +558,80 @@ export default function Home() {
         </AnimatePresence>
       </motion.nav>
 
-      {/* ══════════ HERO — CREATIVE MESH LAYOUT ══════════ */}
+      {/* ══════════ HERO — ULTRA-CREATIVE SHOWCASE ══════════ */}
       <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
-        {/* Animated background */}
+        {/* Layered animated background */}
         <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-br from-brand-surface via-white to-brand-pale/30" />
-          {/* Animated blobs */}
+          {/* Base gradient */}
+          <div className="absolute inset-0 bg-gradient-to-bl from-[#f0f7ff] via-white to-[#e8f0fe]" />
+          {/* Animated mesh gradients */}
           <motion.div
-            className="absolute top-10 right-[10%] w-[500px] h-[500px] bg-brand-mid/10 blob"
-            style={{ animationDuration: "12s" }}
-          />
-          <motion.div
-            className="absolute bottom-10 left-[5%] w-[400px] h-[400px] bg-brand-deep/8 blob-reverse"
-            style={{ animationDuration: "15s" }}
-          />
-          <motion.div
-            className="absolute top-1/3 left-1/3 w-[300px] h-[300px] bg-brand-light/10 blob"
-            style={{ animationDuration: "10s" }}
-          />
-          {/* Grid pattern overlay */}
-          <div
-            className="absolute inset-0 opacity-[0.03]"
+            className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] rounded-full"
             style={{
-              backgroundImage:
-                "radial-gradient(circle, #0047AB 1px, transparent 1px)",
-              backgroundSize: "40px 40px",
+              background: "radial-gradient(circle, rgba(0,127,255,0.12) 0%, transparent 70%)",
+              animation: "float 14s ease-in-out infinite",
             }}
           />
+          <motion.div
+            className="absolute bottom-[-15%] left-[-10%] w-[700px] h-[700px] rounded-full"
+            style={{
+              background: "radial-gradient(circle, rgba(0,71,171,0.08) 0%, transparent 70%)",
+              animation: "float 18s ease-in-out infinite 3s",
+            }}
+          />
+          <motion.div
+            className="absolute top-[40%] left-[50%] w-[500px] h-[500px] blob"
+            style={{
+              background: "radial-gradient(circle, rgba(93,173,226,0.06) 0%, transparent 70%)",
+              animationDuration: "12s",
+            }}
+          />
+          {/* Animated grid lines */}
+          <svg className="absolute inset-0 w-full h-full opacity-[0.03]">
+            <defs>
+              <pattern id="heroGrid" width="60" height="60" patternUnits="userSpaceOnUse">
+                <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#0047AB" strokeWidth="0.5" />
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#heroGrid)" />
+          </svg>
+          {/* Floating particles */}
+          {[...Array(12)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-1 h-1 rounded-full bg-brand-mid/30"
+              style={{
+                top: `${15 + (i * 7) % 70}%`,
+                left: `${10 + (i * 11) % 80}%`,
+              }}
+              animate={{
+                y: [0, -30, 0],
+                opacity: [0.2, 0.6, 0.2],
+                scale: [1, 1.5, 1],
+              }}
+              transition={{
+                duration: 3 + (i % 3),
+                repeat: Infinity,
+                delay: i * 0.4,
+              }}
+            />
+          ))}
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-16 md:py-20">
-          <div className="grid lg:grid-cols-12 gap-8 items-center">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-10 md:py-16">
+          <div className="grid lg:grid-cols-12 gap-10 items-center">
+
             {/* Left content — span 5 */}
-            <div className="lg:col-span-5 text-center lg:text-right">
+            <div className="lg:col-span-5 text-center lg:text-right order-2 lg:order-1">
+              {/* Badge */}
               <FadeIn>
                 <motion.div
-                  className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-brand-pale/60 rounded-full px-5 py-2.5 mb-8 shadow-sm"
-                  whileHover={{ scale: 1.03, boxShadow: "0 4px 20px rgba(0,71,171,0.1)" }}
+                  className="inline-flex items-center gap-2 bg-white/70 backdrop-blur-md border border-brand-pale/50 rounded-full px-5 py-2.5 mb-8 shadow-sm"
+                  whileHover={{ scale: 1.04, boxShadow: "0 8px 30px rgba(0,71,171,0.12)" }}
                 >
                   <motion.span
-                    animate={{ rotate: [0, 15, -15, 0] }}
-                    transition={{ duration: 2, repeat: Infinity }}
+                    animate={{ rotate: [0, 20, -20, 0] }}
+                    transition={{ duration: 2.5, repeat: Infinity }}
                   >
                     <Sparkles className="w-4 h-4 text-brand-mid" />
                   </motion.span>
@@ -615,24 +641,51 @@ export default function Home() {
                 </motion.div>
               </FadeIn>
 
+              {/* Heading — word-by-word animation */}
               <FadeIn delay={0.1}>
-                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-[1.1] mb-6">
-                  <span className="text-gray-900">حسابداری</span>
-                  <br />
-                  <span className="relative">
+                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[4.2rem] font-black leading-[1.08] mb-6">
+                  <motion.span
+                    className="block text-gray-900"
+                    initial={{ opacity: 0, x: 40 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.6, delay: 0.2 }}
+                  >
+                    حسابداری
+                  </motion.span>
+                  <motion.span
+                    className="block relative mt-1"
+                    initial={{ opacity: 0, x: 40 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.6, delay: 0.4 }}
+                  >
                     <span className="text-gradient">را آسان</span>
                     <motion.span
-                      className="absolute -bottom-2 right-0 h-3 w-full gradient-brand rounded-full opacity-20"
-                      initial={{ scaleX: 0, originX: 0 }}
+                      className="absolute -bottom-1 right-0 h-3 w-full rounded-full"
+                      style={{ background: "linear-gradient(90deg, #007FFF, #5DADE2)" }}
+                      initial={{ scaleX: 0, originX: 1 }}
                       animate={{ scaleX: 1 }}
-                      transition={{ duration: 1, delay: 0.8 }}
+                      transition={{ duration: 0.8, delay: 1 }}
                     />
-                  </span>
-                  <br />
-                  <span className="text-gray-900">کنید!</span>
+                  </motion.span>
+                  <motion.span
+                    className="block text-gray-900 mt-1"
+                    initial={{ opacity: 0, x: 40 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.6, delay: 0.6 }}
+                  >
+                    کنید!
+                    <motion.span
+                      className="inline-block ml-2"
+                      animate={{ rotate: [0, 15, 0, -15, 0] }}
+                      transition={{ duration: 2, delay: 1.2, repeat: Infinity }}
+                    >
+                      <Sparkles className="w-8 h-8 text-brand-mid/40 -mt-2" />
+                    </motion.span>
+                  </motion.span>
                 </h1>
               </FadeIn>
 
+              {/* Description */}
               <FadeIn delay={0.2}>
                 <p className="text-base md:text-lg text-gray-500 leading-relaxed mb-8 max-w-md mx-auto lg:mx-0 lg:mr-0">
                   اولین نرم‌افزار حسابداری به{" "}
@@ -642,9 +695,10 @@ export default function Home() {
                 </p>
               </FadeIn>
 
+              {/* CTA Buttons */}
               <FadeIn delay={0.3}>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
+                  <motion.div whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.97 }}>
                     <Button
                       size="lg"
                       className="gradient-brand text-white border-0 px-8 py-6 text-base rounded-2xl shadow-xl shadow-brand-mid/30 relative overflow-hidden group"
@@ -658,13 +712,19 @@ export default function Home() {
                         className="absolute inset-0 shimmer"
                         repeatCount={Infinity}
                       />
+                      {/* Ripple rings */}
+                      <motion.div
+                        className="absolute inset-0 rounded-2xl border-2 border-white/20"
+                        animate={{ scale: [1, 1.15], opacity: [0.5, 0] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                      />
                     </Button>
                   </motion.div>
-                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
+                  <motion.div whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.97 }}>
                     <Button
                       size="lg"
                       variant="outline"
-                      className="px-8 py-6 text-base rounded-2xl border-brand-pale bg-white/50 backdrop-blur-sm hover:border-brand-mid hover:bg-brand-surface transition-all"
+                      className="px-8 py-6 text-base rounded-2xl border-brand-pale bg-white/60 backdrop-blur-md hover:border-brand-mid hover:bg-brand-surface transition-all shadow-sm"
                     >
                       <PlayCircleIcon className="w-5 h-5 ml-2 text-brand-mid" />
                       تماشای ویدیو
@@ -673,110 +733,266 @@ export default function Home() {
                 </div>
               </FadeIn>
 
+              {/* Trust signals */}
               <FadeIn delay={0.4}>
-                <div className="flex items-center gap-6 mt-8 justify-center lg:justify-start">
+                <div className="flex items-center gap-5 mt-8 justify-center lg:justify-start">
                   <div className="flex items-center gap-2">
                     <CheckCircle2 className="w-4 h-4 text-brand-mid" />
                     <span className="text-xs text-gray-400">بدون کارت بانکی</span>
                   </div>
+                  <div className="w-px h-4 bg-gray-200" />
                   <div className="flex items-center gap-2">
                     <CheckCircle2 className="w-4 h-4 text-brand-mid" />
                     <span className="text-xs text-gray-400">بدون تعهد</span>
                   </div>
                 </div>
               </FadeIn>
+
+              {/* Social proof strip */}
+              <FadeIn delay={0.6}>
+                <motion.div
+                  className="mt-8 flex items-center gap-3 justify-center lg:justify-start"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1 }}
+                >
+                  <div className="flex -space-x-2 space-x-reverse">
+                    {["م", "ف", "ح", "ز"].map((letter, i) => (
+                      <div
+                        key={i}
+                        className="w-8 h-8 rounded-full border-2 border-white flex items-center justify-center text-[10px] font-bold text-white shadow-sm"
+                        style={{
+                          background: `linear-gradient(135deg, hsl(${210 + i * 15}, 70%, ${50 + i * 5}%), hsl(${220 + i * 15}, 60%, ${40 + i * 5}%))`,
+                          zIndex: 4 - i,
+                        }}
+                      >
+                        {letter}
+                      </div>
+                    ))}
+                  </div>
+                  <div className="text-xs">
+                    <span className="font-bold text-gray-700">+۵,۰۰۰</span>{" "}
+                    <span className="text-gray-400">کاربر راضی</span>
+                  </div>
+                  <div className="flex gap-0.5">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-3 h-3 fill-amber-400 text-amber-400" />
+                    ))}
+                  </div>
+                </motion.div>
+              </FadeIn>
             </div>
 
-            {/* Right content — creative visual span 7 */}
-            <div className="lg:col-span-7 relative">
-              <ParallaxSection speed={0.15}>
-                <div className="relative">
-                  {/* Decorative elements */}
-                  <motion.div
-                    className="absolute -top-8 -right-8 w-32 h-32 gradient-brand rounded-3xl opacity-10 rotate-12"
-                    animate={{ rotate: [12, 20, 12], scale: [1, 1.05, 1] }}
-                    transition={{ duration: 6, repeat: Infinity }}
-                  />
-                  <motion.div
-                    className="absolute -bottom-6 -left-6 w-24 h-24 bg-brand-light rounded-2xl opacity-15 -rotate-12"
-                    animate={{ rotate: [-12, -6, -12], scale: [1, 1.08, 1] }}
-                    transition={{ duration: 5, repeat: Infinity }}
-                  />
+            {/* Right content — ultra-creative visual showcase span 7 */}
+            <div className="lg:col-span-7 relative order-1 lg:order-2">
+              <div className="relative">
+                {/* Glowing backdrop */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] h-[80%] rounded-[2rem] blur-3xl bg-brand-mid/15" />
 
-                  {/* Main image card with glass effect */}
-                  <motion.div
-                    className="relative rounded-3xl overflow-hidden shadow-2xl shadow-brand-deep/10"
-                    initial={{ opacity: 0, y: 40, rotateY: -5 }}
-                    animate={{ opacity: 1, y: 0, rotateY: 0 }}
-                    transition={{ duration: 1, delay: 0.3 }}
-                  >
-                    <div className="absolute inset-0 gradient-brand opacity-5" />
-                    <img
-                      src="/hero-accounting.png"
-                      alt="آسان حساب"
-                      className="w-full relative"
-                    />
-                  </motion.div>
-
-                  {/* Floating stat cards */}
-                  <motion.div
-                    className="absolute -bottom-6 right-6 md:right-12 bg-white rounded-2xl shadow-xl shadow-brand-deep/10 p-4 border border-brand-pale/50"
-                    style={{ animation: "float 6s ease-in-out infinite" }}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="w-11 h-11 gradient-brand rounded-xl flex items-center justify-center">
-                        <TrendingUp className="w-5 h-5 text-white" />
-                      </div>
-                      <div>
-                        <p className="text-xs text-gray-400">رشد درآمد</p>
-                        <p className="text-xl font-black text-brand-deep">+۴۷٪</p>
-                      </div>
+                {/* Main visual container */}
+                <ParallaxSection speed={0.12}>
+                  <div className="relative">
+                    {/* Rotating ring behind image */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85%] h-[85%]">
+                      <motion.div
+                        className="w-full h-full rounded-3xl border-2 border-dashed border-brand-pale/50"
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+                      />
                     </div>
-                  </motion.div>
-
-                  <motion.div
-                    className="absolute -top-4 -left-4 md:top-4 md:-left-6 bg-white rounded-2xl shadow-xl shadow-brand-deep/10 p-4 border border-brand-pale/50"
-                    style={{ animation: "float 7s ease-in-out infinite 1s" }}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="w-11 h-11 bg-amber-50 rounded-xl flex items-center justify-center">
-                        <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
-                      </div>
-                      <div>
-                        <p className="text-xs text-gray-400">رضایت</p>
-                        <p className="text-xl font-black text-gray-900">۴.۹/۵</p>
-                      </div>
+                    {/* Counter-rotating ring */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[95%] h-[90%]">
+                      <motion.div
+                        className="w-full h-full rounded-[2rem] border border-brand-light/20"
+                        animate={{ rotate: -360 }}
+                        transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
+                      />
                     </div>
-                  </motion.div>
 
-                  {/* Orbiting mini element */}
-                  <div className="absolute top-1/2 right-1/2 -translate-y-1/2 translate-x-1/2 w-0 h-0 hidden lg:block">
+                    {/* Main dashboard image card */}
                     <motion.div
-                      className="w-8 h-8 gradient-brand rounded-lg shadow-lg flex items-center justify-center"
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                      style={{ transformOrigin: "120px center" }}
+                      className="relative rounded-3xl overflow-hidden shadow-2xl shadow-brand-deep/15 border border-white/50"
+                      style={{ perspective: "1000px" }}
+                      initial={{ opacity: 0, y: 50, rotateY: -8, rotateX: 5 }}
+                      animate={{ opacity: 1, y: 0, rotateY: 0, rotateX: 0 }}
+                      transition={{ duration: 1.2, delay: 0.2, ease: [0.25, 0.4, 0.25, 1] }}
                     >
-                      <Calculator className="w-4 h-4 text-white" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-brand-deep/10 to-transparent z-10 pointer-events-none" />
+                      <img
+                        src="/hero-accounting.png"
+                        alt="آسان حساب - نرم‌افزار حسابداری"
+                        className="w-full relative"
+                      />
                     </motion.div>
+
+                    {/* Floating logo badge — top left */}
+                    <motion.div
+                      className="absolute -top-3 -right-3 md:top-4 md:-right-4 z-20"
+                      initial={{ opacity: 0, scale: 0, rotate: -20 }}
+                      animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                      transition={{ delay: 0.8, type: "spring", stiffness: 200 }}
+                    >
+                      <motion.div
+                        className="relative"
+                        animate={{ y: [0, -8, 0] }}
+                        transition={{ duration: 4, repeat: Infinity }}
+                      >
+                        <div className="w-16 h-16 rounded-2xl bg-white shadow-xl shadow-brand-deep/15 p-1 border border-brand-pale/40">
+                          <img
+                            src="/logo-asanhesab.png"
+                            alt="آسان حساب"
+                            className="w-full h-full rounded-xl object-contain"
+                          />
+                        </div>
+                        {/* Pulse */}
+                        <motion.div
+                          className="absolute inset-0 rounded-2xl border-2 border-brand-mid/30"
+                          animate={{ scale: [1, 1.4], opacity: [0.5, 0] }}
+                          transition={{ duration: 2, repeat: Infinity }}
+                        />
+                      </motion.div>
+                    </motion.div>
+
+                    {/* Floating stat: Revenue — bottom right */}
+                    <motion.div
+                      className="absolute -bottom-4 right-4 md:bottom-6 md:right-8 z-20"
+                      initial={{ opacity: 0, y: 20, scale: 0.8 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      transition={{ delay: 1, type: "spring" }}
+                    >
+                      <motion.div
+                        className="bg-white rounded-2xl shadow-xl shadow-brand-deep/10 p-4 border border-brand-pale/40"
+                        style={{ animation: "float 6s ease-in-out infinite" }}
+                        whileHover={{ scale: 1.08, boxShadow: "0 20px 40px rgba(0,71,171,0.15)" }}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="w-11 h-11 gradient-brand rounded-xl flex items-center justify-center">
+                            <TrendingUp className="w-5 h-5 text-white" />
+                          </div>
+                          <div>
+                            <p className="text-[10px] text-gray-400">رشد درآمد</p>
+                            <p className="text-xl font-black text-brand-deep">+۴۷٪</p>
+                          </div>
+                        </div>
+                      </motion.div>
+                    </motion.div>
+
+                    {/* Floating stat: Rating — top right area */}
+                    <motion.div
+                      className="absolute top-8 right-8 z-20 hidden md:block"
+                      initial={{ opacity: 0, y: -20, scale: 0.8 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      transition={{ delay: 1.2, type: "spring" }}
+                    >
+                      <motion.div
+                        className="bg-white rounded-2xl shadow-xl shadow-brand-deep/10 p-3.5 border border-brand-pale/40"
+                        style={{ animation: "float 7s ease-in-out infinite 1.5s" }}
+                        whileHover={{ scale: 1.08 }}
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <div className="w-10 h-10 bg-amber-50 rounded-xl flex items-center justify-center">
+                            <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
+                          </div>
+                          <div>
+                            <p className="text-[10px] text-gray-400">رضایت</p>
+                            <p className="text-lg font-black text-gray-900">۴.۹/۵</p>
+                          </div>
+                        </div>
+                      </motion.div>
+                    </motion.div>
+
+                    {/* Floating mini card: Invoice — bottom left */}
+                    <motion.div
+                      className="absolute -bottom-4 left-4 md:bottom-10 md:-left-4 z-20 hidden sm:block"
+                      initial={{ opacity: 0, x: -20, scale: 0.8 }}
+                      animate={{ opacity: 1, x: 0, scale: 1 }}
+                      transition={{ delay: 1.4, type: "spring" }}
+                    >
+                      <motion.div
+                        className="bg-white rounded-2xl shadow-xl shadow-brand-deep/10 p-3.5 border border-brand-pale/40"
+                        style={{ animation: "float 8s ease-in-out infinite 2s" }}
+                        whileHover={{ scale: 1.08 }}
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <div className="w-10 h-10 gradient-brand rounded-xl flex items-center justify-center">
+                            <Receipt className="w-4 h-4 text-white" />
+                          </div>
+                          <div>
+                            <p className="text-[10px] text-gray-400">فاکتور امروز</p>
+                            <p className="text-lg font-black text-brand-deep">۱۲ عدد</p>
+                          </div>
+                        </div>
+                      </motion.div>
+                    </motion.div>
+
+                    {/* Orbiting icons */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-0 h-0 hidden lg:block">
+                      <motion.div
+                        className="w-9 h-9 gradient-brand rounded-xl shadow-lg flex items-center justify-center"
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+                        style={{ transformOrigin: "180px center" }}
+                      >
+                        <Calculator className="w-4 h-4 text-white" />
+                      </motion.div>
+                      <motion.div
+                        className="w-8 h-8 bg-white rounded-lg shadow-lg flex items-center justify-center border border-brand-pale/40"
+                        animate={{ rotate: -360 }}
+                        transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
+                        style={{ transformOrigin: "200px center" }}
+                      >
+                        <CalendarDays className="w-3.5 h-3.5 text-brand-mid" />
+                      </motion.div>
+                      <motion.div
+                        className="w-7 h-7 bg-amber-50 rounded-lg shadow-lg flex items-center justify-center border border-amber-200/40"
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                        style={{ transformOrigin: "160px center" }}
+                      >
+                        <Wallet className="w-3 h-3 text-amber-500" />
+                      </motion.div>
+                    </div>
                   </div>
-                </div>
-              </ParallaxSection>
+                </ParallaxSection>
+              </div>
             </div>
           </div>
+
+          {/* Inline stats bar — bridging hero to next section */}
+          <FadeIn delay={0.8}>
+            <motion.div
+              className="mt-12 md:mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.2 }}
+            >
+              {stats.map((s, i) => (
+                <motion.div
+                  key={i}
+                  className="glass-card rounded-2xl p-4 text-center"
+                  whileHover={{ scale: 1.05, boxShadow: "0 10px 30px rgba(0,71,171,0.1)" }}
+                >
+                  <p className="text-2xl font-black text-brand-deep">
+                    <AnimatedCounter target={s.value} suffix={s.suffix} />
+                  </p>
+                  <p className="text-xs text-gray-400 mt-1">{s.label}</p>
+                </motion.div>
+              ))}
+            </motion.div>
+          </FadeIn>
         </div>
 
         {/* Scroll indicator */}
         <motion.div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-          animate={{ y: [0, 10, 0] }}
+          className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+          animate={{ y: [0, 8, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
         >
-          <span className="text-xs text-gray-400">اسکرول کنید</span>
-          <div className="w-6 h-10 border-2 border-gray-300 rounded-full flex justify-center pt-2">
+          <span className="text-[10px] text-gray-300 tracking-wider">SCROLL</span>
+          <div className="w-5 h-8 border-2 border-gray-200 rounded-full flex justify-center pt-1.5">
             <motion.div
-              className="w-1.5 h-1.5 bg-brand-mid rounded-full"
-              animate={{ y: [0, 12, 0] }}
+              className="w-1 h-1 bg-brand-mid rounded-full"
+              animate={{ y: [0, 8, 0] }}
               transition={{ duration: 2, repeat: Infinity }}
             />
           </div>
@@ -1383,11 +1599,15 @@ export default function Home() {
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <FadeIn>
             <motion.div
-              className="w-20 h-20 bg-white/15 backdrop-blur-sm rounded-3xl flex items-center justify-center mx-auto mb-8 border border-white/20"
+              className="w-20 h-20 bg-white/15 backdrop-blur-sm rounded-3xl flex items-center justify-center mx-auto mb-8 border border-white/20 p-2"
               animate={{ rotate: [0, 5, -5, 0], scale: [1, 1.05, 1] }}
               transition={{ duration: 4, repeat: Infinity }}
             >
-              <Heart className="w-10 h-10 text-white" />
+              <img
+                src="/logo-asanhesab.png"
+                alt="آسان حساب"
+                className="w-full h-full rounded-2xl object-contain"
+              />
             </motion.div>
             <h2 className="text-3xl md:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight">
               آینده مالی کسب‌وکارتان
@@ -1432,13 +1652,11 @@ export default function Home() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
             <div className="sm:col-span-2 lg:col-span-1">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 gradient-brand rounded-full flex items-center justify-center shadow-lg">
-                  <img
-                    src="/logo-asanhesab.png"
-                    alt="آسان حساب"
-                    className="w-7 h-7 rounded-full object-cover"
-                  />
-                </div>
+                <img
+                  src="/logo-asanhesab.png"
+                  alt="آسان حساب"
+                  className="w-10 h-10 rounded-full shadow-lg"
+                />
                 <div>
                   <span className="text-lg font-black text-white">آسان حساب</span>
                   <span className="text-[10px] text-gray-600 block -mt-0.5 tracking-wider">
