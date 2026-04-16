@@ -232,7 +232,7 @@ function LiveTransactionFeed() {
     { name: "خرید مواد اولیه", amount: "-۸,۲۰۰", type: "expense", time: "۱۱:۱۵", icon: <Truck className="w-2.5 h-2.5" /> },
     { name: "فاکتور #۱۰۴۷", amount: "+۲۳,۰۰۰", type: "income", time: "۱۲:۰۰", icon: <Receipt className="w-2.5 h-2.5" /> },
     { name: "حقوق کارمندان", amount: "-۴۵,۰۰۰", type: "expense", time: "۰۱:۳۰", icon: <Users className="w-2.5 h-2.5" /> },
-    { name: "سفارش آنلاین #۲۳۱", amount: "+۷,۸۰۰", type: "income", time: "۰۲:۴۵", icon: <Globe className="w-2.5 h-2.5" /> },
+    { name: "سفارش #۲۳۱", amount: "+۷,۸۰۰", type: "income", time: "۰۲:۴۵", icon: <Store className="w-2.5 h-2.5" /> },
     { name: "اجاره مغازه", amount: "-۱۲,۰۰۰", type: "expense", time: "۰۳:۰۰", icon: <Building2 className="w-2.5 h-2.5" /> },
   ];
 
@@ -281,7 +281,7 @@ function LiveTransactionFeed() {
           animate={{ opacity: 1 }}
         >
           <motion.div className="w-1 h-1 rounded-full bg-emerald-400" animate={{ scale: [1, 1.5, 1] }} transition={{ duration: 1.5, repeat: Infinity }} />
-          <span className="text-[7px] text-emerald-400/80 font-medium">واردات زنده</span>
+          <span className="text-[7px] text-emerald-400/80 font-medium">ثبت خودکار</span>
         </motion.div>
       )}
     </div>
@@ -476,18 +476,18 @@ function HeroTiltCard() {
         }}
         transition={{ type: "spring", stiffness: 150, damping: 20 }}
       >
-        {/* Browser Chrome */}
-        <div className="bg-gradient-to-l from-gray-50 to-gray-100/80 border-b border-gray-200/60 px-3 py-2.5 flex items-center gap-2">
-          <div className="flex gap-1.5">
-            <div className="w-2.5 h-2.5 rounded-full bg-red-400/80" />
-            <div className="w-2.5 h-2.5 rounded-full bg-amber-400/80" />
-            <div className="w-2.5 h-2.5 rounded-full bg-emerald-400/80" />
-          </div>
-          <div className="flex-1 mx-2">
-            <div className="bg-white/80 rounded-lg px-3 py-1 text-[9px] text-gray-400 flex items-center gap-1.5 border border-gray-200/50" dir="ltr">
-              <Lock className="w-2.5 h-2.5 text-emerald-500" />
-              <span>app.asanhesab.af/dashboard</span>
+        {/* Desktop App Title Bar */}
+        <div className="bg-gradient-to-l from-gray-100 to-gray-200/90 border-b border-gray-300/60 px-3 py-2 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-5 h-5 rounded bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center">
+              <Calculator className="w-3 h-3 text-white" />
             </div>
+            <span className="text-[9px] text-gray-600 font-medium">آسان حساب — داشبورد مدیریت</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <div className="w-3 h-3 rounded-sm border border-gray-400/60 bg-gray-100" />
+            <div className="w-3 h-3 rounded-sm border border-gray-400/60 bg-gray-100" />
+            <div className="w-3 h-3 rounded-sm border border-red-400/60 bg-red-100" />
           </div>
         </div>
 
@@ -505,7 +505,7 @@ function HeroTiltCard() {
               </div>
             </div>
             <div className="flex items-center gap-1.5">
-              <div className="px-2 py-0.5 bg-emerald-50 rounded-full text-[7px] text-emerald-600 font-bold">آنلاین</div>
+              <div className="px-2 py-0.5 bg-blue-50 rounded-full text-[7px] text-blue-600 font-bold">آفلاین</div>
               <div className="w-5 h-5 rounded-full bg-brand-pale flex items-center justify-center">
                 <Bell className="w-2.5 h-2.5 text-brand-deep" />
               </div>
@@ -577,7 +577,7 @@ function HeroTiltCard() {
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-1.5">
                   <motion.div className="w-1.5 h-1.5 rounded-full bg-emerald-400" animate={{ scale: [1, 1.4, 1], opacity: [1, 0.5, 1] }} transition={{ duration: 2, repeat: Infinity }} />
-                  <p className="text-[8px] font-bold text-gray-300">واردات زنده حسابداری</p>
+                  <p className="text-[8px] font-bold text-gray-300">آخرین تراکنش‌های حسابداری</p>
                 </div>
                 <span className="text-[7px] text-gray-500 bg-gray-800 px-1.5 py-0.5 rounded-full">امروز</span>
               </div>
@@ -672,9 +672,9 @@ export default function Home() {
       desc: "رمزگذاری پیشرفته و پشتیبان‌گیری خودکار روزانه.",
     },
     {
-      icon: <Smartphone className="w-7 h-7" />,
-      title: "هر جا، هر وقت",
-      desc: "از موبایل، تبلت یا کامپیوتر به حسابداری خود دسترسی داشته باشید.",
+      icon: <Monitor className="w-7 h-7" />,
+      title: "نصب آسان",
+      desc: "به راحتی روی کامپیوتر خود نصب کنید و بدون نیاز به اینترنت کار کنید.",
     },
     {
       icon: <Wallet className="w-7 h-7" />,
@@ -701,7 +701,7 @@ export default function Home() {
       span: "md:col-span-1",
       icon: <Shield className="w-7 h-7" />,
       title: "پشتیبان‌گیری خودکار",
-      desc: "اطلاعات شما هر روز به صورت خودکار ذخیره می‌شود.",
+      desc: "پشتیبان‌گیری خودکار اطلاعات روی کامپیوتر شما انجام می‌شود.",
     },
     {
       span: "md:col-span-1",
@@ -773,9 +773,9 @@ export default function Home() {
         "صدور فاکتور نامحدود",
         "گزارش سود و زیان",
         "تقویم هجری شمسی",
-        "پشتیبانی آنلاین",
+        "پشتیبانی تلفنی",
       ],
-      cta: "شروع رایگان",
+      cta: "دانلود رایگان",
       popular: false,
     },
     {
@@ -788,11 +788,11 @@ export default function Home() {
         "تمام امکانات پایه",
         "مدیریت موجودی انبار",
         "گزارش‌های پیشرفته",
-        "دسترسی موبایل و دسکتاپ",
+        "نصب روی چند کامپیوتر",
         "پشتیبانی تلفنی ۲۴/۷",
         "بکاپ خودکار روزانه",
       ],
-      cta: "شروع رایگان",
+      cta: "دانلود رایگان",
       popular: true,
     },
     {
@@ -824,16 +824,16 @@ export default function Home() {
       a: "بله، به صورت کامل. تمام تاریخ‌ها، گزارش‌ها، فاکتورها و صورت‌حساب‌ها به تاریخ شمسی نمایش داده می‌شوند. امکان تبدیل تاریخ بین شمسی و میلادی نیز وجود دارد.",
     },
     {
-      q: "آیا می‌توانم از موبایل استفاده کنم؟",
-      a: "بله! آسان حساب روی تمام دستگاه‌ها کار می‌کند. فقط کافیست مرورگر خود را باز کنید و وارد حساب کاربری شوید.",
+      q: "آیا برای استفاده نیاز به اینترنت دارم؟",
+      a: "خیر! آسان حساب کاملاً آفلاین کار می‌کند. بدون نیاز به اینترنت، تمام عملیات حسابداری، صدور فاکتور و گزارش‌گیری را انجام دهید. اطلاعات شما فقط روی کامپیوتر خودتان ذخیره می‌شود.",
     },
     {
       q: "اطلاعات مالی من چقدر امن است؟",
-      a: "بالاترین سطح امنیت: رمزگذاری پیشرفته، پشتیبان‌گیری خودکار روزانه، سرورهای امن. اطلاعات شما با هیچ شخص ثالثی به اشتراک گذاشته نمی‌شود.",
+      a: "بالاترین سطح امنیت: رمزگذاری پیشرفته اطلاعات، پشتیبان‌گیری خودکار روی کامپیوتر شما، بدون ارسال اطلاعات به اینترنت. تمام داده‌های مالی شما فقط روی دستگاه خودتان ذخیره می‌شود.",
     },
     {
       q: "آیا نسخه رایگان وجود دارد؟",
-      a: "بله! ۱۴ روز رایگان试用 با تمام امکانات. بدون کارت بانکی و بدون تعهد.",
+      a: "بله! نسخه آزمایشی رایگان با تمام امکانات. بدون نیاز به اینترنت و بدون تعهد.",
     },
   ];
 
@@ -901,7 +901,7 @@ export default function Home() {
               </Button>
               <Button className="gradient-brand hover:opacity-90 text-white border-0 px-6 rounded-full shadow-lg shadow-brand-mid/25 hover:shadow-brand-mid/40 transition-all duration-300 hover:scale-105">
                 <Zap className="w-4 h-4 ml-2" />
-                شروع رایگان
+                دانلود رایگان
               </Button>
             </div>
 
@@ -946,7 +946,7 @@ export default function Home() {
                     ورود
                   </Button>
                   <Button className="flex-1 gradient-brand text-white border-0 rounded-xl">
-                    شروع رایگان
+                    دانلود رایگان
                   </Button>
                 </div>
               </div>
@@ -1151,7 +1151,7 @@ export default function Home() {
                     >
                       <span className="relative z-10 flex items-center">
                         <Zap className="w-5 h-5 ml-2" />
-                        ۱۴ روز رایگان شروع کنید
+                        دانلود رایگان نسخه آزمایشی
                         <ArrowLeft className="w-5 h-5 mr-2" />
                       </span>
                       <motion.div
@@ -1184,12 +1184,12 @@ export default function Home() {
                 <div className="flex items-center gap-5 mt-8 justify-center lg:justify-start">
                   <div className="flex items-center gap-2">
                     <CheckCircle2 className="w-4 h-4 text-brand-mid" />
-                    <span className="text-xs text-gray-400">بدون کارت بانکی</span>
+                    <span className="text-xs text-gray-400">بدون نیاز به اینترنت</span>
                   </div>
                   <div className="w-px h-4 bg-gray-200" />
                   <div className="flex items-center gap-2">
                     <CheckCircle2 className="w-4 h-4 text-brand-mid" />
-                    <span className="text-xs text-gray-400">بدون تعهد</span>
+                    <span className="text-xs text-gray-400">کاملاً آفلاین</span>
                   </div>
                 </div>
               </FadeIn>
@@ -1704,7 +1704,7 @@ export default function Home() {
                   </div>
                   <div className="flex-1 flex justify-center">
                     <div className="bg-white/5 rounded-lg px-4 py-1 text-xs text-white/30">
-                      app.asanhesab.af/dashboard
+                      آسان حساب — داشبورد مدیریت
                     </div>
                   </div>
                 </div>
@@ -1758,8 +1758,8 @@ export default function Home() {
             {[
               {
                 step: "۱",
-                title: "ثبت‌نام ۳۰ ثانیه‌ای",
-                desc: "با شماره تلفن ثبت‌نام کنید. بدون نیاز به اطلاعات پیچیده.",
+                title: "دانلود و نصب",
+                desc: "نرم‌افزار را دانلود و در کمتر از یک دقیقه نصب کنید. بدون نیاز به اینترنت.",
                 icon: <Users />,
               },
               {
@@ -1954,7 +1954,7 @@ export default function Home() {
               پلنی مناسب هر کسب‌وکار
             </h2>
             <p className="text-gray-400 text-lg">
-              ۱۴ روز رایگان — بدون کارت بانکی
+              نسخه آزمایشی رایگان — بدون نیاز به اینترنت
             </p>
           </FadeIn>
 
@@ -2113,7 +2113,7 @@ export default function Home() {
                   className="bg-white text-brand-deep hover:bg-gray-50 border-0 px-10 py-7 text-lg rounded-2xl shadow-2xl font-bold transition-all"
                 >
                   <Zap className="w-5 h-5 ml-2" />
-                  شروع رایگان ۱۴ روزه
+                  دانلود رایگان
                   <ArrowLeft className="w-5 h-5 mr-2" />
                 </Button>
               </motion.div>
@@ -2128,7 +2128,7 @@ export default function Home() {
               </motion.div>
             </div>
             <p className="text-white/30 text-sm mt-8">
-              بدون کارت بانکی &bull; بدون تعهد &bull; کنسل هر وقت بخواهید
+              بدون نیاز به اینترنت • کاملاً آفلاین • هر وقت بخواهید
             </p>
           </FadeIn>
         </div>
@@ -2159,7 +2159,7 @@ export default function Home() {
             <div>
               <h4 className="text-white font-bold mb-4 text-sm">محصول</h4>
               <ul className="space-y-3 text-sm">
-                {["ویژگی‌ها", "قیمت‌ها", "آپدیت‌ها", "API"].map((l) => (
+                {["ویژگی‌ها", "قیمت‌ها", "آپدیت‌ها", "نسخه دسکتاپ"].map((l) => (
                   <li key={l}>
                     <a href="#" className="hover:text-brand-light transition-colors">
                       {l}
