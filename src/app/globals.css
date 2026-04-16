@@ -113,6 +113,33 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
+  .text-gradient-hero {
+    background: linear-gradient(135deg, #003380 0%, #0047AB 25%, #007FFF 50%, #5DADE2 75%, #007FFF 100%);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: heroGradientShift 6s ease-in-out infinite;
+  }
+  @keyframes heroGradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  @keyframes heroUnderlineGrow {
+    0% { transform: scaleX(0); transform-origin: right; }
+    100% { transform: scaleX(1); transform-origin: right; }
+  }
+  .hero-underline {
+    position: absolute;
+    bottom: -4px;
+    right: 0;
+    height: 6px;
+    width: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #007FFF 0%, #5DADE2 50%, #D6EEFF 100%);
+    opacity: 0.5;
+    animation: heroUnderlineGrow 1s cubic-bezier(0.25, 0.4, 0.25, 1) 0.8s both;
+  }
   .text-gradient-light {
     background: linear-gradient(135deg, #5DADE2, #007FFF);
     -webkit-background-clip: text;

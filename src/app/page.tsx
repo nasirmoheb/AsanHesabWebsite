@@ -234,56 +234,62 @@ function LiveTransactionFeed() {
     { name: "حقوق کارمندان", amount: "-۴۵,۰۰۰", type: "expense", time: "۰۱:۳۰", icon: <Users className="w-2.5 h-2.5" /> },
     { name: "سفارش #۲۳۱", amount: "+۷,۸۰۰", type: "income", time: "۰۲:۴۵", icon: <Store className="w-2.5 h-2.5" /> },
     { name: "اجاره مغازه", amount: "-۱۲,۰۰۰", type: "expense", time: "۰۳:۰۰", icon: <Building2 className="w-2.5 h-2.5" /> },
+    { name: "فروش عمده #۳۱۲", amount: "+۵۶,۰۰۰", type: "income", time: "۰۳:۳۰", icon: <Receipt className="w-2.5 h-2.5" /> },
+    { name: "خرید لوازم اداری", amount: "-۳,۵۰۰", type: "expense", time: "۰۴:۰۰", icon: <Building2 className="w-2.5 h-2.5" /> },
   ];
 
-  const [visibleCount, setVisibleCount] = useState(0);
+  const VISIBLE_SLOTS = 4;
+  const [startIndex, setStartIndex] = useState(0);
 
   useEffect(() => {
-    let count = 0;
     const timer = setInterval(() => {
-      count += 1;
-      if (count > transactions.length) {
-        count = 0;
-      }
-      setVisibleCount(count);
-    }, 1200);
+      setStartIndex((prev) => (prev + 1) % transactions.length);
+    }, 2200);
     return () => clearInterval(timer);
   }, []);
 
+  const visibleItems = Array.from({ length: VISIBLE_SLOTS }, (_, i) => transactions[(startIndex + i) % transactions.length]);
+
   return (
-    <div className="space-y-1.5">
-      {transactions.map((tx, i) => (
-        <motion.div
-          key={i}
-          className="flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-white/5 transition-colors"
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: i < visibleCount ? 1 : 0, x: i < visibleCount ? 0 : 20, height: i < visibleCount ? "auto" : 0, paddingTop: i < visibleCount ? 6 : 0, paddingBottom: i < visibleCount ? 6 : 0 }}
-          transition={{ duration: 0.5, ease: [0.25, 0.4, 0.25, 1] }}
-        >
-          <div className={`w-6 h-6 rounded-md flex items-center justify-center shrink-0 ${tx.type === "income" ? "bg-emerald-500/15 text-emerald-400" : "bg-red-400/15 text-red-400"}`}>
-            {tx.icon}
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-[9px] text-gray-300 font-medium truncate">{tx.name}</p>
-          </div>
-          <div className="text-left shrink-0">
-            <p className={`text-[10px] font-bold ${tx.type === "income" ? "text-emerald-400" : "text-red-400"}`}>
-              {tx.amount} <span className="text-[7px] text-gray-500 font-normal">Afs</span>
-            </p>
-            <p className="text-[7px] text-gray-500 text-left">{tx.time}</p>
-          </div>
-        </motion.div>
-      ))}
-      {visibleCount >= transactions.length && (
-        <motion.div
-          className="flex items-center justify-center gap-1.5 pt-1"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-        >
-          <motion.div className="w-1 h-1 rounded-full bg-emerald-400" animate={{ scale: [1, 1.5, 1] }} transition={{ duration: 1.5, repeat: Infinity }} />
-          <span className="text-[7px] text-emerald-400/80 font-medium">ثبت خودکار</span>
-        </motion.div>
-      )}
+    <div className="relative" style={{ height: `${VISIBLE_SLOTS * 30 + 16}px` }}>
+      {/* Pulse dot indicator */}
+      <div className="flex items-center gap-1.5 mb-1">
+        <motion.div className="w-1 h-1 rounded-full bg-emerald-400" animate={{ scale: [1, 1.4, 1], opacity: [1, 0.5, 1] }} transition={{ duration: 2, repeat: Infinity }} />
+        <span className="text-[7px] text-emerald-400/80 font-medium">ثبت خودکار</span>
+      </div>
+      {/* Fixed-height viewport */}
+      <div className="space-y-0.5 overflow-hidden">
+        <AnimatePresence mode="popLayout">
+          {visibleItems.map((tx, i) => (
+            <motion.div
+              key={startIndex + i}
+              layout
+              initial={{ opacity: 0, y: 12, scale: 0.97 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -10, scale: 0.97 }}
+              transition={{
+                duration: 0.45,
+                ease: [0.25, 0.4, 0.25, 1],
+                delay: i * 0.04,
+              }}
+              className="flex items-center gap-2 py-[5px] px-2 rounded-lg"
+              style={{ height: "30px" }}
+            >
+              <div className={`w-5 h-5 rounded-md flex items-center justify-center shrink-0 ${tx.type === "income" ? "bg-emerald-500/15 text-emerald-400" : "bg-red-400/15 text-red-400"}`}>
+                {tx.icon}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-[8px] text-gray-300 font-medium truncate leading-tight">{tx.name}</p>
+              </div>
+              <div className="text-left shrink-0">
+                <p className={`text-[9px] font-bold leading-tight ${tx.type === "income" ? "text-emerald-400" : "text-red-400"}`}>
+                  {tx.amount} <span className="text-[6px] text-gray-500 font-normal">Afs</span>
+                </p>
+              </div>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </div>
     </div>
   );
 }
@@ -956,7 +962,7 @@ export default function Home() {
       </motion.nav>
 
       {/* ══════════ HERO — CODE-ONLY CREATIVE SHOWCASE ══════════ */}
-      <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
+      <section className="relative pt-24 pb-32 md:pt-28 md:pb-36 overflow-hidden">
         {/* Layered animated background */}
         <div className="absolute inset-0">
           {/* Base gradient + Aurora */}
@@ -1064,8 +1070,8 @@ export default function Home() {
           />
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-10 md:py-16">
-          <div className="grid lg:grid-cols-12 gap-10 items-center">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+          <div className="grid lg:grid-cols-12 gap-8 lg:gap-10 items-center">
 
             {/* Left content — span 5 */}
             <div className="lg:col-span-5 text-center lg:text-right order-1 lg:order-2">
@@ -1087,45 +1093,68 @@ export default function Home() {
                 </motion.div>
               </FadeIn>
 
-              {/* Heading — word-by-word animation */}
+              {/* Heading — creative staggered animation */}
               <FadeIn delay={0.1}>
-                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[4.2rem] font-black leading-[1.08] mb-6">
+                <h1 className="mb-6" style={{ lineHeight: 1.05 }}>
+                  {/* Line 1: حسابداری — dark, large */}
                   <motion.span
                     className="block text-gray-900"
-                    initial={{ opacity: 0, x: 40 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.6, delay: 0.2 }}
+                    style={{ fontSize: "clamp(2.8rem, 7vw, 5.5rem)", letterSpacing: "-0.02em" }}
+                    initial={{ opacity: 0, x: 50, filter: "blur(8px)" }}
+                    animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+                    transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.4, 0.25, 1] }}
                   >
                     حسابداری
                   </motion.span>
+
+                  {/* Line 2: را آسان — gradient, with animated underline */}
                   <motion.span
                     className="block relative mt-1"
-                    initial={{ opacity: 0, x: 40 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.6, delay: 0.4 }}
+                    style={{ fontSize: "clamp(3.2rem, 8.5vw, 6.5rem)", letterSpacing: "-0.03em" }}
+                    initial={{ opacity: 0, x: 50, filter: "blur(8px)" }}
+                    animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+                    transition={{ duration: 0.8, delay: 0.45, ease: [0.25, 0.4, 0.25, 1] }}
                   >
-                    <span className="text-gradient">را آسان</span>
+                    <span className="text-gradient-hero">را آسان</span>
+                    {/* Animated gradient underline */}
                     <motion.span
-                      className="absolute -bottom-1 right-0 h-3 w-full rounded-full"
-                      style={{ background: "linear-gradient(90deg, #007FFF, #5DADE2)" }}
-                      initial={{ scaleX: 0, originX: 1 }}
-                      animate={{ scaleX: 1 }}
-                      transition={{ duration: 0.8, delay: 1 }}
+                      className="absolute -bottom-2 right-0 h-[6px] w-full rounded-full"
+                      style={{
+                        background: "linear-gradient(90deg, #0047AB 0%, #007FFF 40%, #5DADE2 70%, #D6EEFF 100%)",
+                      }}
+                      initial={{ scaleX: 0, originX: 1, opacity: 0 }}
+                      animate={{ scaleX: 1, opacity: 0.6 }}
+                      transition={{ duration: 1, delay: 1, ease: [0.25, 0.4, 0.25, 1] }}
+                    />
+                    {/* Secondary thinner underline for depth */}
+                    <motion.span
+                      className="absolute -bottom-[10px] right-4 h-[3px] rounded-full"
+                      style={{
+                        background: "linear-gradient(90deg, transparent 0%, #007FFF 30%, #5DADE2 100%)",
+                        width: "60%",
+                      }}
+                      initial={{ scaleX: 0, originX: 1, opacity: 0 }}
+                      animate={{ scaleX: 1, opacity: 0.3 }}
+                      transition={{ duration: 1.2, delay: 1.2, ease: [0.25, 0.4, 0.25, 1] }}
                     />
                   </motion.span>
+
+                  {/* Line 3: کنید! — dark with sparkle */}
                   <motion.span
-                    className="block text-gray-900 mt-1"
-                    initial={{ opacity: 0, x: 40 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.6, delay: 0.6 }}
+                    className="block relative mt-1 text-gray-900"
+                    style={{ fontSize: "clamp(2.8rem, 7vw, 5.5rem)", letterSpacing: "-0.02em" }}
+                    initial={{ opacity: 0, x: 50, filter: "blur(8px)" }}
+                    animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+                    transition={{ duration: 0.8, delay: 0.7, ease: [0.25, 0.4, 0.25, 1] }}
                   >
                     کنید!
+                    {/* Animated sparkle burst around exclamation */}
                     <motion.span
-                      className="inline-block ml-2"
-                      animate={{ rotate: [0, 15, 0, -15, 0] }}
-                      transition={{ duration: 2, delay: 1.2, repeat: Infinity }}
+                      className="inline-block mr-1 relative"
+                      animate={{ rotate: [0, 10, 0, -10, 0] }}
+                      transition={{ duration: 3, delay: 1.5, repeat: Infinity, ease: "easeInOut" }}
                     >
-                      <Sparkles className="w-8 h-8 text-brand-mid/40 -mt-2" />
+                      <Sparkles className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-brand-mid/30 -mt-1" />
                     </motion.span>
                   </motion.span>
                 </h1>
@@ -1471,20 +1500,22 @@ export default function Home() {
         </div>
 
         {/* Scroll indicator */}
-        <motion.div
-          className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-        >
-          <span className="text-[10px] text-gray-300 tracking-wider">SCROLL</span>
-          <div className="w-5 h-8 border-2 border-gray-200 rounded-full flex justify-center pt-1.5">
-            <motion.div
-              className="w-1 h-1 bg-brand-mid rounded-full"
-              animate={{ y: [0, 8, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            />
-          </div>
-        </motion.div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 md:mt-16">
+          <motion.div
+            className="flex flex-col items-center gap-2"
+            animate={{ y: [0, 6, 0] }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <span className="text-[10px] text-gray-400 tracking-[0.2em] font-medium">اسکرول</span>
+            <div className="w-5 h-9 border-2 border-gray-300/60 rounded-full flex justify-center pt-2">
+              <motion.div
+                className="w-1 h-1.5 bg-brand-mid rounded-full"
+                animate={{ y: [0, 10, 0], opacity: [1, 0.3, 1] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              />
+            </div>
+          </motion.div>
+        </div>
       </section>
 
       {/* ══════════ MARQUEE TRUST BAR ══════════ */}
