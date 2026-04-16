@@ -1,7 +1,13 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import {
+  motion,
+  useInView,
+  useScroll,
+  useTransform,
+  AnimatePresence,
+} from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -31,26 +37,46 @@ import {
   Building2,
   Truck,
   Store,
+  Sparkles,
+  Layers,
+  Lock,
+  Database,
+  Monitor,
+  Cpu,
 } from "lucide-react";
 
-/* ─── Fade-in wrapper ─── */
-function FadeInSection({
+/* ═══════════════════════════════════════════
+   UTILITY COMPONENTS
+   ═══════════════════════════════════════════ */
+
+function FadeIn({
   children,
   className = "",
   delay = 0,
+  direction = "up",
 }: {
   children: React.ReactNode;
   className?: string;
   delay?: number;
+  direction?: "up" | "down" | "left" | "right" | "none";
 }) {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const isInView = useInView(ref, { once: true, margin: "-60px" });
+  const dirMap = {
+    up: { y: 50, x: 0 },
+    down: { y: -50, x: 0 },
+    left: { y: 0, x: 50 },
+    right: { y: 0, x: -50 },
+    none: { y: 0, x: 0 },
+  };
+  const d = dirMap[direction];
+
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 40 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.7, delay, ease: "easeOut" }}
+      initial={{ opacity: 0, y: d.y, x: d.x }}
+      animate={isInView ? { opacity: 1, y: 0, x: 0 } : {}}
+      transition={{ duration: 0.7, delay, ease: [0.25, 0.4, 0.25, 1] }}
       className={className}
     >
       {children}
@@ -58,12 +84,68 @@ function FadeInSection({
   );
 }
 
-/* ─── Stats counter ─── */
-function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: string }) {
+function StaggerContainer({
+  children,
+  className = "",
+  stagger = 0.1,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  stagger?: number;
+}) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-60px" });
+  return (
+    <motion.div
+      ref={ref}
+      initial="hidden"
+      animate={isInView ? "visible" : "hidden"}
+      variants={{
+        hidden: {},
+        visible: { transition: { staggerChildren: stagger } },
+      }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+function StaggerItem({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <motion.div
+      variants={{
+        hidden: { opacity: 0, y: 30, scale: 0.95 },
+        visible: {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          transition: { duration: 0.6, ease: [0.25, 0.4, 0.25, 1] },
+        },
+      }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+function AnimatedCounter({
+  target,
+  suffix = "",
+}: {
+  target: number;
+  suffix?: string;
+}) {
   const [count, setCount] = useState(0);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
-
   useEffect(() => {
     if (!isInView) return;
     let start = 0;
@@ -80,12 +162,62 @@ function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: str
     }, 16);
     return () => clearInterval(timer);
   }, [isInView, target]);
-
   return (
     <span ref={ref}>
       {count.toLocaleString("fa-AF")}
       {suffix}
     </span>
+  );
+}
+
+function ParallaxSection({
+  children,
+  speed = 0.3,
+  className = "",
+}: {
+  children: React.ReactNode;
+  speed?: number;
+  className?: string;
+}) {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+  const y = useTransform(scrollYProgress, [0, 1], [0, speed * 100]);
+  return (
+    <motion.div ref={ref} style={{ y }} className={className}>
+      {children}
+    </motion.div>
+  );
+}
+
+function GlowOrb({
+  color,
+  size,
+  top,
+  right,
+  left,
+}: {
+  color: string;
+  size: string;
+  top?: string;
+  right?: string;
+  left?: string;
+}) {
+  return (
+    <div
+      className={`absolute ${top} ${right} ${left} w-[${size}] h-[${size}] rounded-full opacity-20 blur-3xl pointer-events-none`}
+      style={{
+        background: color,
+        width: size,
+        height: size,
+        top,
+        right,
+        left,
+        filter: "blur(80px)",
+      }}
+    />
   );
 }
 
@@ -103,143 +235,148 @@ export default function Home() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  /* ─── NAV ─── */
   const navLinks = [
     { label: "ویژگی‌ها", href: "#features" },
-    { label: "چگونه کار می‌کند", href: "#how-it-works" },
-    { label: "نظرات مشتریان", href: "#testimonials" },
+    { label: "داشبورد", href: "#dashboard" },
+    { label: "نظرات", href: "#testimonials" },
     { label: "قیمت‌ها", href: "#pricing" },
-    { label: "سوالات متداول", href: "#faq" },
+    { label: "سوالات", href: "#faq" },
   ];
 
-  /* ─── FEATURES ─── */
   const features = [
     {
-      icon: <Globe className="w-8 h-8" />,
+      icon: <Globe className="w-7 h-7" />,
       title: "کاملاً به زبان دری",
-      desc: "تمام رابط کاربری، گزارش‌ها و تنظیمات به زبان دری و پشتو طراحی شده است. شما بدون نیاز به دانش زبان انگلیسی می‌توانید از تمام امکانات نرم‌افزار بهره‌مند شوید.",
-      color: "from-emerald-500 to-teal-500",
+      desc: "تمام رابط کاربری، گزارش‌ها و تنظیمات به زبان دری و پشتو طراحی شده است.",
     },
     {
-      icon: <CalendarDays className="w-8 h-8" />,
+      icon: <CalendarDays className="w-7 h-7" />,
       title: "تقویم هجری شمسی",
-      desc: "تقویم هجری شمسی به صورت کامل در نرم‌افزار تعبیه شده است. تاریخ‌ها، گزارش‌ها و فاکتورها همه به تاریخ شمسی نمایش داده می‌شوند تا با زندگی شما هماهنگ باشد.",
-      color: "from-emerald-600 to-emerald-500",
+      desc: "تمام تاریخ‌ها و گزارش‌ها به تاریخ شمسی نمایش داده می‌شوند.",
     },
     {
-      icon: <SmileIcon />,
+      icon: <Sparkles className="w-7 h-7" />,
       title: "ساده برای همه",
-      desc: "حتی اگر هیچ دانش حسابداری ندارید، می‌توانید با آسان حساب کار کنید. رابط کاربری بسیار ساده و بصری طراحی شده تا هر کسی بتواند به راحتی از آن استفاده کند.",
-      color: "from-teal-500 to-emerald-400",
+      desc: "حتی بدون دانش حسابداری می‌توانید به راحتی کار کنید.",
     },
     {
-      icon: <Receipt className="w-8 h-8" />,
-      title: "صدور فاکتور آسان",
-      desc: "با چند کلیک ساده، فاکتورهای حرفه‌ای صادر کنید. قالب‌های آماده، چاپ مستقیم و ارسال فاکتور از طریق شبکه‌های اجتماعی امکان‌پذیر است.",
-      color: "from-emerald-500 to-green-500",
+      icon: <Receipt className="w-7 h-7" />,
+      title: "صدور فاکتور",
+      desc: "با چند کلیک فاکتورهای حرفه‌ای صادر کنید و ارسال نمایید.",
     },
     {
-      icon: <BarChart3 className="w-8 h-8" />,
+      icon: <BarChart3 className="w-7 h-7" />,
       title: "گزارش‌های هوشمند",
-      desc: "داشبورد مدیریتی با نمودارهای زیبا و قابل فهم. سود و زیان، بدهکاری و طلبکاری، وضعیت صندوق و ده‌ها گزارش دیگر به صورت لحظه‌ای.",
-      color: "from-green-500 to-emerald-600",
+      desc: "داشبورد با نمودارهای زیبا و قابل فهم، لحظه‌ای و دقیق.",
     },
     {
-      icon: <Shield className="w-8 h-8" />,
+      icon: <Shield className="w-7 h-7" />,
       title: "امنیت کامل",
-      desc: "اطلاعات مالی شما با بالاترین سطح امنیت محافظت می‌شود. پشتیبان‌گیری خودکار روزانه و رمزگذاری پیشرفته اطلاعات تضمین می‌کند که داده‌های شما در امان هستند.",
-      color: "from-emerald-600 to-teal-600",
+      desc: "رمزگذاری پیشرفته و پشتیبان‌گیری خودکار روزانه.",
     },
     {
-      icon: <Smartphone className="w-8 h-8" />,
-      title: "دسترسی از هر جا",
-      desc: "از موبایل، تبلت یا کامپیوتر به حسابداری خود دسترسی داشته باشید. آسان حساب روی تمام دستگاه‌ها به صورت آنلاین کار می‌کند.",
-      color: "from-teal-500 to-green-500",
+      icon: <Smartphone className="w-7 h-7" />,
+      title: "هر جا، هر وقت",
+      desc: "از موبایل، تبلت یا کامپیوتر به حسابداری خود دسترسی داشته باشید.",
     },
     {
-      icon: <Wallet className="w-8 h-8" />,
+      icon: <Wallet className="w-7 h-7" />,
       title: "پول افغانی",
-      desc: "تمام محاسبات به واحد پول افغانی انجام می‌شود. بدون نیاز به تبدیل ارز و با دقت کامل، حساب‌های خود را مدیریت کنید.",
-      color: "from-emerald-500 to-teal-600",
+      desc: "تمام محاسبات به واحد پول افغانی بدون نیاز به تبدیل ارز.",
     },
   ];
 
-  /* ─── HOW IT WORKS ─── */
-  const steps = [
+  const bentoFeatures = [
     {
-      step: "۱",
-      title: "ثبت‌نام آسان",
-      desc: "با شماره تلفن یا ایمیل خود در کمتر از ۳۰ ثانیه ثبت‌نام کنید. هیچ نیاز به اطلاعات پیچیده ندارد.",
-      icon: <Users className="w-10 h-10" />,
+      span: "md:col-span-2 md:row-span-2",
+      icon: <BarChart3 className="w-10 h-10" />,
+      title: "داشبورد مدیریتی هوشمند",
+      desc: "با یک نگاه، تصویر کامل مالی کسب‌وکار خود را ببینید. نمودارهای تعاملی، شاخص‌های کلیدی و گزارش‌های لحظه‌ای همه در یک صفحه.",
+      gradient: true,
     },
     {
-      step: "۲",
-      title: "تنظیم کسب‌وکار",
-      desc: "نام کسب‌وکار، نوع فعالیت و اطلاعات اولیه را وارد کنید. ویزاردهای آماده به شما کمک می‌کند.",
-      icon: <Building2 className="w-10 h-10" />,
+      span: "md:col-span-1",
+      icon: <Receipt className="w-7 h-7" />,
+      title: "فاکتور آنی",
+      desc: "در کمتر از ۳۰ ثانیه فاکتور حرفه‌ای بسازید.",
     },
     {
-      step: "۳",
-      title: "شروع حسابداری",
-      desc: "فاکتور صادر کنید، هزینه‌ها را ثبت کنید و گزارش‌های هوشمند ببینید. همین امروز شروع کنید!",
-      icon: <TrendingUp className="w-10 h-10" />,
+      span: "md:col-span-1",
+      icon: <Shield className="w-7 h-7" />,
+      title: "پشتیبان‌گیری خودکار",
+      desc: "اطلاعات شما هر روز به صورت خودکار ذخیره می‌شود.",
+    },
+    {
+      span: "md:col-span-1",
+      icon: <Globe className="w-7 h-7" />,
+      title: "پشتیبانی محلی",
+      desc: "تیم پشتیبانی به زبان دری همیشه در دسترس است.",
+    },
+    {
+      span: "md:col-span-1",
+      icon: <CalendarDays className="w-7 h-7" />,
+      title: "تقویم هجری",
+      desc: "تاریخ‌ها و گزارش‌ها به تقویم شمسی.",
     },
   ];
 
-  /* ─── TESTIMONIALS ─── */
   const testimonials = [
     {
       name: "محمد احمد رحیمی",
       role: "صاحب فروشگاه لوازم الکترونیک، کابل",
       text: "قبل از آسان حساب، حسابداری فروشگاهم را در دفترچه یادداشت می‌کردم. حالا همه چیز راحت و مرتب است. واقعاً زندگیم را تغییر داد!",
       rating: 5,
+      city: "کابل",
     },
     {
       name: "فاطمه نوری",
       role: "مدیر شرکت بازرگانی، هرات",
-      text: "به عنوان یک زن کارآفرین، داشتن نرم‌افزار حسابداری به زبان دری برای من خیلی مهم بود. آسان حساب بهترین انتخاب من بود. از وقتی استفاده می‌کنم، کنترل مالی شرکت‌ام بهتر شده.",
+      text: "به عنوان یک زن کارآفرین، داشتن نرم‌افزار حسابداری به زبان دری برای من خیلی مهم بود. آسان حساب بهترین انتخاب من بود.",
       rating: 5,
+      city: "هرات",
     },
     {
       name: "حاجی عبدالسلام",
       role: "صاحب شرکت حمل و نقل، مزار شریف",
       text: "من هیچ دانش حسابداری ندارم ولی با آسان حساب به راحتی درآمد و هزینه‌های شرکت حمل‌ونقل‌ام را مدیریت می‌کنم. عالی است!",
       rating: 5,
+      city: "مزار شریف",
     },
     {
       name: "زهرا موسوی",
       role: "دارنده بوتیک پوشاک، قندهار",
       text: "تقویم هجری شمسی و زبان دری باعث شد آسان حساب را انتخاب کنم. خیلی راحت فاکتور صادر می‌کنم و مشتریانم راضی هستند.",
       rating: 5,
+      city: "قندهار",
     },
     {
       name: "غلام حیدر",
       role: "صاحب رستوران، جلال‌آباد",
-      text: "آسان حساب کمک کرد تا هزینه‌های رستورانم را کنترل کنم و سودآوری‌ام را افزایش دهم. بسیار ممنون از تیم آسان حساب.",
+      text: "آسان حساب کمک کرد تا هزینه‌های رستورانم را کنترل کنم و سودآوری‌ام را افزایش دهم.",
       rating: 5,
+      city: "جلال‌آباد",
     },
     {
       name: "مریم صدیقی",
       role: "مدیر موسسه آموزشی، بامیان",
       text: "مدیریت شهریه دانش‌آموزان و هزینه‌های موسسه قبل از آسان حساب خیلی سخت بود. حالا همه چیز سیستماتیک و شفاف است.",
       rating: 5,
+      city: "بامیان",
     },
   ];
 
-  /* ─── PRICING ─── */
   const pricingPlans = [
     {
       name: "پایه",
       price: "۲,۵۰۰",
       period: "افغانی / ماهانه",
-      desc: "مناسب کسب‌وکارهای کوچک",
+      desc: "کسب‌وکارهای کوچک",
       features: [
         "یک کاربر",
         "صدور فاکتور نامحدود",
         "گزارش سود و زیان",
         "تقویم هجری شمسی",
         "پشتیبانی آنلاین",
-        "حسابداری به زبان دری",
       ],
       cta: "شروع رایگان",
       popular: false,
@@ -248,7 +385,7 @@ export default function Home() {
       name: "حرفه‌ای",
       price: "۵,۵۰۰",
       period: "افغانی / ماهانه",
-      desc: "مناسب کسب‌وکارهای متوسط",
+      desc: "کسب‌وکارهای متوسط",
       features: [
         "۵ کاربر",
         "تمام امکانات پایه",
@@ -256,7 +393,6 @@ export default function Home() {
         "گزارش‌های پیشرفته",
         "دسترسی موبایل و دسکتاپ",
         "پشتیبانی تلفنی ۲۴/۷",
-        "صدور فاکتور حرفه‌ای",
         "بکاپ خودکار روزانه",
       ],
       cta: "شروع رایگان",
@@ -266,140 +402,160 @@ export default function Home() {
       name: "سازمانی",
       price: "۱۲,۰۰۰",
       period: "افغانی / ماهانه",
-      desc: "مناسب شرکت‌ها و سازمان‌ها",
+      desc: "شرکت‌ها و سازمان‌ها",
       features: [
         "کاربران نامحدود",
         "تمام امکانات حرفه‌ای",
         "گزارش مالیاتی",
         "مدیریت چند شعبه",
         "API اختصاصی",
-        "آموزش اختصاصی تیم",
-        "مدیر قراردادها",
-        "پشتیبانی ویژه VIP",
+        "آموزش تیم",
+        "پشتیبانی VIP",
       ],
       cta: "تماس بگیرید",
       popular: false,
     },
   ];
 
-  /* ─── FAQ ─── */
   const faqs = [
     {
       q: "آیا استفاده از آسان حساب نیاز به دانش حسابداری دارد؟",
-      a: "خیر، اصلاً! آسان حساب مخصوص افرادی طراحی شده که هیچ دانش حسابداری ندارند. رابط کاربری به زبان دری و بسیار ساده است. با چند کلیک می‌توانید فاکتور صادر کنید، هزینه‌ها را ثبت کنید و گزارش‌های هوشمند ببینید. ما همچنین ویدیوهای آموزشی رایگان به زبان دری تهیه کرده‌ایم.",
+      a: "خیر، اصلاً! آسان حساب مخصوص افرادی طراحی شده که هیچ دانش حسابداری ندارند. رابط کاربری به زبان دری و بسیار ساده است. با چند کلیک می‌توانید فاکتور صادر کنید و گزارش‌ها را ببینید. ویدیوهای آموزشی رایگان به زبان دری نیز موجود است.",
     },
     {
       q: "آیا تقویم هجری شمسی پشتیبانی می‌شود؟",
-      a: "بله، آسان حساب به صورت کامل از تقویم هجری شمسی پشتیبانی می‌کند. تمام تاریخ‌ها، گزارش‌ها، فاکتورها و صورت‌حساب‌ها به تاریخ شمسی نمایش داده می‌شوند. همچنین امکان تبدیل تاریخ بین شمسی و میلادی وجود دارد.",
+      a: "بله، به صورت کامل. تمام تاریخ‌ها، گزارش‌ها، فاکتورها و صورت‌حساب‌ها به تاریخ شمسی نمایش داده می‌شوند. امکان تبدیل تاریخ بین شمسی و میلادی نیز وجود دارد.",
     },
     {
       q: "آیا می‌توانم از موبایل استفاده کنم؟",
-      a: "بله! آسان حساب روی تمام دستگاه‌ها شامل موبایل، تبلت و کامپیوتر کار می‌کند. فقط کافیست مرورگر خود را باز کنید و وارد حساب کاربری خود شوید. هیچ نیاز به نصب برنامه جداگانه نیست.",
+      a: "بله! آسان حساب روی تمام دستگاه‌ها کار می‌کند. فقط کافیست مرورگر خود را باز کنید و وارد حساب کاربری شوید.",
     },
     {
       q: "اطلاعات مالی من چقدر امن است؟",
-      a: "ما بالاترین سطح امنیت را برای اطلاعات شما در نظر گرفته‌ایم. تمام داده‌ها با رمزگذاری پیشرفته محافظت می‌شوند، پشتیبان‌گیری خودکار روزانه انجام می‌شود و سرورهای ما در مکان‌های امن قرار دارند. اطلاعات شما با هیچ شخص ثالثی به اشتراک گذاشته نمی‌شود.",
+      a: "بالاترین سطح امنیت: رمزگذاری پیشرفته، پشتیبان‌گیری خودکار روزانه، سرورهای امن. اطلاعات شما با هیچ شخص ثالثی به اشتراک گذاشته نمی‌شود.",
     },
     {
       q: "آیا نسخه رایگان وجود دارد؟",
-      a: "بله! شما می‌توانید به صورت رایگان试用 کنید و تمام امکانات را در مدت ۱۴ روز آزمایش کنید. بدون نیاز به کارت بانکی و بدون هیچ تعهدی. اگر راضی بودید، می‌توانید یکی از پلن‌های اشتراک را انتخاب کنید.",
+      a: "بله! ۱۴ روز رایگان试用 با تمام امکانات. بدون کارت بانکی و بدون تعهد.",
     },
   ];
 
-  /* ─── Businesses served ─── */
-  const businessTypes = [
-    { icon: <Store className="w-8 h-8" />, label: "فروشگاه‌ها" },
-    { icon: <Truck className="w-8 h-8" />, label: "شرکت‌های حمل‌ونقل" },
-    { icon: <Building2 className="w-8 h-8" />, label: "شرکت‌های بازرگانی" },
-    { icon: <Receipt className="w-8 h-8" />, label: "رستوران‌ها و کافه‌ها" },
-    { icon: <FileText className="w-8 h-8" />, label: "موسسات آموزشی" },
-    { icon: <Users className="w-8 h-8" />, label: "کلینیک‌ها و مطب‌ها" },
+  const stats = [
+    { value: 5000, suffix: "+", label: "کاربر فعال" },
+    { value: 120000, suffix: "+", label: "فاکتور صادر شده" },
+    { value: 34, suffix: "", label: "ولایت تحت پوشش" },
+    { value: 99, suffix: "٪", label: "رضایت مشتریان" },
   ];
 
   return (
     <div className="min-h-screen flex flex-col overflow-x-hidden">
       {/* ══════════ NAVBAR ══════════ */}
-      <nav
-        className={`fixed top-0 right-0 left-0 z-50 transition-all duration-300 ${
+      <motion.nav
+        className={`fixed top-0 right-0 left-0 z-50 transition-all duration-500 ${
           scrolled
-            ? "bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-100"
+            ? "bg-white/80 backdrop-blur-xl shadow-lg shadow-brand-deep/5 border-b border-brand-pale/50"
             : "bg-transparent"
         }`}
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 md:h-20">
-            {/* Logo */}
-            <div className="flex items-center gap-3">
-              <img
-                src="/logo-asanhesab.png"
-                alt="آسان حساب"
-                className="w-10 h-10 rounded-xl object-contain"
-              />
-              <div>
-                <span className="text-xl font-bold text-emerald-700">آسان حساب</span>
-                <span className="text-xs text-gray-400 block -mt-1">AsanHesab</span>
+          <div className="flex items-center justify-between h-18 md:h-20">
+            <motion.div
+              className="flex items-center gap-3"
+              whileHover={{ scale: 1.02 }}
+            >
+              <div className="relative">
+                <div className="w-11 h-11 gradient-brand rounded-full flex items-center justify-center shadow-lg shadow-brand-mid/30">
+                  <img
+                    src="/logo-asanhesab.png"
+                    alt="آسان حساب"
+                    className="w-8 h-8 rounded-full object-cover"
+                  />
+                </div>
+                <motion.div
+                  className="absolute inset-0 gradient-brand rounded-full opacity-0"
+                  whileHover={{ scale: 1.3, opacity: 0.3 }}
+                  transition={{ duration: 0.3 }}
+                />
               </div>
-            </div>
+              <div>
+                <span className="text-xl font-black text-gradient">آسان حساب</span>
+                <span className="text-[10px] text-gray-400 block -mt-0.5 tracking-wider">
+                  ASANHESAB
+                </span>
+              </div>
+            </motion.div>
 
-            {/* Desktop Links */}
-            <div className="hidden md:flex items-center gap-8">
+            <div className="hidden md:flex items-center gap-1">
               {navLinks.map((link) => (
                 <a
                   key={link.href}
                   href={link.href}
-                  className="text-gray-600 hover:text-emerald-600 transition-colors text-sm font-medium"
+                  className="relative px-4 py-2 text-sm font-medium text-gray-500 hover:text-brand-deep transition-colors group"
                 >
                   {link.label}
+                  <span className="absolute bottom-0 right-1/2 translate-x-1/2 w-0 h-0.5 gradient-brand rounded-full group-hover:w-6 transition-all duration-300" />
                 </a>
               ))}
             </div>
 
-            {/* CTA */}
             <div className="hidden md:flex items-center gap-3">
-              <Button variant="ghost" size="sm" className="text-gray-600 hover:text-emerald-600">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-gray-500 hover:text-brand-deep"
+              >
                 ورود
               </Button>
-              <Button className="gradient-emerald hover:opacity-90 text-white border-0 px-6 rounded-full shadow-lg shadow-emerald-200">
+              <Button className="gradient-brand hover:opacity-90 text-white border-0 px-6 rounded-full shadow-lg shadow-brand-mid/25 hover:shadow-brand-mid/40 transition-all duration-300 hover:scale-105">
                 <Zap className="w-4 h-4 ml-2" />
                 شروع رایگان
               </Button>
             </div>
 
-            {/* Mobile Menu Button */}
             <button
-              className="md:hidden p-2"
+              className="md:hidden p-2 rounded-xl hover:bg-brand-surface transition-colors"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {mobileMenuOpen ? (
+                <X className="w-6 h-6 text-brand-deep" />
+              ) : (
+                <Menu className="w-6 h-6 text-brand-deep" />
+              )}
             </button>
           </div>
         </div>
 
-        {/* Mobile Menu */}
         <AnimatePresence>
           {mobileMenuOpen && (
             <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              className="md:hidden bg-white border-t border-gray-100 shadow-xl"
+              initial={{ opacity: 0, height: 0, y: -10 }}
+              animate={{ opacity: 1, height: "auto", y: 0 }}
+              exit={{ opacity: 0, height: 0, y: -10 }}
+              transition={{ duration: 0.3 }}
+              className="md:hidden bg-white/95 backdrop-blur-xl border-t border-brand-pale/50 shadow-xl"
             >
-              <div className="px-4 py-4 space-y-3">
-                {navLinks.map((link) => (
-                  <a
+              <div className="px-4 py-6 space-y-1">
+                {navLinks.map((link, i) => (
+                  <motion.a
                     key={link.href}
                     href={link.href}
-                    className="block text-gray-600 hover:text-emerald-600 py-2 text-sm font-medium"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.05 }}
+                    className="block text-gray-600 hover:text-brand-deep hover:bg-brand-surface py-3 px-4 rounded-xl text-sm font-medium transition-all"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     {link.label}
-                  </a>
+                  </motion.a>
                 ))}
-                <div className="pt-3 border-t flex gap-3">
-                  <Button variant="outline" className="flex-1" size="sm">
+                <div className="pt-4 mt-4 border-t border-gray-100 flex gap-3">
+                  <Button variant="outline" className="flex-1 rounded-xl">
                     ورود
                   </Button>
-                  <Button className="flex-1 gradient-emerald text-white border-0" size="sm">
+                  <Button className="flex-1 gradient-brand text-white border-0 rounded-xl">
                     شروع رایگان
                   </Button>
                 </div>
@@ -407,498 +563,783 @@ export default function Home() {
             </motion.div>
           )}
         </AnimatePresence>
-      </nav>
+      </motion.nav>
 
-      {/* ══════════ HERO SECTION ══════════ */}
-      <section className="relative pt-28 pb-16 md:pt-36 md:pb-24 overflow-hidden">
-        {/* Background decorations */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-20 right-0 w-96 h-96 bg-emerald-100 rounded-full blur-3xl opacity-40" />
-          <div className="absolute bottom-0 left-0 w-80 h-80 bg-teal-100 rounded-full blur-3xl opacity-30" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-50 rounded-full blur-3xl opacity-20" />
+      {/* ══════════ HERO — CREATIVE MESH LAYOUT ══════════ */}
+      <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
+        {/* Animated background */}
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-gradient-to-br from-brand-surface via-white to-brand-pale/30" />
+          {/* Animated blobs */}
+          <motion.div
+            className="absolute top-10 right-[10%] w-[500px] h-[500px] bg-brand-mid/10 blob"
+            style={{ animationDuration: "12s" }}
+          />
+          <motion.div
+            className="absolute bottom-10 left-[5%] w-[400px] h-[400px] bg-brand-deep/8 blob-reverse"
+            style={{ animationDuration: "15s" }}
+          />
+          <motion.div
+            className="absolute top-1/3 left-1/3 w-[300px] h-[300px] bg-brand-light/10 blob"
+            style={{ animationDuration: "10s" }}
+          />
+          {/* Grid pattern overlay */}
+          <div
+            className="absolute inset-0 opacity-[0.03]"
+            style={{
+              backgroundImage:
+                "radial-gradient(circle, #0047AB 1px, transparent 1px)",
+              backgroundSize: "40px 40px",
+            }}
+          />
         </div>
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-16 md:py-20">
+          <div className="grid lg:grid-cols-12 gap-8 items-center">
+            {/* Left content — span 5 */}
+            <div className="lg:col-span-5 text-center lg:text-right">
+              <FadeIn>
+                <motion.div
+                  className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-brand-pale/60 rounded-full px-5 py-2.5 mb-8 shadow-sm"
+                  whileHover={{ scale: 1.03, boxShadow: "0 4px 20px rgba(0,71,171,0.1)" }}
+                >
+                  <motion.span
+                    animate={{ rotate: [0, 15, -15, 0] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  >
+                    <Sparkles className="w-4 h-4 text-brand-mid" />
+                  </motion.span>
+                  <span className="text-sm font-semibold text-brand-deep">
+                    مخصوص بازار افغانستان
+                  </span>
+                </motion.div>
+              </FadeIn>
+
+              <FadeIn delay={0.1}>
+                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-[1.1] mb-6">
+                  <span className="text-gray-900">حسابداری</span>
+                  <br />
+                  <span className="relative">
+                    <span className="text-gradient">را آسان</span>
+                    <motion.span
+                      className="absolute -bottom-2 right-0 h-3 w-full gradient-brand rounded-full opacity-20"
+                      initial={{ scaleX: 0, originX: 0 }}
+                      animate={{ scaleX: 1 }}
+                      transition={{ duration: 1, delay: 0.8 }}
+                    />
+                  </span>
+                  <br />
+                  <span className="text-gray-900">کنید!</span>
+                </h1>
+              </FadeIn>
+
+              <FadeIn delay={0.2}>
+                <p className="text-base md:text-lg text-gray-500 leading-relaxed mb-8 max-w-md mx-auto lg:mx-0 lg:mr-0">
+                  اولین نرم‌افزار حسابداری به{" "}
+                  <span className="text-brand-deep font-bold">زبان دری</span> با{" "}
+                  <span className="text-brand-deep font-bold">تقویم هجری شمسی</span>.
+                  بدون نیاز به دانش حسابداری!
+                </p>
+              </FadeIn>
+
+              <FadeIn delay={0.3}>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
+                    <Button
+                      size="lg"
+                      className="gradient-brand text-white border-0 px-8 py-6 text-base rounded-2xl shadow-xl shadow-brand-mid/30 relative overflow-hidden group"
+                    >
+                      <span className="relative z-10 flex items-center">
+                        <Zap className="w-5 h-5 ml-2" />
+                        ۱۴ روز رایگان شروع کنید
+                        <ArrowLeft className="w-5 h-5 mr-2" />
+                      </span>
+                      <motion.div
+                        className="absolute inset-0 shimmer"
+                        repeatCount={Infinity}
+                      />
+                    </Button>
+                  </motion.div>
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
+                    <Button
+                      size="lg"
+                      variant="outline"
+                      className="px-8 py-6 text-base rounded-2xl border-brand-pale bg-white/50 backdrop-blur-sm hover:border-brand-mid hover:bg-brand-surface transition-all"
+                    >
+                      <PlayCircleIcon className="w-5 h-5 ml-2 text-brand-mid" />
+                      تماشای ویدیو
+                    </Button>
+                  </motion.div>
+                </div>
+              </FadeIn>
+
+              <FadeIn delay={0.4}>
+                <div className="flex items-center gap-6 mt-8 justify-center lg:justify-start">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-brand-mid" />
+                    <span className="text-xs text-gray-400">بدون کارت بانکی</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-brand-mid" />
+                    <span className="text-xs text-gray-400">بدون تعهد</span>
+                  </div>
+                </div>
+              </FadeIn>
+            </div>
+
+            {/* Right content — creative visual span 7 */}
+            <div className="lg:col-span-7 relative">
+              <ParallaxSection speed={0.15}>
+                <div className="relative">
+                  {/* Decorative elements */}
+                  <motion.div
+                    className="absolute -top-8 -right-8 w-32 h-32 gradient-brand rounded-3xl opacity-10 rotate-12"
+                    animate={{ rotate: [12, 20, 12], scale: [1, 1.05, 1] }}
+                    transition={{ duration: 6, repeat: Infinity }}
+                  />
+                  <motion.div
+                    className="absolute -bottom-6 -left-6 w-24 h-24 bg-brand-light rounded-2xl opacity-15 -rotate-12"
+                    animate={{ rotate: [-12, -6, -12], scale: [1, 1.08, 1] }}
+                    transition={{ duration: 5, repeat: Infinity }}
+                  />
+
+                  {/* Main image card with glass effect */}
+                  <motion.div
+                    className="relative rounded-3xl overflow-hidden shadow-2xl shadow-brand-deep/10"
+                    initial={{ opacity: 0, y: 40, rotateY: -5 }}
+                    animate={{ opacity: 1, y: 0, rotateY: 0 }}
+                    transition={{ duration: 1, delay: 0.3 }}
+                  >
+                    <div className="absolute inset-0 gradient-brand opacity-5" />
+                    <img
+                      src="/hero-accounting.png"
+                      alt="آسان حساب"
+                      className="w-full relative"
+                    />
+                  </motion.div>
+
+                  {/* Floating stat cards */}
+                  <motion.div
+                    className="absolute -bottom-6 right-6 md:right-12 bg-white rounded-2xl shadow-xl shadow-brand-deep/10 p-4 border border-brand-pale/50"
+                    style={{ animation: "float 6s ease-in-out infinite" }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-11 h-11 gradient-brand rounded-xl flex items-center justify-center">
+                        <TrendingUp className="w-5 h-5 text-white" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-400">رشد درآمد</p>
+                        <p className="text-xl font-black text-brand-deep">+۴۷٪</p>
+                      </div>
+                    </div>
+                  </motion.div>
+
+                  <motion.div
+                    className="absolute -top-4 -left-4 md:top-4 md:-left-6 bg-white rounded-2xl shadow-xl shadow-brand-deep/10 p-4 border border-brand-pale/50"
+                    style={{ animation: "float 7s ease-in-out infinite 1s" }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-11 h-11 bg-amber-50 rounded-xl flex items-center justify-center">
+                        <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-400">رضایت</p>
+                        <p className="text-xl font-black text-gray-900">۴.۹/۵</p>
+                      </div>
+                    </div>
+                  </motion.div>
+
+                  {/* Orbiting mini element */}
+                  <div className="absolute top-1/2 right-1/2 -translate-y-1/2 translate-x-1/2 w-0 h-0 hidden lg:block">
+                    <motion.div
+                      className="w-8 h-8 gradient-brand rounded-lg shadow-lg flex items-center justify-center"
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                      style={{ transformOrigin: "120px center" }}
+                    >
+                      <Calculator className="w-4 h-4 text-white" />
+                    </motion.div>
+                  </div>
+                </div>
+              </ParallaxSection>
+            </div>
+          </div>
+        </div>
+
+        {/* Scroll indicator */}
+        <motion.div
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        >
+          <span className="text-xs text-gray-400">اسکرول کنید</span>
+          <div className="w-6 h-10 border-2 border-gray-300 rounded-full flex justify-center pt-2">
+            <motion.div
+              className="w-1.5 h-1.5 bg-brand-mid rounded-full"
+              animate={{ y: [0, 12, 0] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            />
+          </div>
+        </motion.div>
+      </section>
+
+      {/* ══════════ MARQUEE TRUST BAR ══════════ */}
+      <section className="py-6 bg-white border-y border-brand-pale/40 overflow-hidden">
+        <div className="flex" style={{ animation: "marquee 30s linear infinite", width: "max-content" }}>
+          {[...stats, ...stats, ...stats, ...stats].map((s, i) => (
+            <div key={i} className="flex items-center gap-8 px-8">
+              <div className="flex items-center gap-3">
+                <span className="text-2xl font-black text-brand-deep">
+                  <AnimatedCounter target={s.value} suffix={s.suffix} />
+                </span>
+                <span className="text-sm text-gray-400 whitespace-nowrap">
+                  {s.label}
+                </span>
+              </div>
+              <div className="w-1 h-1 bg-brand-pale rounded-full" />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ══════════ PROBLEM / PAIN SECTION ══════════ */}
+      <section className="py-20 md:py-28 relative overflow-hidden">
+        <GlowOrb color="#007FFF" size="400px" top="-100px" left="-100px" />
+        <GlowOrb color="#0047AB" size="300px" bottom="-50px" right="-50px" />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Text Content */}
-            <FadeInSection className="text-center lg:text-right">
-              <Badge className="mb-6 bg-emerald-50 text-emerald-700 border-emerald-200 px-4 py-2 text-sm font-medium rounded-full">
-                <SparkleIcon className="w-4 h-4 ml-2" />
-                مخصوص بازار افغانستان
-              </Badge>
-
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-black leading-tight mb-6">
-                <span className="text-gray-900">حسابداری را</span>
-                <br />
-                <span className="text-gradient">آسان کنید!</span>
-              </h1>
-
-              <p className="text-lg md:text-xl text-gray-600 leading-relaxed mb-8 max-w-lg mx-auto lg:mx-0 lg:mr-0">
-                آسان حساب اولین نرم‌افزار حسابداری به{" "}
-                <strong className="text-emerald-600">زبان دری</strong> با{" "}
-                <strong className="text-emerald-600">تقویم هجری شمسی</strong>،
-                مخصوص کسب‌وکارهای افغانستان. بدون نیاز به دانش حسابداری!
-              </p>
-
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                <Button
-                  size="lg"
-                  className="gradient-emerald hover:opacity-90 text-white border-0 px-8 py-6 text-lg rounded-full shadow-xl shadow-emerald-200 pulse-glow"
-                >
-                  <Zap className="w-5 h-5 ml-2" />
-                  ۱۴ روز رایگان شروع کنید
-                  <ArrowLeft className="w-5 h-5 mr-2" />
-                </Button>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="px-8 py-6 text-lg rounded-full border-gray-200 hover:border-emerald-300"
-                >
-                  <PlayIcon className="w-5 h-5 ml-2" />
-                  تماشای ویدیو معرفی
-                </Button>
-              </div>
-
-              <div className="flex items-center gap-6 mt-8 justify-center lg:justify-start text-sm text-gray-500">
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                  بدون نیاز به کارت بانکی
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                  بدون تعهد
-                </div>
-              </div>
-            </FadeInSection>
-
-            {/* Hero Image */}
-            <FadeInSection delay={0.3} className="relative">
-              <div className="relative float-animation">
-                <div className="absolute -inset-4 bg-gradient-to-r from-emerald-200 to-teal-200 rounded-3xl blur-2xl opacity-40" />
-                <img
-                  src="/hero-accounting.png"
-                  alt="آسان حساب - نرم‌افزار حسابداری"
-                  className="relative rounded-2xl shadow-2xl w-full"
-                />
-              </div>
-              {/* Floating badge */}
-              <motion.div
-                animate={{ y: [0, -10, 0] }}
-                transition={{ duration: 3, repeat: Infinity }}
-                className="absolute -bottom-4 -right-4 md:bottom-8 md:-right-8 bg-white rounded-2xl shadow-xl p-4 border border-emerald-100"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 gradient-emerald rounded-xl flex items-center justify-center">
-                    <TrendingUp className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-500">رشد درآمد</p>
-                    <p className="text-xl font-bold text-emerald-600">+۴۷٪</p>
-                  </div>
-                </div>
-              </motion.div>
-              {/* Another floating badge */}
-              <motion.div
-                animate={{ y: [0, 10, 0] }}
-                transition={{ duration: 4, repeat: Infinity }}
-                className="absolute -top-4 -left-4 md:top-4 md:-left-8 bg-white rounded-2xl shadow-xl p-4 border border-emerald-100"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center">
-                    <Star className="w-6 h-6 text-amber-500" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-500">رضایت مشتریان</p>
-                    <p className="text-xl font-bold text-amber-600">۴.۹ از ۵</p>
-                  </div>
-                </div>
-              </motion.div>
-            </FadeInSection>
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════ TRUST BAR ══════════ */}
-      <section className="py-10 bg-gray-50 border-y border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeInSection>
-            <p className="text-center text-gray-400 text-sm mb-6 font-medium">
-              بیش از ۵,۰۰۰ کسب‌وکار در سراسر افغانستان به آسان حساب اعتماد کرده‌اند
-            </p>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              {[
-                { value: 5000, suffix: "+", label: "کاربر فعال" },
-                { value: 120000, suffix: "+", label: "فاکتور صادر شده" },
-                { value: 34, suffix: "", label: "ولایت تحت پوشش" },
-                { value: 99, suffix: "٪", label: "رضایت مشتریان" },
-              ].map((stat) => (
-                <div key={stat.label} className="text-center">
-                  <p className="text-3xl md:text-4xl font-black text-emerald-600">
-                    <AnimatedCounter target={stat.value} suffix={stat.suffix} />
-                  </p>
-                  <p className="text-sm text-gray-500 mt-1">{stat.label}</p>
-                </div>
-              ))}
-            </div>
-          </FadeInSection>
-        </div>
-      </section>
-
-      {/* ══════════ PROBLEM SECTION ══════════ */}
-      <section className="py-20 md:py-28">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeInSection className="text-center mb-16">
-            <Badge className="mb-4 bg-red-50 text-red-600 border-red-200 px-4 py-2 rounded-full text-sm">
+          <FadeIn className="text-center mb-16">
+            <Badge className="mb-4 bg-red-50 text-red-500 border-red-200/60 px-4 py-2 rounded-full text-sm font-medium">
               آیا شما هم این مشکلات را دارید؟
             </Badge>
-            <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
-              مشکلاتی که کسب‌وکار شما را متوقف می‌کند
+            <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-4">
+              مشکلاتی که کسب‌وکار شما را
+              <span className="text-red-500"> متوقف</span> می‌کند
             </h2>
-            <p className="text-gray-500 text-lg max-w-2xl mx-auto">
-              بسیاری از کسب‌وکارها در افغانستان با چالش‌های مشابه روبرو هستند. آیا شما هم یکی از این مشکلات را تجربه کرده‌اید؟
-            </p>
-          </FadeInSection>
+          </FadeIn>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <StaggerContainer className="grid md:grid-cols-2 lg:grid-cols-3 gap-5" stagger={0.08}>
             {[
-              {
-                icon: <FileText className="w-6 h-6" />,
-                problem: "حساب و کتاب کاغذی و گیج‌کننده",
-                desc: "دفترچه‌ها و برگه‌های پراکنده که پیدا کردن یک فاکتور قدیمی را غیرممکن می‌کند.",
-              },
-              {
-                icon: <Globe className="w-6 h-6" />,
-                problem: "نرم‌افزارهای انگلیسی‌زبان",
-                desc: "نرم‌افزارهای خارجی که زبانشان را نمی‌فهمید و تقویمشان با تقویم شما فرق دارد.",
-              },
-              {
-                icon: <PieChart className="w-6 h-6" />,
-                problem: "عدم شفافیت مالی",
-                desc: "نمی‌دانید دقیقاً چقدر سود کرده‌اید، چقدر بدهکارید و وضعیت مالی کسب‌وکارتان چیست.",
-              },
-              {
-                icon: <Clock className="w-6 h-6" />,
-                problem: "هدر رفتن وقت",
-                desc: "ساعت‌ها وقت صرف محاسبات دستی می‌کنید که می‌تواند در چند دقیقه انجام شود.",
-              },
-              {
-                icon: <Receipt className="w-6 h-6" />,
-                problem: "فاکتورهای غیرحرفه‌ای",
-                desc: "فاکتورهای دستی که اعتبار کسب‌وکار شما را زیر سوال می‌برند.",
-              },
-              {
-                icon: <Shield className="w-6 h-6" />,
-                problem: "خطر از دست رفتن اطلاعات",
-                desc: "یک ورقه گم‌شده یا دفترچه پاره‌شده می‌تواند اطلاعات مهم مالی شما را برای همیشه نابود کند.",
-              },
+              { icon: <FileText />, problem: "حساب و کتاب کاغذی", desc: "دفترچه‌های پراکنده که پیدا کردن یک فاکتور را غیرممکن می‌کند." },
+              { icon: <Globe />, problem: "نرم‌افزارهای انگلیسی", desc: "نرم‌افزار خارجی که زبان و تقویمش با شما فرق دارد." },
+              { icon: <PieChart />, problem: "عدم شفافیت مالی", desc: "نمی‌دانید چقدر سود کرده‌اید و وضعیت مالی‌تان چیست." },
+              { icon: <Clock />, problem: "هدر رفتن وقت", desc: "ساعت‌ها وقت صرف محاسبات دستی می‌کنید." },
+              { icon: <Receipt />, problem: "فاکتورهای غیرحرفه‌ای", desc: "فاکتورهای دستی که اعتبار شما را زیر سوال می‌برند." },
+              { icon: <Shield />, problem: "خطر از دست رفتن اطلاعات", desc: "یک ورقه گم‌شده اطلاعات مهم مالی را نابود می‌کند." },
             ].map((item, i) => (
-              <FadeInSection key={i} delay={i * 0.1}>
-                <div className="bg-red-50/50 border border-red-100 rounded-2xl p-6 h-full hover:shadow-lg transition-shadow">
-                  <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center text-red-500 mb-4">
+              <StaggerItem key={i}>
+                <motion.div
+                  className="bg-white rounded-2xl p-6 border border-gray-100 h-full hover:border-red-200 hover:shadow-xl hover:shadow-red-100/30 transition-all duration-500 group cursor-default"
+                  whileHover={{ y: -4 }}
+                >
+                  <div className="w-12 h-12 bg-red-50 rounded-xl flex items-center justify-center text-red-400 mb-4 group-hover:scale-110 transition-transform">
                     {item.icon}
                   </div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">{item.problem}</h3>
-                  <p className="text-gray-500 text-sm leading-relaxed">{item.desc}</p>
-                </div>
-              </FadeInSection>
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">
+                    {item.problem}
+                  </h3>
+                  <p className="text-gray-400 text-sm leading-relaxed">{item.desc}</p>
+                </motion.div>
+              </StaggerItem>
             ))}
-          </div>
-
-          <FadeInSection className="text-center mt-12">
-            <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 inline-flex items-center gap-3">
-              <CheckCircle2 className="w-6 h-6 text-emerald-500 flex-shrink-0" />
-              <p className="text-emerald-700 font-medium">
-                آسان حساب تمام این مشکلات را حل کرده است!
-              </p>
-            </div>
-          </FadeInSection>
+          </StaggerContainer>
         </div>
       </section>
 
-      {/* ══════════ FEATURES ══════════ */}
-      <section id="features" className="py-20 md:py-28 bg-gradient-to-b from-white to-emerald-50/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeInSection className="text-center mb-16">
-            <Badge className="mb-4 bg-emerald-50 text-emerald-600 border-emerald-200 px-4 py-2 rounded-full text-sm">
+      {/* ══════════ FEATURES — ASYMMETRIC ICON GRID ══════════ */}
+      <section id="features" className="py-20 md:py-28 gradient-brand-soft relative overflow-hidden">
+        {/* Subtle dot pattern */}
+        <div
+          className="absolute inset-0 opacity-[0.04]"
+          style={{
+            backgroundImage: "radial-gradient(circle, #0047AB 1px, transparent 1px)",
+            backgroundSize: "30px 30px",
+          }}
+        />
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <FadeIn className="text-center mb-16">
+            <Badge className="mb-4 bg-white text-brand-deep border-brand-pale px-4 py-2 rounded-full text-sm font-medium shadow-sm">
               <Award className="w-4 h-4 ml-1" />
               ویژگی‌های قدرتمند
             </Badge>
-            <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
-              همه چیز آن چیزی است که نیاز دارید
+            <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-4">
+              همه چیز آن چیزی است که
+              <span className="text-gradient"> نیاز دارید</span>
             </h2>
-            <p className="text-gray-500 text-lg max-w-2xl mx-auto">
-              آسان حساب با ویژگی‌های متنوع و کاربردی، تمام نیازهای حسابداری کسب‌وکار شما را پوشش می‌دهد
-            </p>
-          </FadeInSection>
+          </FadeIn>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {features.map((feature, i) => (
-              <FadeInSection key={i} delay={i * 0.08}>
-                <div className="bg-white rounded-2xl p-6 h-full border border-gray-100 hover:border-emerald-200 hover:shadow-xl hover:shadow-emerald-100/50 transition-all duration-300 group">
-                  <div
-                    className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center text-white mb-5 group-hover:scale-110 transition-transform`}
+          <StaggerContainer className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5" stagger={0.06}>
+            {features.map((f, i) => (
+              <StaggerItem key={i}>
+                <motion.div
+                  className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-white/50 h-full hover:shadow-2xl hover:shadow-brand-deep/10 transition-all duration-500 group cursor-default"
+                  whileHover={{ y: -6, scale: 1.02 }}
+                >
+                  <motion.div
+                    className="w-14 h-14 gradient-brand rounded-2xl flex items-center justify-center text-white mb-5 shadow-lg shadow-brand-mid/20"
+                    whileHover={{ rotate: [0, -5, 5, 0], scale: 1.1 }}
+                    transition={{ duration: 0.4 }}
                   >
-                    {feature.icon}
-                  </div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-3">{feature.title}</h3>
-                  <p className="text-gray-500 text-sm leading-relaxed">{feature.desc}</p>
-                </div>
-              </FadeInSection>
+                    {f.icon}
+                  </motion.div>
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">{f.title}</h3>
+                  <p className="text-gray-400 text-sm leading-relaxed">{f.desc}</p>
+                </motion.div>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerContainer>
         </div>
       </section>
 
-      {/* ══════════ DASHBOARD PREVIEW ══════════ */}
-      <section className="py-20 md:py-28">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeInSection className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
-              داشبورد ساده و زیبا
+      {/* ══════════ BENTO GRID FEATURES ══════════ */}
+      <section className="py-20 md:py-28 relative overflow-hidden">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <FadeIn className="text-center mb-16">
+            <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-4">
+              یک نگاه به قدرت{" "}
+              <span className="text-gradient">آسان حساب</span>
             </h2>
-            <p className="text-gray-500 text-lg max-w-2xl mx-auto">
+          </FadeIn>
+
+          <StaggerContainer className="grid md:grid-cols-3 gap-5 auto-rows-[minmax(180px,auto)]" stagger={0.1}>
+            {bentoFeatures.map((f, i) => (
+              <StaggerItem key={i} className={f.span}>
+                <motion.div
+                  className={`rounded-3xl p-8 h-full flex flex-col justify-between relative overflow-hidden group cursor-default transition-all duration-500 ${
+                    f.gradient
+                      ? "gradient-brand text-white"
+                      : "bg-white border border-gray-100 hover:border-brand-pale hover:shadow-xl hover:shadow-brand-deep/5"
+                  }`}
+                  whileHover={{ y: -4, scale: 1.01 }}
+                >
+                  {f.gradient && (
+                    <div className="absolute top-0 left-0 w-full h-full opacity-10">
+                      <div
+                        className="absolute inset-0"
+                        style={{
+                          backgroundImage:
+                            "radial-gradient(circle at 20% 80%, rgba(255,255,255,0.3) 0%, transparent 50%)",
+                        }}
+                      />
+                    </div>
+                  )}
+                  <div>
+                    <div
+                      className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-5 ${
+                        f.gradient ? "bg-white/20" : "bg-brand-surface text-brand-deep"
+                      }`}
+                    >
+                      {f.icon}
+                    </div>
+                    <h3
+                      className={`text-xl font-bold mb-3 ${
+                        f.gradient ? "text-white" : "text-gray-900"
+                      }`}
+                    >
+                      {f.title}
+                    </h3>
+                    <p
+                      className={`text-sm leading-relaxed ${
+                        f.gradient ? "text-white/80" : "text-gray-400"
+                      }`}
+                    >
+                      {f.desc}
+                    </p>
+                  </div>
+                  {f.gradient && (
+                    <motion.div
+                      className="absolute -bottom-10 -left-10 w-40 h-40 bg-white/5 rounded-full"
+                      whileHover={{ scale: 1.5 }}
+                    />
+                  )}
+                </motion.div>
+              </StaggerItem>
+            ))}
+          </StaggerContainer>
+        </div>
+      </section>
+
+      {/* ══════════ DASHBOARD SHOWCASE ══════════ */}
+      <section id="dashboard" className="py-20 md:py-28 gradient-brand-dark relative overflow-hidden">
+        <div
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle, #fff 1px, transparent 1px)",
+            backgroundSize: "30px 30px",
+          }}
+        />
+
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <FadeIn className="text-center mb-12">
+            <h2 className="text-3xl md:text-5xl font-black text-white mb-4">
+              داشبورد ساده و قدرتمند
+            </h2>
+            <p className="text-brand-light/60 text-lg max-w-2xl mx-auto">
               با یک نگاه، وضعیت کامل مالی کسب‌وکار خود را ببینید
             </p>
-          </FadeInSection>
+          </FadeIn>
 
-          <FadeInSection>
-            <div className="relative">
-              <div className="absolute -inset-4 bg-gradient-to-r from-emerald-200 via-teal-200 to-emerald-200 rounded-3xl blur-xl opacity-30" />
-              <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-100">
+          <FadeIn delay={0.2}>
+            <motion.div
+              className="relative"
+              whileHover={{ scale: 1.01 }}
+              transition={{ duration: 0.5 }}
+            >
+              {/* Glow behind */}
+              <div className="absolute -inset-4 bg-brand-mid/20 rounded-[2rem] blur-3xl" />
+              {/* Browser mockup frame */}
+              <div className="relative bg-[#1a1a2e] rounded-2xl overflow-hidden shadow-2xl">
+                {/* Browser bar */}
+                <div className="flex items-center gap-2 px-4 py-3 bg-[#16162a] border-b border-white/5">
+                  <div className="flex gap-1.5">
+                    <div className="w-3 h-3 rounded-full bg-red-400/80" />
+                    <div className="w-3 h-3 rounded-full bg-yellow-400/80" />
+                    <div className="w-3 h-3 rounded-full bg-green-400/80" />
+                  </div>
+                  <div className="flex-1 flex justify-center">
+                    <div className="bg-white/5 rounded-lg px-4 py-1 text-xs text-white/30">
+                      app.asanhesab.af/dashboard
+                    </div>
+                  </div>
+                </div>
                 <img
                   src="/dashboard-preview.png"
                   alt="داشبورد آسان حساب"
                   className="w-full"
                 />
               </div>
-            </div>
-          </FadeInSection>
-        </div>
-      </section>
+            </motion.div>
+          </FadeIn>
 
-      {/* ══════════ HOW IT WORKS ══════════ */}
-      <section id="how-it-works" className="py-20 md:py-28 bg-gradient-to-b from-gray-50 to-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeInSection className="text-center mb-16">
-            <Badge className="mb-4 bg-emerald-50 text-emerald-600 border-emerald-200 px-4 py-2 rounded-full text-sm">
-              شروع آسان
-            </Badge>
-            <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
-              در سه مرحله شروع کنید
-            </h2>
-            <p className="text-gray-500 text-lg max-w-2xl mx-auto">
-              شروع حسابداری با آسان حساب خیلی ساده است. حتی یک فرد بدون دانش فنی می‌تواند در کمتر از ۵ دقیقه شروع کند
-            </p>
-          </FadeInSection>
-
-          <div className="grid md:grid-cols-3 gap-8 relative">
-            {/* Connection line */}
-            <div className="hidden md:block absolute top-24 right-1/6 left-1/6 h-0.5 bg-gradient-to-l from-emerald-300 via-emerald-400 to-emerald-300" />
-
-            {steps.map((step, i) => (
-              <FadeInSection key={i} delay={i * 0.2}>
-                <div className="text-center relative">
-                  <div className="w-20 h-20 mx-auto mb-6 gradient-emerald rounded-full flex items-center justify-center text-white shadow-xl shadow-emerald-200 relative z-10">
-                    <span className="text-3xl font-black">{step.step}</span>
-                  </div>
-                  <div className="w-14 h-14 mx-auto mb-4 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600">
-                    {step.icon}
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-3">{step.title}</h3>
-                  <p className="text-gray-500 leading-relaxed max-w-sm mx-auto">{step.desc}</p>
-                </div>
-              </FadeInSection>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════ BUSINESS TYPES ══════════ */}
-      <section className="py-20 md:py-28">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeInSection className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
-              مناسب برای هر نوع کسب‌وکار
-            </h2>
-            <p className="text-gray-500 text-lg max-w-2xl mx-auto">
-              از فروشگاه کوچک تا شرکت بزرگ، آسان حساب نیاز همه را برآورده می‌کند
-            </p>
-          </FadeInSection>
-
-          <FadeInSection>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-              {businessTypes.map((biz, i) => (
-                <div
+          {/* Feature pills floating below */}
+          <FadeIn delay={0.4}>
+            <div className="flex flex-wrap justify-center gap-3 mt-10">
+              {[
+                "تقویم هجری شمسی",
+                "گزارش لحظه‌ای",
+                "فاکتور خودکار",
+                "نمودارهای تعاملی",
+              ].map((tag, i) => (
+                <motion.span
                   key={i}
-                  className="bg-white border border-gray-100 rounded-2xl p-6 text-center hover:border-emerald-200 hover:shadow-lg transition-all duration-300 group cursor-pointer"
+                  className="glass px-4 py-2 rounded-full text-sm text-white/80"
+                  whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.2)" }}
                 >
-                  <div className="text-emerald-500 group-hover:scale-110 transition-transform mb-3 flex justify-center">
-                    {biz.icon}
-                  </div>
-                  <p className="text-sm font-medium text-gray-700">{biz.label}</p>
-                </div>
+                  {tag}
+                </motion.span>
               ))}
             </div>
-          </FadeInSection>
+          </FadeIn>
         </div>
       </section>
 
-      {/* ══════════ TESTIMONIALS ══════════ */}
-      <section id="testimonials" className="py-20 md:py-28 gradient-dark relative overflow-hidden">
-        {/* Decorations */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-10 left-10 w-64 h-64 bg-emerald-500 rounded-full blur-3xl opacity-10" />
-          <div className="absolute bottom-10 right-10 w-80 h-80 bg-teal-500 rounded-full blur-3xl opacity-10" />
-        </div>
-
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeInSection className="text-center mb-16">
-            <Badge className="mb-4 bg-emerald-800/50 text-emerald-300 border-emerald-700 px-4 py-2 rounded-full text-sm">
-              <Heart className="w-4 h-4 ml-1" />
-              صدای مشتریان ما
+      {/* ══════════ HOW IT WORKS — CREATIVE TIMELINE ══════════ */}
+      <section className="py-20 md:py-28 relative overflow-hidden">
+        <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <FadeIn className="text-center mb-16">
+            <Badge className="mb-4 bg-brand-surface text-brand-deep border-brand-pale px-4 py-2 rounded-full text-sm font-medium">
+              شروع آسان
             </Badge>
-            <h2 className="text-3xl md:text-4xl font-black text-white mb-4">
-              آن‌ها آسان حساب را دوست دارند
+            <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-4">
+              در سه قدم شروع کنید
             </h2>
-            <p className="text-emerald-200/70 text-lg max-w-2xl mx-auto">
-              هزاران کاربر در سراسر افغانستان با آسان حساب حسابداری خود را متحول کرده‌اند
-            </p>
-          </FadeInSection>
+          </FadeIn>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {testimonials.map((t, i) => (
-              <FadeInSection key={i} delay={i * 0.1}>
-                <div className="bg-white/10 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/15 transition-all duration-300">
-                  <div className="flex gap-1 mb-4">
-                    {Array.from({ length: t.rating }).map((_, j) => (
-                      <Star
-                        key={j}
-                        className="w-4 h-4 fill-amber-400 text-amber-400"
-                      />
+          <div className="relative">
+            {/* Vertical line */}
+            <div className="absolute top-0 bottom-0 right-1/2 translate-x-1/2 w-px bg-gradient-to-b from-brand-pale via-brand-mid to-brand-pale hidden md:block" />
+
+            {[
+              {
+                step: "۱",
+                title: "ثبت‌نام ۳۰ ثانیه‌ای",
+                desc: "با شماره تلفن ثبت‌نام کنید. بدون نیاز به اطلاعات پیچیده.",
+                icon: <Users />,
+              },
+              {
+                step: "۲",
+                title: "تنظیم کسب‌وکار",
+                desc: "ویزارد هوشمند به شما کمک می‌کند تا اطلاعات اولیه را وارد کنید.",
+                icon: <Building2 />,
+              },
+              {
+                step: "۳",
+                title: "شروع حسابداری",
+                desc: "فاکتور صادر کنید، گزارش ببینید. همین امروز!",
+                icon: <TrendingUp />,
+              },
+            ].map((item, i) => (
+              <FadeIn
+                key={i}
+                delay={i * 0.2}
+                direction={i % 2 === 0 ? "right" : "left"}
+                className={`mb-12 last:mb-0 md:flex items-center ${
+                  i % 2 === 0 ? "md:flex-row-reverse" : ""
+                }`}
+              >
+                <div className="md:w-1/2 md:px-8">
+                  <motion.div
+                    className={`bg-white rounded-3xl p-8 border border-gray-100 hover:shadow-2xl hover:shadow-brand-deep/5 transition-all duration-500 ${
+                      i % 2 === 0 ? "md:mr-auto" : "md:ml-auto"
+                    } max-w-sm`}
+                    whileHover={{ y: -4 }}
+                  >
+                    <div className="w-14 h-14 gradient-brand rounded-2xl flex items-center justify-center text-white mb-5 shadow-lg shadow-brand-mid/20">
+                      {item.icon}
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-3">
+                      {item.title}
+                    </h3>
+                    <p className="text-gray-400 text-sm leading-relaxed">
+                      {item.desc}
+                    </p>
+                  </motion.div>
+                </div>
+
+                {/* Center node */}
+                <div className="hidden md:flex md:w-0 justify-center relative z-10">
+                  <motion.div
+                    className="w-14 h-14 gradient-brand rounded-full flex items-center justify-center text-white font-black text-lg shadow-xl shadow-brand-mid/30"
+                    whileHover={{ scale: 1.2 }}
+                  >
+                    {item.step}
+                  </motion.div>
+                  {/* Pulse ring */}
+                  <motion.div
+                    className="absolute w-14 h-14 gradient-brand rounded-full opacity-30"
+                    animate={{ scale: [1, 1.8], opacity: [0.3, 0] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  />
+                </div>
+                <div className="md:w-1/2" />
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════ BUSINESS TYPES — HORIZONTAL SCROLL CARDS ══════════ */}
+      <section className="py-20 md:py-28 gradient-brand-soft relative overflow-hidden">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <FadeIn className="text-center mb-12">
+            <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-4">
+              مناسب برای هر نوع کسب‌وکار
+            </h2>
+          </FadeIn>
+
+          <StaggerContainer className="flex flex-wrap justify-center gap-4" stagger={0.06}>
+            {[
+              { icon: <Store />, label: "فروشگاه‌ها" },
+              { icon: <Truck />, label: "حمل‌ونقل" },
+              { icon: <Building2 />, label: "بازرگانی" },
+              { icon: <Receipt />, label: "رستوران‌ها" },
+              { icon: <FileText />, label: "موسسات آموزشی" },
+              { icon: <Users />, label: "کلینیک‌ها" },
+            ].map((biz, i) => (
+              <StaggerItem key={i}>
+                <motion.div
+                  className="bg-white rounded-2xl px-6 py-5 flex items-center gap-4 border border-white/50 cursor-default"
+                  whileHover={{ y: -4, scale: 1.03, shadow: "0 20px 40px rgba(0,71,171,0.1)" }}
+                >
+                  <div className="w-10 h-10 gradient-brand rounded-xl flex items-center justify-center text-white shadow-md shadow-brand-mid/20">
+                    {biz.icon}
+                  </div>
+                  <span className="text-sm font-bold text-gray-700">{biz.label}</span>
+                </motion.div>
+              </StaggerItem>
+            ))}
+          </StaggerContainer>
+        </div>
+      </section>
+
+      {/* ══════════ TESTIMONIALS — CREATIVE CAROUSEL GRID ══════════ */}
+      <section id="testimonials" className="py-20 md:py-28 relative overflow-hidden">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <FadeIn className="text-center mb-16">
+            <Badge className="mb-4 bg-brand-surface text-brand-deep border-brand-pale px-4 py-2 rounded-full text-sm font-medium">
+              <Heart className="w-4 h-4 ml-1" />
+              صدای مشتریان
+            </Badge>
+            <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-4">
+              آن‌ها آسان حساب را{" "}
+              <span className="text-gradient">دوست دارند</span>
+            </h2>
+          </FadeIn>
+
+          {/* Creative grid: 2 large + 4 small */}
+          <div className="grid md:grid-cols-3 gap-5">
+            {/* Large card */}
+            <FadeIn className="md:col-span-2 md:row-span-2">
+              <motion.div
+                className="gradient-brand rounded-3xl p-8 md:p-10 h-full text-white relative overflow-hidden"
+                whileHover={{ scale: 1.01 }}
+              >
+                <div className="absolute top-0 right-0 w-60 h-60 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2" />
+                <div className="absolute bottom-0 left-0 w-40 h-40 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/2" />
+                <div className="relative">
+                  <div className="flex gap-1 mb-6">
+                    {Array.from({ length: 5 }).map((_, j) => (
+                      <Star key={j} className="w-5 h-5 fill-amber-300 text-amber-300" />
                     ))}
                   </div>
-                  <p className="text-emerald-50/90 text-sm leading-relaxed mb-6">
-                    &ldquo;{t.text}&rdquo;
+                  <p className="text-2xl md:text-3xl font-bold leading-relaxed mb-8 text-white/95">
+                    &ldquo;{testimonials[0].text}&rdquo;
                   </p>
-                  <div className="flex items-center gap-3 border-t border-white/10 pt-4">
-                    <div className="w-10 h-10 gradient-emerald rounded-full flex items-center justify-center text-white font-bold text-sm">
-                      {t.name.charAt(0)}
+                  <div className="flex items-center gap-4 border-t border-white/10 pt-6">
+                    <div className="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center text-xl font-black backdrop-blur-sm">
+                      {testimonials[0].name.charAt(0)}
                     </div>
                     <div>
-                      <p className="text-white font-medium text-sm">{t.name}</p>
-                      <p className="text-emerald-300/60 text-xs">{t.role}</p>
+                      <p className="font-bold text-lg">{testimonials[0].name}</p>
+                      <p className="text-white/50 text-sm">{testimonials[0].role}</p>
                     </div>
                   </div>
                 </div>
-              </FadeInSection>
+              </motion.div>
+            </FadeIn>
+
+            {/* Small cards */}
+            {testimonials.slice(1).map((t, i) => (
+              <FadeIn key={i} delay={i * 0.1}>
+                <motion.div
+                  className="bg-white rounded-2xl p-6 border border-gray-100 h-full hover:shadow-xl hover:shadow-brand-deep/5 transition-all duration-500 group"
+                  whileHover={{ y: -3 }}
+                >
+                  <div className="flex gap-1 mb-3">
+                    {Array.from({ length: t.rating }).map((_, j) => (
+                      <Star key={j} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                    ))}
+                  </div>
+                  <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-4">
+                    &ldquo;{t.text}&rdquo;
+                  </p>
+                  <div className="flex items-center gap-3 border-t border-gray-50 pt-3">
+                    <div className="w-9 h-9 gradient-brand rounded-lg flex items-center justify-center text-white text-sm font-bold">
+                      {t.name.charAt(0)}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-sm font-bold text-gray-900 truncate">{t.name}</p>
+                      <p className="text-xs text-gray-400 truncate">{t.city}</p>
+                    </div>
+                  </div>
+                </motion.div>
+              </FadeIn>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ══════════ PRICING ══════════ */}
-      <section id="pricing" className="py-20 md:py-28">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeInSection className="text-center mb-16">
-            <Badge className="mb-4 bg-emerald-50 text-emerald-600 border-emerald-200 px-4 py-2 rounded-full text-sm">
+      {/* ══════════ PRICING — CREATIVE CARDS ══════════ */}
+      <section id="pricing" className="py-20 md:py-28 gradient-brand-soft relative overflow-hidden">
+        <div
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage: "radial-gradient(circle, #0047AB 1px, transparent 1px)",
+            backgroundSize: "25px 25px",
+          }}
+        />
+
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <FadeIn className="text-center mb-16">
+            <Badge className="mb-4 bg-white text-brand-deep border-brand-pale px-4 py-2 rounded-full text-sm font-medium shadow-sm">
               قیمت‌گذاری منصفانه
             </Badge>
-            <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
-              پلنی مناسب برای هر کسب‌وکار
+            <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-4">
+              پلنی مناسب هر کسب‌وکار
             </h2>
-            <p className="text-gray-500 text-lg max-w-2xl mx-auto">
-              قیمت‌های ما مخصوص بازار افغانستان تنظیم شده است. ۱۴ روز رایگان试用 کنید!
+            <p className="text-gray-400 text-lg">
+              ۱۴ روز رایگان — بدون کارت بانکی
             </p>
-          </FadeInSection>
+          </FadeIn>
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-6 items-start">
             {pricingPlans.map((plan, i) => (
-              <FadeInSection key={i} delay={i * 0.15}>
-                <div
-                  className={`relative rounded-2xl p-8 h-full flex flex-col ${
-                    plan.popular
-                      ? "bg-white border-2 border-emerald-500 shadow-2xl shadow-emerald-100 scale-105"
-                      : "bg-white border border-gray-200 hover:shadow-lg"
-                  } transition-all duration-300`}
+              <FadeIn key={i} delay={i * 0.15}>
+                <motion.div
+                  className={`relative rounded-3xl overflow-hidden ${
+                    plan.popular ? "md:-mt-4 md:mb-4" : ""
+                  }`}
+                  whileHover={{ y: -6 }}
                 >
                   {plan.popular && (
-                    <div className="absolute -top-4 right-1/2 translate-x-1/2">
-                      <Badge className="gradient-emerald text-white border-0 px-4 py-1 rounded-full shadow-lg">
-                        محبوب‌ترین
-                      </Badge>
+                    <div className="gradient-brand text-white text-center py-2 text-sm font-bold">
+                      محبوب‌ترین انتخاب
                     </div>
                   )}
-                  <div className="text-center mb-6">
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">{plan.name}</h3>
-                    <p className="text-sm text-gray-400 mb-4">{plan.desc}</p>
-                    <div className="flex items-baseline justify-center gap-1">
-                      <span className="text-4xl font-black text-emerald-600">{plan.price}</span>
-                      <span className="text-sm text-gray-400">{plan.period}</span>
-                    </div>
-                  </div>
-
-                  <ul className="space-y-3 mb-8 flex-grow">
-                    {plan.features.map((f, j) => (
-                      <li key={j} className="flex items-start gap-3">
-                        <CheckCircle2 className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
-                        <span className="text-sm text-gray-600">{f}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <Button
-                    className={`w-full py-5 rounded-full text-base font-bold transition-all ${
+                  <div
+                    className={`bg-white p-8 border ${
                       plan.popular
-                        ? "gradient-emerald text-white border-0 shadow-lg shadow-emerald-200 hover:opacity-90"
-                        : "border-2 border-emerald-500 text-emerald-600 hover:bg-emerald-50"
+                        ? "border-brand-mid/30 shadow-2xl shadow-brand-deep/10"
+                        : "border-gray-100"
                     }`}
-                    variant={plan.popular ? "default" : "outline"}
                   >
-                    {plan.cta}
-                  </Button>
-                </div>
-              </FadeInSection>
+                    <div className="text-center mb-6">
+                      <h3 className="text-xl font-black text-gray-900 mb-1">{plan.name}</h3>
+                      <p className="text-xs text-gray-400 mb-5">{plan.desc}</p>
+                      <div className="flex items-baseline justify-center gap-1">
+                        <span className="text-4xl font-black text-gradient">{plan.price}</span>
+                        <span className="text-xs text-gray-400">{plan.period}</span>
+                      </div>
+                    </div>
+                    <ul className="space-y-3 mb-8">
+                      {plan.features.map((f, j) => (
+                        <li key={j} className="flex items-start gap-3">
+                          <CheckCircle2 className="w-4 h-4 text-brand-mid flex-shrink-0 mt-0.5" />
+                          <span className="text-sm text-gray-500">{f}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
+                      <Button
+                        className={`w-full py-5 rounded-xl text-sm font-bold transition-all ${
+                          plan.popular
+                            ? "gradient-brand text-white border-0 shadow-lg shadow-brand-mid/25"
+                            : "border-2 border-brand-pale text-brand-deep hover:bg-brand-surface hover:border-brand-mid"
+                        }`}
+                        variant={plan.popular ? "default" : "outline"}
+                      >
+                        {plan.cta}
+                      </Button>
+                    </motion.div>
+                  </div>
+                </motion.div>
+              </FadeIn>
             ))}
           </div>
-
-          <FadeInSection className="text-center mt-10">
-            <p className="text-sm text-gray-400">
-              تمام پلن‌ها شامل ۱۴ روز رایگان trial هستند. بدون نیاز به کارت بانکی.
-            </p>
-          </FadeInSection>
         </div>
       </section>
 
       {/* ══════════ FAQ ══════════ */}
-      <section id="faq" className="py-20 md:py-28 bg-gray-50">
+      <section id="faq" className="py-20 md:py-28">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeInSection className="text-center mb-16">
-            <Badge className="mb-4 bg-emerald-50 text-emerald-600 border-emerald-200 px-4 py-2 rounded-full text-sm">
+          <FadeIn className="text-center mb-16">
+            <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-4">
               سوالات متداول
-            </Badge>
-            <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
-              سوالات شما را پاسخ می‌دهیم
             </h2>
-          </FadeInSection>
+          </FadeIn>
 
-          <div className="space-y-4">
+          <div className="space-y-3">
             {faqs.map((faq, i) => (
-              <FadeInSection key={i} delay={i * 0.08}>
-                <div
-                  className="bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-md transition-shadow"
+              <FadeIn key={i} delay={i * 0.06}>
+                <motion.div
+                  className="bg-white rounded-2xl border border-gray-100 overflow-hidden"
+                  whileHover={{ shadow: "0 4px 20px rgba(0,71,171,0.05)" }}
                 >
                   <button
-                    className="w-full flex items-center justify-between p-6 text-right"
+                    className="w-full flex items-center justify-between p-5 md:p-6 text-right"
                     onClick={() => setOpenFaq(openFaq === i ? null : i)}
                   >
                     <span className="font-bold text-gray-900 text-sm md:text-base">
                       {faq.q}
                     </span>
-                    <ChevronDown
-                      className={`w-5 h-5 text-gray-400 flex-shrink-0 transition-transform duration-300 ${
-                        openFaq === i ? "rotate-180" : ""
-                      }`}
-                    />
+                    <motion.div
+                      animate={{ rotate: openFaq === i ? 180 : 0 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <ChevronDown className="w-5 h-5 text-brand-mid flex-shrink-0" />
+                    </motion.div>
                   </button>
                   <AnimatePresence>
                     {openFaq === i && (
@@ -906,102 +1347,115 @@ export default function Home() {
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: "auto", opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3 }}
+                        transition={{ duration: 0.3, ease: [0.25, 0.4, 0.25, 1] }}
                       >
-                        <div className="px-6 pb-6 text-gray-500 text-sm leading-relaxed">
+                        <div className="px-5 md:px-6 pb-5 md:pb-6 text-gray-400 text-sm leading-relaxed border-t border-gray-50 pt-4">
                           {faq.a}
                         </div>
                       </motion.div>
                     )}
                   </AnimatePresence>
-                </div>
-              </FadeInSection>
+                </motion.div>
+              </FadeIn>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ══════════ FINAL CTA ══════════ */}
-      <section className="py-20 md:py-28 relative overflow-hidden">
-        <div className="absolute inset-0 gradient-emerald" />
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-white rounded-full blur-3xl opacity-5" />
-          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-white rounded-full blur-3xl opacity-5" />
+      {/* ══════════ FINAL CTA — DRAMATIC ══════════ */}
+      <section className="py-24 md:py-36 relative overflow-hidden">
+        <div className="absolute inset-0 gradient-brand" />
+        {/* Animated decorations */}
+        <div className="absolute inset-0">
+          <motion.div
+            className="absolute top-[20%] right-[10%] w-[300px] h-[300px] bg-white/5 rounded-full"
+            style={{ animation: "float 8s ease-in-out infinite" }}
+          />
+          <motion.div
+            className="absolute bottom-[10%] left-[10%] w-[200px] h-[200px] bg-white/5 rounded-full"
+            style={{ animation: "float 10s ease-in-out infinite 2s" }}
+          />
+          <motion.div
+            className="absolute top-[50%] left-[50%] w-[500px] h-[500px] bg-white/3 blob"
+          />
         </div>
 
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <FadeInSection>
+          <FadeIn>
             <motion.div
-              animate={{ scale: [1, 1.05, 1] }}
-              transition={{ duration: 3, repeat: Infinity }}
-              className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-8"
+              className="w-20 h-20 bg-white/15 backdrop-blur-sm rounded-3xl flex items-center justify-center mx-auto mb-8 border border-white/20"
+              animate={{ rotate: [0, 5, -5, 0], scale: [1, 1.05, 1] }}
+              transition={{ duration: 4, repeat: Infinity }}
             >
               <Heart className="w-10 h-10 text-white" />
             </motion.div>
-            <h2 className="text-3xl md:text-5xl font-black text-white mb-6 leading-tight">
+            <h2 className="text-3xl md:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight">
               آینده مالی کسب‌وکارتان
               <br />
-              از امروز شروع می‌شود
+              از همین لحظه شروع می‌شود
             </h2>
-            <p className="text-emerald-100/80 text-lg md:text-xl mb-10 max-w-2xl mx-auto leading-relaxed">
-              هزاران کاربر افغان پیش از شما این تصمیم را گرفته‌اند. به آن‌ها بپیوندید و
-              مدیریت مالی کسب‌وکارتان را برای همیشه متحول کنید. همین حالا رایگان شروع کنید!
+            <p className="text-white/60 text-lg md:text-xl mb-10 max-w-2xl mx-auto leading-relaxed">
+              هزاران کاربر افغان پیش از شما این تصمیم را گرفته‌اند.
+              به آن‌ها بپیوندید و مدیریت مالی خود را برای همیشه متحول کنید.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button
-                size="lg"
-                className="bg-white text-emerald-700 hover:bg-emerald-50 border-0 px-10 py-7 text-lg rounded-full shadow-2xl font-bold"
-              >
-                <Zap className="w-5 h-5 ml-2" />
-                شروع رایگان ۱۴ روزه
-                <ArrowLeft className="w-5 h-5 mr-2" />
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="bg-transparent text-white border-white/30 hover:bg-white/10 px-10 py-7 text-lg rounded-full"
-              >
-                <Headphones className="w-5 h-5 ml-2" />
-                تماس با ما
-              </Button>
+              <motion.div whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.97 }}>
+                <Button
+                  size="lg"
+                  className="bg-white text-brand-deep hover:bg-gray-50 border-0 px-10 py-7 text-lg rounded-2xl shadow-2xl font-bold transition-all"
+                >
+                  <Zap className="w-5 h-5 ml-2" />
+                  شروع رایگان ۱۴ روزه
+                  <ArrowLeft className="w-5 h-5 mr-2" />
+                </Button>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.97 }}>
+                <Button
+                  size="lg"
+                  className="bg-white/10 hover:bg-white/20 text-white border border-white/20 px-10 py-7 text-lg rounded-2xl backdrop-blur-sm transition-all"
+                >
+                  <Headphones className="w-5 h-5 ml-2" />
+                  تماس با ما
+                </Button>
+              </motion.div>
             </div>
-            <p className="text-emerald-200/50 text-sm mt-6">
-              بدون نیاز به کارت بانکی &bull; بدون تعهد &bull; کنسل کردن هر وقت بخواهید
+            <p className="text-white/30 text-sm mt-8">
+              بدون کارت بانکی &bull; بدون تعهد &bull; کنسل هر وقت بخواهید
             </p>
-          </FadeInSection>
+          </FadeIn>
         </div>
       </section>
 
       {/* ══════════ FOOTER ══════════ */}
-      <footer className="bg-gray-900 text-gray-400 pt-16 pb-8">
+      <footer className="bg-[#0a0a1a] text-gray-400 pt-16 pb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
-            {/* Brand */}
             <div className="sm:col-span-2 lg:col-span-1">
               <div className="flex items-center gap-3 mb-4">
-                <img
-                  src="/logo-asanhesab.png"
-                  alt="آسان حساب"
-                  className="w-10 h-10 rounded-xl object-contain"
-                />
+                <div className="w-10 h-10 gradient-brand rounded-full flex items-center justify-center shadow-lg">
+                  <img
+                    src="/logo-asanhesab.png"
+                    alt="آسان حساب"
+                    className="w-7 h-7 rounded-full object-cover"
+                  />
+                </div>
                 <div>
-                  <span className="text-lg font-bold text-white">آسان حساب</span>
-                  <span className="text-xs text-gray-500 block -mt-1">AsanHesab</span>
+                  <span className="text-lg font-black text-white">آسان حساب</span>
+                  <span className="text-[10px] text-gray-600 block -mt-0.5 tracking-wider">
+                    ASANHESAB
+                  </span>
                 </div>
               </div>
               <p className="text-sm leading-relaxed text-gray-500 mb-4">
-                اولین و بهترین نرم‌افزار حسابداری به زبان دری با تقویم هجری شمسی، مخصوص
-                بازار افغانستان.
+                اولین نرم‌افزار حسابداری به زبان دری با تقویم هجری شمسی، مخصوص بازار افغانستان.
               </p>
             </div>
-
-            {/* Links */}
             <div>
-              <h4 className="text-white font-bold mb-4">محصول</h4>
+              <h4 className="text-white font-bold mb-4 text-sm">محصول</h4>
               <ul className="space-y-3 text-sm">
-                {["ویژگی‌ها", "قیمت‌ها", " integrations", "آپدیت‌ها"].map((l) => (
+                {["ویژگی‌ها", "قیمت‌ها", "آپدیت‌ها", "API"].map((l) => (
                   <li key={l}>
-                    <a href="#" className="hover:text-emerald-400 transition-colors">
+                    <a href="#" className="hover:text-brand-light transition-colors">
                       {l}
                     </a>
                   </li>
@@ -1009,11 +1463,11 @@ export default function Home() {
               </ul>
             </div>
             <div>
-              <h4 className="text-white font-bold mb-4">شرکت</h4>
+              <h4 className="text-white font-bold mb-4 text-sm">شرکت</h4>
               <ul className="space-y-3 text-sm">
-                {["درباره ما", "تماس با ما", "بلاگ", "فرصت‌های شغلی"].map((l) => (
+                {["درباره ما", "تماس با ما", "بلاگ", "فرصت‌ها"].map((l) => (
                   <li key={l}>
-                    <a href="#" className="hover:text-emerald-400 transition-colors">
+                    <a href="#" className="hover:text-brand-light transition-colors">
                       {l}
                     </a>
                   </li>
@@ -1021,12 +1475,12 @@ export default function Home() {
               </ul>
             </div>
             <div>
-              <h4 className="text-white font-bold mb-4">پشتیبانی</h4>
+              <h4 className="text-white font-bold mb-4 text-sm">پشتیبانی</h4>
               <ul className="space-y-3 text-sm">
-                {["مرکز راهنما", "آموزش‌های ویدیویی", "سوالات متداول", "تماس تلفنی"].map(
+                {["مرکز راهنما", "آموزش ویدیویی", "سوالات متداول", "تماس تلفنی"].map(
                   (l) => (
                     <li key={l}>
-                      <a href="#" className="hover:text-emerald-400 transition-colors">
+                      <a href="#" className="hover:text-brand-light transition-colors">
                         {l}
                       </a>
                     </li>
@@ -1035,16 +1489,15 @@ export default function Home() {
               </ul>
             </div>
           </div>
-
-          <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-sm text-gray-500">
+          <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-xs text-gray-600">
               تمام حقوق محفوظ است &copy; آسان حساب ۱۴۰۴
             </p>
-            <div className="flex items-center gap-6 text-sm">
-              <a href="#" className="hover:text-emerald-400 transition-colors">
+            <div className="flex items-center gap-6 text-xs">
+              <a href="#" className="hover:text-brand-light transition-colors">
                 حریم خصوصی
               </a>
-              <a href="#" className="hover:text-emerald-400 transition-colors">
+              <a href="#" className="hover:text-brand-light transition-colors">
                 شرایط استفاده
               </a>
             </div>
@@ -1055,37 +1508,8 @@ export default function Home() {
   );
 }
 
-/* ─── Custom SVG icons ─── */
-function SparkleIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M12 3l1.912 5.813a2 2 0 0 0 1.275 1.275L21 12l-5.813 1.912a2 2 0 0 0-1.275 1.275L12 21l-1.912-5.813a2 2 0 0 0-1.275-1.275L3 12l5.813-1.912a2 2 0 0 0 1.275-1.275L12 3z" />
-    </svg>
-  );
-}
-
-function PlayIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      stroke="none"
-    >
-      <path d="M8 5v14l11-7z" />
-    </svg>
-  );
-}
-
-function SmileIcon({ className }: { className?: string }) {
+/* ─── Custom Icons ─── */
+function PlayCircleIcon({ className }: { className?: string }) {
   return (
     <svg
       className={className}
@@ -1097,9 +1521,7 @@ function SmileIcon({ className }: { className?: string }) {
       strokeLinejoin="round"
     >
       <circle cx="12" cy="12" r="10" />
-      <path d="M8 14s1.5 2 4 2 4-2 4-2" />
-      <line x1="9" y1="9" x2="9.01" y2="9" />
-      <line x1="15" y1="9" x2="15.01" y2="9" />
+      <polygon points="10 8 16 12 10 16 10 8" fill="currentColor" stroke="none" />
     </svg>
   );
 }
