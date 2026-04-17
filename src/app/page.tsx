@@ -238,11 +238,7 @@ function GlowOrb({
    ROTATING PHRASE — ANIMATED MARKETING LINE
    ═══════════════════════════════════════════ */
 
-/* ═══════════════════════════════════════════
-   TERMINAL-STYLE ROTATING PHRASE
-   ═══════════════════════════════════════════ */
-
-function TerminalRotatingPhrase() {
+function RotatingPhrase() {
   const phrases = [
     "به زبان دری",
     "بدون اینترنت",
@@ -288,28 +284,32 @@ function TerminalRotatingPhrase() {
       <span className="text-base md:text-lg text-gray-500 leading-relaxed">
         نرم‌افزار حسابداری
       </span>
-      {/* Terminal prompt container */}
-      <span className="relative inline-flex items-center min-w-[155px] h-[2.2rem] md:min-w-[195px] md:h-[2.7rem]">
-        <span className="absolute inset-0 rounded-xl terminal-prompt" />
-        {/* Terminal header dots */}
-        <span className="absolute right-2 top-1.5 flex gap-1 opacity-60">
-          <span className="w-[5px] h-[5px] rounded-full bg-red-400/80" />
-          <span className="w-[5px] h-[5px] rounded-full bg-yellow-400/80" />
-          <span className="w-[5px] h-[5px] rounded-full bg-green-400/80" />
-        </span>
-        <span className="flex items-center gap-1 px-3.5 pl-2 w-full relative z-10" style={{ direction: "ltr" }}>
-          <span className="text-emerald-400 text-xs font-bold font-mono shrink-0">~$</span>
-          <span className="text-white/90 text-sm font-mono leading-relaxed whitespace-nowrap">
-            {displayed}
-          </span>
-          {/* Blinking cursor */}
+      {/* Clean pill container */}
+      <span className="relative inline-flex items-center justify-center min-w-[155px] h-[2.2rem] md:min-w-[195px] md:h-[2.7rem]">
+        {/* Pill background */}
+        <span className="absolute inset-0 rounded-full bg-gradient-to-l from-brand-pale/70 to-brand-surface/80 border border-brand-pale/60" />
+        {/* Decorative side accent dots */}
+        <span className="absolute right-2.5 top-1/2 -translate-y-1/2 w-1 h-1 rounded-full bg-brand-mid/30" />
+        <span className="absolute left-2.5 top-1/2 -translate-y-1/2 w-1 h-1 rounded-full bg-brand-mid/30" />
+        <AnimatePresence mode="wait">
           <motion.span
-            className="w-[7px] h-[14px] bg-brand-light rounded-sm shrink-0"
-            animate={{ opacity: [1, 0, 1] }}
-            transition={{ duration: 0.8, repeat: Infinity, ease: "steps(2)" }}
-            style={{ boxShadow: "0 0 6px rgba(93,173,226,0.6), 0 0 12px rgba(93,173,226,0.2)" }}
-          />
-        </span>
+            key={phraseIndex + (isDeleting ? 'del' : 'ins')}
+            initial={{ opacity: 0, scale: 0.7, filter: "blur(8px)" }}
+            animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+            exit={{ opacity: 0, scale: 1.15, filter: "blur(8px)" }}
+            transition={{ duration: 0.45, ease: [0.25, 0.4, 0.25, 1] }}
+            className="relative text-sm md:text-base font-black text-gradient-glow leading-relaxed whitespace-nowrap z-10"
+          >
+            {displayed}
+          </motion.span>
+        </AnimatePresence>
+        {/* Glowing blinking cursor */}
+        <motion.span
+          className="absolute left-3.5 top-1/2 -translate-y-1/2 w-[2px] h-4 bg-brand-mid rounded-full z-10"
+          animate={{ opacity: [1, 0, 1] }}
+          transition={{ duration: 1, repeat: Infinity, ease: "steps(2)" }}
+          style={{ boxShadow: "0 0 6px rgba(0,127,255,0.6), 0 0 12px rgba(0,127,255,0.2)" }}
+        />
       </span>
       <span className="text-base md:text-lg text-gray-500 leading-relaxed">
         مخصوص کسب‌وکار شما
@@ -784,7 +784,7 @@ function HeroTiltCard() {
   return (
     <motion.div
       ref={cardRef}
-      className="relative z-10 mx-auto w-[280px] sm:w-[360px] md:w-[420px]"
+      className="relative z-10 mx-auto w-[300px] sm:w-[370px] md:w-[420px]"
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -1513,12 +1513,12 @@ export default function Home() {
                     <Sparkles className="w-4 h-4 text-brand-mid" />
                   </motion.span>
                   <span className="text-sm font-semibold text-brand-deep">
-                    مخصوص بازار افغانستان
+                    نرم‌افزار حسابداری ویژه بازار افغانستان
                   </span>
                 </motion.div>
               </FadeIn>
 
-              {/* Heading — ultra creative with typewriter char reveal */}
+              {/* Heading — two-line creative stack */}
               <FadeIn delay={0.1}>
                 <div className="relative mb-6" style={{ direction: 'rtl' }}>
                   {/* Decorative floating shapes around heading */}
@@ -1541,110 +1541,101 @@ export default function Home() {
                   {/* Particle burst on heading complete */}
                   <ParticleBurst show={showParticles} />
 
-                  <h1 style={{ lineHeight: 1.05 }}>
-                    {/* Line 1: حسابداری — char by char reveal */}
-                    <span className="block font-black text-gray-900 relative" style={{ fontSize: "clamp(2.8rem, 7.5vw, 5.8rem)", letterSpacing: "-0.02em" }}>
-                      <CharReveal
-                        text="حسابداری"
-                        delayStart={0.4}
-                        charDelay={0.06}
-                      />
-                    </span>
+                  <h1 style={{ lineHeight: 1.15 }}>
+                    {/* Line 1: مدیریت تجارت شما، — normal weight */}
+                    <CharReveal
+                      text="مدیریت تجارت شما،"
+                      delayStart={0.3}
+                      charDelay={0.04}
+                      className="block font-bold text-gray-700 relative"
+                      style={{ fontSize: "clamp(1.6rem, 4vw, 2.8rem)", letterSpacing: "-0.01em" }}
+                    />
 
-                    {/* Line 2: را آسان — with pulsing glow */}
-                    <span className="block relative mt-1" style={{ fontSize: "clamp(3.4rem, 9vw, 7rem)", letterSpacing: "-0.03em" }}>
+                    {/* Line 2: حالا آسان‌تر از همیشه! — bolder, with highlighted آسان‌تر */}
+                    <span className="block relative mt-1" style={{ fontSize: "clamp(2.8rem, 8vw, 5.5rem)", letterSpacing: "-0.03em" }}>
                       {/* Pulsing glow behind text */}
                       <motion.span
                         className="absolute inset-0 font-black pointer-events-none"
                         aria-hidden
                         style={{
-                          fontSize: "clamp(3.4rem, 9vw, 7rem)",
+                          fontSize: "clamp(2.8rem, 8vw, 5.5rem)",
                           letterSpacing: "-0.03em",
-                          background: "linear-gradient(135deg, #0047AB, #007FFF, #5DADE2)",
+                          background: "linear-gradient(135deg, #059669, #10B981, #34D399)",
                           WebkitBackgroundClip: "text",
                           WebkitTextFillColor: "transparent",
                         }}
                         animate={{
                           filter: [
                             "blur(12px) brightness(1)",
-                            "blur(20px) brightness(1.3)",
+                            "blur(22px) brightness(1.3)",
                             "blur(12px) brightness(1)",
                           ],
-                          opacity: [0.25, 0.45, 0.25],
+                          opacity: [0.2, 0.4, 0.2],
                         }}
                         transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
                       >
-                        را آسان
+                        حالا آسان‌تر از همیشه!
                       </motion.span>
-                      <span className="text-gradient-hero font-black">
+                      <span className="font-black">
                         <CharReveal
-                          text="را آسان"
-                          delayStart={0.85}
-                          charDelay={0.07}
+                          text="حالا "
+                          delayStart={0.7}
+                          charDelay={0.05}
+                        />
+                        {/* Highlighted word آسان‌تر in emerald green */}
+                        <span
+                          className="inline-block"
+                          style={{
+                            background: "linear-gradient(135deg, #059669 0%, #10B981 40%, #34D399 100%)",
+                            WebkitBackgroundClip: "text",
+                            WebkitTextFillColor: "transparent",
+                            backgroundClip: "text",
+                          }}
+                        >
+                          <CharReveal
+                            text="آسان‌تر"
+                            delayStart={1.0}
+                            charDelay={0.06}
+                          />
+                        </span>
+                        <CharReveal
+                          text=" از همیشه!"
+                          delayStart={1.3}
+                          charDelay={0.05}
+                          onComplete={() => setShowParticles(true)}
                         />
                       </span>
-                      {/* Animated gradient underline */}
+                      {/* Animated emerald underline */}
                       <motion.span
-                        className="absolute -bottom-2 right-0 h-[7px] w-full rounded-full"
+                        className="absolute -bottom-2 right-0 h-[7px] rounded-full"
                         style={{
-                          background: "linear-gradient(90deg, #0047AB 0%, #007FFF 40%, #5DADE2 70%, #D6EEFF 100%)",
+                          background: "linear-gradient(90deg, #059669 0%, #10B981 40%, #34D399 70%, #A7F3D0 100%)",
+                          width: "85%",
                         }}
                         initial={{ scaleX: 0, originX: 1, opacity: 0 }}
-                        animate={{ scaleX: 1, opacity: 0.55 }}
-                        transition={{ duration: 1, delay: 1.6, ease: [0.25, 0.4, 0.25, 1] }}
+                        animate={{ scaleX: 1, opacity: 0.5 }}
+                        transition={{ duration: 1, delay: 1.8, ease: [0.25, 0.4, 0.25, 1] }}
                       />
                       {/* Secondary thinner underline */}
                       <motion.span
                         className="absolute -bottom-[11px] right-4 h-[3px] rounded-full"
                         style={{
-                          background: "linear-gradient(90deg, transparent 0%, #007FFF 30%, #5DADE2 100%)",
-                          width: "55%",
+                          background: "linear-gradient(90deg, transparent 0%, #10B981 30%, #34D399 100%)",
+                          width: "50%",
                         }}
                         initial={{ scaleX: 0, originX: 1, opacity: 0 }}
                         animate={{ scaleX: 1, opacity: 0.25 }}
-                        transition={{ duration: 1.2, delay: 1.8, ease: [0.25, 0.4, 0.25, 1] }}
+                        transition={{ duration: 1.2, delay: 2.0, ease: [0.25, 0.4, 0.25, 1] }}
                       />
                     </span>
-
-                    {/* Line 3: کنید! — with wiggle animation */}
-                    <motion.span
-                      className="block relative mt-1"
-                      animate={{
-                        rotate: [0, 0, 0, 0, -3, 3, -2, 2, -1, 1, 0, 0],
-                      }}
-                      transition={{
-                        duration: 0.7,
-                        delay: 2.2,
-                        ease: "easeInOut",
-                        repeat: 0,
-                        times: [0, 0.15, 0.3, 0.4, 0.45, 0.55, 0.6, 0.7, 0.75, 0.85, 0.9, 1],
-                      }}
-                    >
-                      <span className="font-black text-gray-900" style={{ fontSize: "clamp(2.8rem, 7.5vw, 5.8rem)", letterSpacing: "-0.02em" }}>
-                        <CharReveal
-                          text="کنید!"
-                          delayStart={1.3}
-                          charDelay={0.06}
-                          onComplete={() => setShowParticles(true)}
-                        />
-                      </span>
-                      {/* Animated sparkle burst */}
-                      <motion.span
-                        className="inline-block mr-1 relative"
-                        animate={{ rotate: [0, 12, 0, -12, 0] }}
-                        transition={{ duration: 3, delay: 2.5, repeat: Infinity, ease: "easeInOut" }}
-                      >
-                        <Sparkles className="w-9 h-9 sm:w-11 sm:h-11 md:w-14 md:h-14 text-brand-mid/25 -mt-1" />
-                      </motion.span>
-                    </motion.span>
                   </h1>
                 </div>
               </FadeIn>
 
-              {/* Description — Terminal Rotating Phrases */}
+              {/* Description — Rotating Phrases */}
               <FadeIn delay={0.2}>
                 <div className="mb-8">
-                  <TerminalRotatingPhrase />
+                  <RotatingPhrase />
                   <motion.p
                     className="text-sm text-gray-400 mt-2 max-w-lg mx-auto lg:mx-0 lg:mr-0"
                     initial={{ opacity: 0 }}
@@ -1692,6 +1683,19 @@ export default function Home() {
                     </Button>
                   </motion.div>
                 </div>
+                {/* Friction-Killer — tiny text below CTA */}
+                <motion.p
+                  className="text-xs text-gray-400 mt-3 text-center lg:text-right"
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1.2, duration: 0.8 }}
+                >
+                  <span>نصب در ۵ دقیقه</span>
+                  <span className="mx-1.5 text-gray-300">|</span>
+                  <span>بدون نیاز به اینترنت</span>
+                  <span className="mx-1.5 text-gray-300">|</span>
+                  <span>پشتیبانی دایمی</span>
+                </motion.p>
               </FadeIn>
 
               {/* Floating user counter badge */}

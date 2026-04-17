@@ -87,3 +87,19 @@ Stage Summary:
 - Rewrote footer with gradient background, CTA banner, social links, hover animations
 - Added new CSS: wiggle, glow-pulse-text, particle-fly, holo-sweep keyframes + utility classes
 - Build verified: ✓ Compiled successfully
+---
+Task ID: 6
+Agent: Main Agent
+Task: 6 hero section refinements per user feedback
+
+Work Log:
+- Replaced TerminalRotatingPhrase dark terminal design with clean pill-style RotatingPhrase (keeps typewriter character animation in a light rounded pill)
+- Increased HeroTiltCard mobile width from 280px to 300px (sm: 360px→370px)
+- Changed badge text from "مخصوص بازار افغانستان" to "نرم‌افزار حسابداری ویژه بازار افغانستان"
+- Completely rewrote main heading: 2-line stack instead of 3-line
+  - Line 1: "مدیریت تجارت شما،" in normal-bold weight, smaller size (clamp 1.6rem–2.8rem), gray-700 color
+  - Line 2: "حالا آسان‌تر از همیشه!" in black font-black weight, larger size (clamp 2.8rem–5.5rem)
+  - "آسان‌تر" highlighted in emerald green gradient (#059669→#10B981→#34D399) with pulsing green glow
+  - Animated emerald underlines instead of blue
+- Added Friction-Killer text below CTA: "نصب در ۵ دقیقه | بدون نیاز به اینترنت | پشتیبانی دایمی"
+- Build verified: ✓ Compiled successfully
