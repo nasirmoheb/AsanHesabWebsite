@@ -1202,6 +1202,10 @@ export default function Home() {
                   </motion.a>
                 ))}
                 <div className="pt-4 mt-4 border-t border-gray-100 dark:border-gray-800">
+                  <div className="flex items-center justify-between px-4 mb-4">
+                    <LanguageSwitcher />
+                    <ThemeToggle />
+                  </div>
                   <Button className="w-full gradient-brand text-white border-0 rounded-xl">
                     <Zap className="w-4 h-4 ml-2" />
                     {t("nav.download")}
