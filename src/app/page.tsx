@@ -1317,13 +1317,6 @@ export default function Home() {
             </div>
 
             <div className="hidden md:flex items-center gap-3">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-gray-500 hover:text-brand-deep"
-              >
-                ورود
-              </Button>
               <Button className="gradient-brand hover:opacity-90 text-white border-0 px-6 rounded-full shadow-lg shadow-brand-mid/25 hover:shadow-brand-mid/40 transition-all duration-300 hover:scale-105">
                 <Zap className="w-4 h-4 ml-2" />
                 دانلود رایگان
@@ -1366,11 +1359,9 @@ export default function Home() {
                     {link.label}
                   </motion.a>
                 ))}
-                <div className="pt-4 mt-4 border-t border-gray-100 flex gap-3">
-                  <Button variant="outline" className="flex-1 rounded-xl">
-                    ورود
-                  </Button>
-                  <Button className="flex-1 gradient-brand text-white border-0 rounded-xl">
+                <div className="pt-4 mt-4 border-t border-gray-100">
+                  <Button className="w-full gradient-brand text-white border-0 rounded-xl">
+                    <Zap className="w-4 h-4 ml-2" />
                     دانلود رایگان
                   </Button>
                 </div>
@@ -1518,14 +1509,14 @@ export default function Home() {
                 </motion.div>
               </FadeIn>
 
-              {/* Heading — Cinematic Circle-Reveal with Golden Gradient */}
+              {/* Heading — Cinematic Circle-Reveal with Brand Blue Highlight */}
               <FadeIn delay={0.1}>
                 <div className="relative mb-6" style={{ direction: 'rtl' }}>
                   {/* Soft ambient glow behind heading */}
                   <motion.div
                     className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[130%] h-[140%] rounded-full pointer-events-none"
                     style={{
-                      background: "radial-gradient(ellipse at 65% 45%, rgba(245,158,11,0.07) 0%, rgba(0,127,255,0.04) 40%, transparent 70%)",
+                      background: "radial-gradient(ellipse at 65% 45%, rgba(0,127,255,0.06) 0%, rgba(0,71,171,0.04) 40%, transparent 70%)",
                     }}
                     animate={{
                       scale: [1, 1.08, 1],
@@ -1536,11 +1527,11 @@ export default function Home() {
 
                   {/* Subtle floating accent — top-right */}
                   <motion.div
-                    className="absolute -top-3 -right-1 md:-top-4 md:-right-4 w-8 h-8 md:w-10 md:h-10 rounded-xl border border-amber-300/20 bg-amber-50/40 hidden sm:flex items-center justify-center pointer-events-none"
+                    className="absolute -top-3 -right-1 md:-top-4 md:-right-4 w-8 h-8 md:w-10 md:h-10 rounded-xl border border-brand-mid/15 bg-brand-surface/40 hidden sm:flex items-center justify-center pointer-events-none"
                     animate={{ y: [0, -6, 0], rotate: [0, 8, 0] }}
                     transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
                   >
-                    <Sparkles className="w-3.5 h-3.5 text-amber-400/50" />
+                    <Sparkles className="w-3.5 h-3.5 text-brand-mid/40" />
                   </motion.div>
 
                   <h1 className="relative" style={{ lineHeight: 1.25 }}>
@@ -1559,22 +1550,22 @@ export default function Home() {
                         مدیریت تجارت شما،
                       </span>
 
-                      {/* Line 2 — bold with golden "آسان‌تر" */}
+                      {/* Line 2 — bold with brand-blue highlighted "آسان‌تر" */}
                       <span
                         className="block font-black text-gray-900 mt-1"
                         style={{ fontSize: "clamp(2.6rem, 7.5vw, 5rem)", letterSpacing: "-0.03em" }}
                       >
                         حالا{" "}
-                        {/* Golden highlighted "آسان‌تر" */}
+                        {/* Brand-blue highlighted "آسان‌تر" */}
                         <span className="relative inline-block">
-                          {/* Pulsing golden glow */}
+                          {/* Pulsing brand glow */}
                           <motion.span
                             className="absolute inset-0 blur-2xl opacity-40 pointer-events-none"
                             style={{
-                              background: "linear-gradient(135deg, #D97706, #F59E0B, #FBBF24, #FDE68A)",
+                              background: "linear-gradient(135deg, #0047AB, #007FFF, #5DADE2, #D6EEFF)",
                             }}
                             animate={{
-                              opacity: [0.25, 0.45, 0.25],
+                              opacity: [0.2, 0.4, 0.2],
                               scale: [1, 1.06, 1],
                             }}
                             transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
@@ -1583,7 +1574,7 @@ export default function Home() {
                           <span
                             className="relative"
                             style={{
-                              background: "linear-gradient(135deg, #B45309 0%, #D97706 20%, #F59E0B 45%, #FBBF24 65%, #FDE68A 85%, #FEF3C7 100%)",
+                              background: "linear-gradient(135deg, #0047AB 0%, #007FFF 25%, #5DADE2 55%, #89CFF0 80%, #D6EEFF 100%)",
                               WebkitBackgroundClip: "text",
                               WebkitTextFillColor: "transparent",
                               backgroundClip: "text",
@@ -1601,14 +1592,14 @@ export default function Home() {
                       <motion.span
                         className="h-[3px] rounded-full flex-1"
                         style={{
-                          background: "linear-gradient(90deg, transparent 0%, #F59E0B 20%, #FBBF24 50%, transparent 100%)",
+                          background: "linear-gradient(90deg, transparent 0%, #0047AB 20%, #007FFF 50%, transparent 100%)",
                         }}
                         initial={{ scaleX: 0, originX: 0.5 }}
                         animate={{ scaleX: 1 }}
                         transition={{ delay: 1.5, duration: 1, ease: [0.25, 0.4, 0.25, 1] }}
                       />
                       <motion.span
-                        className="w-2 h-2 rounded-full bg-amber-400/60 shrink-0"
+                        className="w-2 h-2 rounded-full bg-brand-mid/50 shrink-0"
                         initial={{ scale: 0, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         transition={{ delay: 1.9, type: "spring", stiffness: 200 }}
@@ -1616,7 +1607,7 @@ export default function Home() {
                       <motion.span
                         className="h-[2px] rounded-full w-8"
                         style={{
-                          background: "linear-gradient(90deg, #FBBF24, transparent)",
+                          background: "linear-gradient(90deg, #5DADE2, transparent)",
                         }}
                         initial={{ scaleX: 0, originX: 1 }}
                         animate={{ scaleX: 1 }}
@@ -1980,27 +1971,86 @@ export default function Home() {
           </div>
         </div>
 
+          {/* Inline stats bar */}
+          <FadeIn delay={0.8}>
+            <motion.div
+              className="mt-10 md:mt-14 grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 max-w-3xl mx-auto"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.2 }}
+            >
+              {stats.map((s, i) => (
+                <motion.div
+                  key={i}
+                  className="glass-card rounded-2xl p-4 text-center"
+                  whileHover={{ scale: 1.05, boxShadow: "0 10px 30px rgba(0,71,171,0.1)" }}
+                >
+                  <p className="text-2xl font-black text-brand-deep">
+                    <AnimatedCounter target={s.value} suffix={s.suffix} />
+                  </p>
+                  <p className="text-xs text-gray-400 mt-1">{s.label}</p>
+                </motion.div>
+              ))}
+            </motion.div>
+          </FadeIn>
+
       </section>
 
       {/* Gradient divider — hero to marquee */}
       <div className="gradient-divider-section" />
 
-      {/* ══════════ MARQUEE TRUST BAR ══════════ */}
-      <section className="py-6 bg-white overflow-hidden">
-        <div className="flex" style={{ animation: "marquee 30s linear infinite", width: "max-content" }}>
-          {[...stats, ...stats, ...stats, ...stats].map((s, i) => (
-            <div key={i} className="flex items-center gap-8 px-8">
-              <div className="flex items-center gap-3">
-                <span className="text-2xl font-black text-brand-deep">
-                  <AnimatedCounter target={s.value} suffix={s.suffix} />
-                </span>
-                <span className="text-sm text-gray-400 whitespace-nowrap">
-                  {s.label}
-                </span>
+      {/* ══════════ ENHANCED MARQUEE TRUST BAR ══════════ */}
+      <section className="relative py-5 overflow-hidden bg-white">
+        {/* Top fade edges */}
+        <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
+        <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
+
+        {/* Row 1 — Stats scrolling right-to-left */}
+        <div className="relative">
+          <div className="flex" style={{ animation: "marquee 35s linear infinite", width: "max-content" }}>
+            {[...stats, ...stats, ...stats, ...stats, ...stats].map((s, i) => (
+              <div key={`r1-${i}`} className="flex items-center gap-3 px-10">
+                <div className="flex items-center gap-2.5 bg-brand-surface/50 rounded-full pl-4 pr-5 py-2 border border-brand-pale/30">
+                  <span className="text-xl md:text-2xl font-black text-brand-deep tabular-nums">
+                    <AnimatedCounter target={s.value} suffix={s.suffix} />
+                  </span>
+                  <span className="text-[11px] md:text-xs text-gray-400 font-medium whitespace-nowrap">
+                    {s.label}
+                  </span>
+                </div>
+                <div className="w-1.5 h-1.5 rounded-full bg-brand-mid/20" />
               </div>
-              <div className="w-1 h-1 bg-brand-pale rounded-full" />
-            </div>
-          ))}
+            ))}
+          </div>
+        </div>
+
+        {/* Row 2 — Trust keywords scrolling left-to-right */}
+        <div className="relative mt-2.5">
+          <div className="flex" style={{ animation: "marquee-reverse 28s linear infinite", width: "max-content" }}>
+            {(() => {
+              const trustItems = [
+                { icon: <Shield className="w-3.5 h-3.5" />, text: "امن و مطمئن" },
+                { icon: <WifiOff className="w-3.5 h-3.5" />, text: "بدون اینترنت" },
+                { icon: <Globe className="w-3.5 h-3.5" />, text: "به زبان دری" },
+                { icon: <CalendarDays className="w-3.5 h-3.5" />, text: "تقویم شمسی" },
+                { icon: <Zap className="w-3.5 h-3.5" />, text: "سریع و آسان" },
+                { icon: <Lock className="w-3.5 h-3.5" />, text: "محافظت از داده‌ها" },
+                { icon: <Monitor className="w-3.5 h-3.5" />, text: "برای دسکتاپ" },
+                { icon: <Database className="w-3.5 h-3.5" />, text: "ذخیره آفلاین" },
+              ];
+              return [...trustItems, ...trustItems, ...trustItems, ...trustItems, ...trustItems].map((item, i) => (
+                <div key={`r2-${i}`} className="flex items-center gap-6 px-10">
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 rounded-md bg-brand-surface/60 flex items-center justify-center text-brand-mid">
+                      {item.icon}
+                    </div>
+                    <span className="text-[11px] md:text-xs text-gray-400 font-medium whitespace-nowrap">{item.text}</span>
+                  </div>
+                  <div className="w-1 h-1 rounded-full bg-brand-pale" />
+                </div>
+              ));
+            })()}
+          </div>
         </div>
       </section>
 
