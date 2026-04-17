@@ -1969,12 +1969,11 @@ export default function Home() {
               </div>
             </div>
           </div>
-        </div>
 
-          {/* Inline stats bar */}
+          {/* Inline stats bar — inside max-w-7xl for proper padding */}
           <FadeIn delay={0.8}>
             <motion.div
-              className="mt-10 md:mt-14 grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 max-w-3xl mx-auto"
+              className="mt-10 md:mt-14 grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.2 }}
@@ -1982,17 +1981,18 @@ export default function Home() {
               {stats.map((s, i) => (
                 <motion.div
                   key={i}
-                  className="glass-card rounded-2xl p-4 text-center"
+                  className="rounded-2xl p-3 md:p-4 text-center bg-white/80 border border-brand-pale/40 shadow-sm md:shadow-md"
                   whileHover={{ scale: 1.05, boxShadow: "0 10px 30px rgba(0,71,171,0.1)" }}
                 >
-                  <p className="text-2xl font-black text-brand-deep">
-                    <AnimatedCounter target={s.value} suffix={s.suffix} />
+                  <p className="text-xl md:text-2xl font-black text-brand-deep tabular-nums">
+                    {s.value.toLocaleString("fa-AF")}{s.suffix}
                   </p>
-                  <p className="text-xs text-gray-400 mt-1">{s.label}</p>
+                  <p className="text-[11px] md:text-xs text-gray-400 mt-1">{s.label}</p>
                 </motion.div>
               ))}
             </motion.div>
           </FadeIn>
+        </div>
 
       </section>
 
@@ -2000,21 +2000,21 @@ export default function Home() {
       <div className="gradient-divider-section" />
 
       {/* ══════════ ENHANCED MARQUEE TRUST BAR ══════════ */}
-      <section className="relative py-5 overflow-hidden bg-white">
-        {/* Top fade edges */}
-        <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
-        <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
+      <section className="relative py-4 md:py-5 overflow-hidden bg-white">
+        {/* Fade edges */}
+        <div className="absolute inset-y-0 right-0 w-12 md:w-20 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
+        <div className="absolute inset-y-0 left-0 w-12 md:w-20 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
 
         {/* Row 1 — Stats scrolling right-to-left */}
         <div className="relative">
           <div className="flex" style={{ animation: "marquee 35s linear infinite", width: "max-content" }}>
             {[...stats, ...stats, ...stats, ...stats, ...stats].map((s, i) => (
-              <div key={`r1-${i}`} className="flex items-center gap-3 px-10">
-                <div className="flex items-center gap-2.5 bg-brand-surface/50 rounded-full pl-4 pr-5 py-2 border border-brand-pale/30">
-                  <span className="text-xl md:text-2xl font-black text-brand-deep tabular-nums">
-                    <AnimatedCounter target={s.value} suffix={s.suffix} />
+              <div key={`r1-${i}`} className="flex items-center gap-2.5 px-5 md:px-10">
+                <div className="flex items-center gap-2 bg-brand-surface/50 rounded-full pl-3 pr-4 md:pl-4 md:pr-5 py-1.5 md:py-2 border border-brand-pale/30">
+                  <span className="text-lg md:text-2xl font-black text-brand-deep tabular-nums">
+                    {s.value.toLocaleString("fa-AF")}{s.suffix}
                   </span>
-                  <span className="text-[11px] md:text-xs text-gray-400 font-medium whitespace-nowrap">
+                  <span className="text-[10px] md:text-xs text-gray-400 font-medium whitespace-nowrap">
                     {s.label}
                   </span>
                 </div>
@@ -2025,26 +2025,26 @@ export default function Home() {
         </div>
 
         {/* Row 2 — Trust keywords scrolling left-to-right */}
-        <div className="relative mt-2.5">
+        <div className="relative mt-2">
           <div className="flex" style={{ animation: "marquee-reverse 28s linear infinite", width: "max-content" }}>
             {(() => {
               const trustItems = [
-                { icon: <Shield className="w-3.5 h-3.5" />, text: "امن و مطمئن" },
-                { icon: <WifiOff className="w-3.5 h-3.5" />, text: "بدون اینترنت" },
-                { icon: <Globe className="w-3.5 h-3.5" />, text: "به زبان دری" },
-                { icon: <CalendarDays className="w-3.5 h-3.5" />, text: "تقویم شمسی" },
-                { icon: <Zap className="w-3.5 h-3.5" />, text: "سریع و آسان" },
-                { icon: <Lock className="w-3.5 h-3.5" />, text: "محافظت از داده‌ها" },
-                { icon: <Monitor className="w-3.5 h-3.5" />, text: "برای دسکتاپ" },
-                { icon: <Database className="w-3.5 h-3.5" />, text: "ذخیره آفلاین" },
+                { icon: <Shield className="w-3 h-3 md:w-3.5 md:h-3.5" />, text: "امن و مطمئن" },
+                { icon: <WifiOff className="w-3 h-3 md:w-3.5 md:h-3.5" />, text: "بدون اینترنت" },
+                { icon: <Globe className="w-3 h-3 md:w-3.5 md:h-3.5" />, text: "به زبان دری" },
+                { icon: <CalendarDays className="w-3 h-3 md:w-3.5 md:h-3.5" />, text: "تقویم شمسی" },
+                { icon: <Zap className="w-3 h-3 md:w-3.5 md:h-3.5" />, text: "سریع و آسان" },
+                { icon: <Lock className="w-3 h-3 md:w-3.5 md:h-3.5" />, text: "محافظت از داده‌ها" },
+                { icon: <Monitor className="w-3 h-3 md:w-3.5 md:h-3.5" />, text: "برای دسکتاپ" },
+                { icon: <Database className="w-3 h-3 md:w-3.5 md:h-3.5" />, text: "ذخیره آفلاین" },
               ];
               return [...trustItems, ...trustItems, ...trustItems, ...trustItems, ...trustItems].map((item, i) => (
-                <div key={`r2-${i}`} className="flex items-center gap-6 px-10">
-                  <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 rounded-md bg-brand-surface/60 flex items-center justify-center text-brand-mid">
+                <div key={`r2-${i}`} className="flex items-center gap-4 md:gap-6 px-5 md:px-10">
+                  <div className="flex items-center gap-1.5 md:gap-2">
+                    <div className="w-5 h-5 md:w-6 md:h-6 rounded-md bg-brand-surface/60 flex items-center justify-center text-brand-mid">
                       {item.icon}
                     </div>
-                    <span className="text-[11px] md:text-xs text-gray-400 font-medium whitespace-nowrap">{item.text}</span>
+                    <span className="text-[10px] md:text-xs text-gray-400 font-medium whitespace-nowrap">{item.text}</span>
                   </div>
                   <div className="w-1 h-1 rounded-full bg-brand-pale" />
                 </div>
