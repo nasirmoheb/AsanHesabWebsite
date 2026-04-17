@@ -44,6 +44,7 @@ import {
   Database,
   Monitor,
   Cpu,
+  WifiOff,
   Bell,
   ArrowUp,
   MessageCircle,
@@ -784,7 +785,7 @@ function HeroTiltCard() {
   return (
     <motion.div
       ref={cardRef}
-      className="relative z-10 mx-auto w-[300px] sm:w-[370px] md:w-[420px]"
+      className="relative z-10 mx-auto w-[340px] sm:w-[400px] md:w-[460px]"
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -1042,7 +1043,6 @@ export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const [showParticles, setShowParticles] = useState(false);
 
   const { scrollYProgress } = useScroll();
 
@@ -1518,116 +1518,111 @@ export default function Home() {
                 </motion.div>
               </FadeIn>
 
-              {/* Heading — two-line creative stack */}
+              {/* Heading — Cinematic Circle-Reveal with Golden Gradient */}
               <FadeIn delay={0.1}>
                 <div className="relative mb-6" style={{ direction: 'rtl' }}>
-                  {/* Decorative floating shapes around heading */}
+                  {/* Soft ambient glow behind heading */}
                   <motion.div
-                    className="absolute -top-4 -right-2 md:-top-6 md:-right-6 w-10 h-10 md:w-14 md:h-14 rounded-2xl border-2 border-brand-mid/15 hidden sm:block"
-                    animate={{ rotate: [0, 90, 180, 270, 360], scale: [1, 1.1, 1] }}
-                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                  />
-                  <motion.div
-                    className="absolute -top-2 -left-3 md:-top-3 md:-left-8 w-6 h-6 md:w-8 md:h-8 rounded-full bg-brand-light/30 hidden sm:block"
-                    animate={{ y: [0, -8, 0], scale: [1, 1.2, 1] }}
-                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                  />
-                  <motion.div
-                    className="absolute bottom-4 -right-6 md:bottom-2 md:-right-10 w-4 h-4 md:w-6 md:h-6 rounded-lg bg-brand-mid/10 hidden sm:block"
-                    animate={{ rotate: [0, -45, 0, 45, 0], y: [0, -5, 0] }}
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[130%] h-[140%] rounded-full pointer-events-none"
+                    style={{
+                      background: "radial-gradient(ellipse at 65% 45%, rgba(245,158,11,0.07) 0%, rgba(0,127,255,0.04) 40%, transparent 70%)",
+                    }}
+                    animate={{
+                      scale: [1, 1.08, 1],
+                      opacity: [0.5, 0.9, 0.5],
+                    }}
                     transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
                   />
 
-                  {/* Particle burst on heading complete */}
-                  <ParticleBurst show={showParticles} />
+                  {/* Subtle floating accent — top-right */}
+                  <motion.div
+                    className="absolute -top-3 -right-1 md:-top-4 md:-right-4 w-8 h-8 md:w-10 md:h-10 rounded-xl border border-amber-300/20 bg-amber-50/40 hidden sm:flex items-center justify-center pointer-events-none"
+                    animate={{ y: [0, -6, 0], rotate: [0, 8, 0] }}
+                    transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                  >
+                    <Sparkles className="w-3.5 h-3.5 text-amber-400/50" />
+                  </motion.div>
 
-                  <h1 style={{ lineHeight: 1.15 }}>
-                    {/* Line 1: مدیریت تجارت شما، — normal weight */}
-                    <CharReveal
-                      text="مدیریت تجارت شما،"
-                      delayStart={0.3}
-                      charDelay={0.04}
-                      className="block font-bold text-gray-700 relative"
-                      style={{ fontSize: "clamp(1.6rem, 4vw, 2.8rem)", letterSpacing: "-0.01em" }}
-                    />
-
-                    {/* Line 2: حالا آسان‌تر از همیشه! — bolder, with highlighted آسان‌تر */}
-                    <span className="block relative mt-1" style={{ fontSize: "clamp(2.8rem, 8vw, 5.5rem)", letterSpacing: "-0.03em" }}>
-                      {/* Pulsing glow behind text */}
-                      <motion.span
-                        className="absolute inset-0 font-black pointer-events-none"
-                        aria-hidden
-                        style={{
-                          fontSize: "clamp(2.8rem, 8vw, 5.5rem)",
-                          letterSpacing: "-0.03em",
-                          background: "linear-gradient(135deg, #059669, #10B981, #34D399)",
-                          WebkitBackgroundClip: "text",
-                          WebkitTextFillColor: "transparent",
-                        }}
-                        animate={{
-                          filter: [
-                            "blur(12px) brightness(1)",
-                            "blur(22px) brightness(1.3)",
-                            "blur(12px) brightness(1)",
-                          ],
-                          opacity: [0.2, 0.4, 0.2],
-                        }}
-                        transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+                  <h1 className="relative" style={{ lineHeight: 1.25 }}>
+                    {/* Clip-path circle reveal animation */}
+                    <motion.div
+                      className="relative z-10"
+                      initial={{ clipPath: "circle(0% at 70% 45%)" }}
+                      animate={{ clipPath: "circle(150% at 70% 45%)" }}
+                      transition={{ delay: 0.4, duration: 1.3, ease: [0.22, 1, 0.36, 1] }}
+                    >
+                      {/* Line 1 — management text */}
+                      <span
+                        className="block font-bold text-gray-600"
+                        style={{ fontSize: "clamp(1.5rem, 3.8vw, 2.6rem)", letterSpacing: "-0.01em" }}
                       >
-                        حالا آسان‌تر از همیشه!
-                      </motion.span>
-                      <span className="font-black">
-                        <CharReveal
-                          text="حالا "
-                          delayStart={0.7}
-                          charDelay={0.05}
-                        />
-                        {/* Highlighted word آسان‌تر in emerald green */}
-                        <span
-                          className="inline-block"
-                          style={{
-                            background: "linear-gradient(135deg, #059669 0%, #10B981 40%, #34D399 100%)",
-                            WebkitBackgroundClip: "text",
-                            WebkitTextFillColor: "transparent",
-                            backgroundClip: "text",
-                          }}
-                        >
-                          <CharReveal
-                            text="آسان‌تر"
-                            delayStart={1.0}
-                            charDelay={0.06}
-                          />
-                        </span>
-                        <CharReveal
-                          text=" از همیشه!"
-                          delayStart={1.3}
-                          charDelay={0.05}
-                          onComplete={() => setShowParticles(true)}
-                        />
+                        مدیریت تجارت شما،
                       </span>
-                      {/* Animated emerald underline */}
+
+                      {/* Line 2 — bold with golden "آسان‌تر" */}
+                      <span
+                        className="block font-black text-gray-900 mt-1"
+                        style={{ fontSize: "clamp(2.6rem, 7.5vw, 5rem)", letterSpacing: "-0.03em" }}
+                      >
+                        حالا{" "}
+                        {/* Golden highlighted "آسان‌تر" */}
+                        <span className="relative inline-block">
+                          {/* Pulsing golden glow */}
+                          <motion.span
+                            className="absolute inset-0 blur-2xl opacity-40 pointer-events-none"
+                            style={{
+                              background: "linear-gradient(135deg, #D97706, #F59E0B, #FBBF24, #FDE68A)",
+                            }}
+                            animate={{
+                              opacity: [0.25, 0.45, 0.25],
+                              scale: [1, 1.06, 1],
+                            }}
+                            transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+                          />
+                          {/* The actual gradient text */}
+                          <span
+                            className="relative"
+                            style={{
+                              background: "linear-gradient(135deg, #B45309 0%, #D97706 20%, #F59E0B 45%, #FBBF24 65%, #FDE68A 85%, #FEF3C7 100%)",
+                              WebkitBackgroundClip: "text",
+                              WebkitTextFillColor: "transparent",
+                              backgroundClip: "text",
+                            }}
+                          >
+                            آسان‌تر
+                          </span>
+                        </span>
+                        {" "}از همیشه!
+                      </span>
+                    </motion.div>
+
+                    {/* Animated accent line under heading */}
+                    <div className="relative z-10 mt-3 flex items-center gap-3">
                       <motion.span
-                        className="absolute -bottom-2 right-0 h-[7px] rounded-full"
+                        className="h-[3px] rounded-full flex-1"
                         style={{
-                          background: "linear-gradient(90deg, #059669 0%, #10B981 40%, #34D399 70%, #A7F3D0 100%)",
-                          width: "85%",
+                          background: "linear-gradient(90deg, transparent 0%, #F59E0B 20%, #FBBF24 50%, transparent 100%)",
                         }}
-                        initial={{ scaleX: 0, originX: 1, opacity: 0 }}
-                        animate={{ scaleX: 1, opacity: 0.5 }}
-                        transition={{ duration: 1, delay: 1.8, ease: [0.25, 0.4, 0.25, 1] }}
+                        initial={{ scaleX: 0, originX: 0.5 }}
+                        animate={{ scaleX: 1 }}
+                        transition={{ delay: 1.5, duration: 1, ease: [0.25, 0.4, 0.25, 1] }}
                       />
-                      {/* Secondary thinner underline */}
                       <motion.span
-                        className="absolute -bottom-[11px] right-4 h-[3px] rounded-full"
-                        style={{
-                          background: "linear-gradient(90deg, transparent 0%, #10B981 30%, #34D399 100%)",
-                          width: "50%",
-                        }}
-                        initial={{ scaleX: 0, originX: 1, opacity: 0 }}
-                        animate={{ scaleX: 1, opacity: 0.25 }}
-                        transition={{ duration: 1.2, delay: 2.0, ease: [0.25, 0.4, 0.25, 1] }}
+                        className="w-2 h-2 rounded-full bg-amber-400/60 shrink-0"
+                        initial={{ scale: 0, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{ delay: 1.9, type: "spring", stiffness: 200 }}
                       />
-                    </span>
+                      <motion.span
+                        className="h-[2px] rounded-full w-8"
+                        style={{
+                          background: "linear-gradient(90deg, #FBBF24, transparent)",
+                        }}
+                        initial={{ scaleX: 0, originX: 1 }}
+                        animate={{ scaleX: 1 }}
+                        transition={{ delay: 2.1, duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
+                      />
+                    </div>
                   </h1>
                 </div>
               </FadeIn>
@@ -1683,19 +1678,6 @@ export default function Home() {
                     </Button>
                   </motion.div>
                 </div>
-                {/* Friction-Killer — tiny text below CTA */}
-                <motion.p
-                  className="text-xs text-gray-400 mt-3 text-center lg:text-right"
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1.2, duration: 0.8 }}
-                >
-                  <span>نصب در ۵ دقیقه</span>
-                  <span className="mx-1.5 text-gray-300">|</span>
-                  <span>بدون نیاز به اینترنت</span>
-                  <span className="mx-1.5 text-gray-300">|</span>
-                  <span>پشتیبانی دایمی</span>
-                </motion.p>
               </FadeIn>
 
               {/* Floating user counter badge */}
@@ -1721,18 +1703,27 @@ export default function Home() {
                 </div>
               </motion.div>
 
-              {/* Trust signals */}
+              {/* Trust signals with icons */}
               <FadeIn delay={0.4}>
-                <div className="flex items-center gap-5 mt-8 justify-center lg:justify-start">
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-brand-mid" />
-                    <span className="text-xs text-gray-400">بدون نیاز به اینترنت</span>
-                  </div>
-                  <div className="w-px h-4 bg-gray-200" />
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-brand-mid" />
-                    <span className="text-xs text-gray-400">کاملاً آفلاین</span>
-                  </div>
+                <div className="flex flex-wrap items-center gap-3 md:gap-4 mt-8 justify-center lg:justify-start">
+                  {[
+                    { icon: <Download className="w-3.5 h-3.5" />, text: "نصب در ۵ دقیقه" },
+                    { icon: <WifiOff className="w-3.5 h-3.5" />, text: "بدون نیاز به اینترنت" },
+                    { icon: <Headphones className="w-3.5 h-3.5" />, text: "پشتیبانی دایمی" },
+                    { icon: <Shield className="w-3.5 h-3.5" />, text: "کاملاً آفلاین و امن" },
+                  ].map((item, i) => (
+                    <motion.div
+                      key={i}
+                      className="flex items-center gap-2 bg-brand-surface/40 rounded-full px-3.5 py-2 border border-brand-pale/50 backdrop-blur-sm"
+                      initial={{ opacity: 0, y: 12 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.8 + i * 0.1, duration: 0.5 }}
+                      whileHover={{ scale: 1.04, borderColor: "rgba(0,127,255,0.3)" }}
+                    >
+                      <span className="text-brand-mid">{item.icon}</span>
+                      <span className="text-xs text-gray-500 font-medium">{item.text}</span>
+                    </motion.div>
+                  ))}
                 </div>
               </FadeIn>
 
@@ -1987,29 +1978,6 @@ export default function Home() {
               </div>
             </div>
           </div>
-
-          {/* Inline stats bar — bridging hero to next section */}
-          <FadeIn delay={0.8}>
-            <motion.div
-              className="mt-12 md:mt-16 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.2 }}
-            >
-              {stats.map((s, i) => (
-                <motion.div
-                  key={i}
-                  className="glass-card rounded-2xl p-4 text-center"
-                  whileHover={{ scale: 1.05, boxShadow: "0 10px 30px rgba(0,71,171,0.1)" }}
-                >
-                  <p className="text-2xl font-black text-brand-deep">
-                    <AnimatedCounter target={s.value} suffix={s.suffix} />
-                  </p>
-                  <p className="text-xs text-gray-400 mt-1">{s.label}</p>
-                </motion.div>
-              ))}
-            </motion.div>
-          </FadeIn>
         </div>
 
       </section>
