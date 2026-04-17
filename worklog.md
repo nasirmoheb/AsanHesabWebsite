@@ -114,3 +114,24 @@ Extracted all 10 below-fold sections from the monolithic `page.tsx` (~2900 lines
 - Pre-existing lint warnings (set-state-in-effect, page-custom-font, hero-section.tsx parse error) are unrelated to this refactoring
 - All visual styling, classes, and behavior are preserved identically
 - Page.tsx reduced from ~2900 lines to ~1950 lines
+---
+Task ID: 1
+Agent: main
+Task: Performance optimization and mobile nav fixes
+
+Work Log:
+- Replaced 293KB PNG logo with 1KB SVG across all references (navbar, footer, CTA section)
+- Switched Vazirmatn font from Google Fonts CDN render-blocking link to next/font/google with display:swap
+- Added ThemeToggle and LanguageSwitcher to mobile top navbar bar (visible without opening hamburger menu)
+- Removed duplicate toggles from mobile hamburger dropdown menu
+- Deleted 5 unused public images (hero-creative.png, hero-bg.png, hero-accounting.png, dashboard-creative.png, dashboard-preview.png)
+- Updated favicon from PNG to SVG in layout.tsx metadata
+- Updated FinalCTA.tsx to use SVG logo
+- Build verified: compiled successfully
+
+Stage Summary:
+- Logo optimization: 293KB PNG → 1KB SVG (~292KB savings on image delivery)
+- Font optimization: Eliminated render-blocking Google Fonts CDN request; font now self-hosted via next/font
+- Mobile UX: Theme toggle and language switcher now visible in mobile top bar
+- Removed ~390KB of unused image assets from public/
+- Build: Clean, no errors

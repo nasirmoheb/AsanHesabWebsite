@@ -1129,9 +1129,9 @@ export default function Home() {
               whileHover={{ scale: 1.02 }}
             >
               <motion.img
-                src="/logo-asanhesab.png"
+                src="/logo.svg"
                 alt="آسان حساب"
-                className="w-11 h-11 rounded-full shadow-lg shadow-brand-mid/25"
+                className="w-11 h-11 rounded-xl shadow-lg shadow-brand-mid/25"
                 whileHover={{ rotate: [0, -10, 10, 0] }}
                 transition={{ duration: 0.5 }}
               />
@@ -1165,16 +1165,20 @@ export default function Home() {
               </Button>
             </div>
 
-            <button
-              className={`w-6 h-6 ${isRtl ? "ml-2" : "mr-2"} rounded-xl hover:bg-brand-surface dark:hover:bg-white/10 transition-colors`}
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            >
-              {mobileMenuOpen ? (
-                <X className="w-6 h-6 text-brand-deep dark:text-brand-light" />
-              ) : (
-                <Menu className="w-6 h-6 text-brand-deep dark:text-brand-light" />
-              )}
-            </button>
+            <div className="flex md:hidden items-center gap-1.5">
+              <ThemeToggle />
+              <LanguageSwitcher />
+              <button
+                className="w-9 h-9 rounded-xl flex items-center justify-center hover:bg-brand-surface dark:hover:bg-white/10 transition-colors"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              >
+                {mobileMenuOpen ? (
+                  <X className="w-5 h-5 text-brand-deep dark:text-brand-light" />
+                ) : (
+                  <Menu className="w-5 h-5 text-brand-deep dark:text-brand-light" />
+                )}
+              </button>
+            </div>
           </div>
         </div>
 
@@ -1202,10 +1206,6 @@ export default function Home() {
                   </motion.a>
                 ))}
                 <div className="pt-4 mt-4 border-t border-gray-100 dark:border-gray-800">
-                  <div className="flex items-center justify-between px-4 mb-4">
-                    <LanguageSwitcher />
-                    <ThemeToggle />
-                  </div>
                   <Button className="w-full gradient-brand text-white border-0 rounded-xl">
                     <Zap className="w-4 h-4 ml-2" />
                     {t("nav.download")}

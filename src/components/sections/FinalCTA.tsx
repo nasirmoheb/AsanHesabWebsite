@@ -42,7 +42,7 @@ export default function FinalCTA() {
               transition={{ duration: 4, repeat: Infinity }}
             >
               <img
-                src="/logo-asanhesab.png"
+                src="/logo.svg"
                 alt="آسان حساب"
                 className="w-full h-full rounded-2xl object-contain"
               />
@@ -118,9 +118,9 @@ export default function FinalCTA() {
               <div className="flex items-center gap-3 mb-4">
                 <div className="relative">
                   <img
-                    src="/logo-asanhesab.png"
+                    src="/logo.svg"
                     alt="آسان حساب"
-                    className="w-10 h-10 rounded-full shadow-lg"
+                    className="w-10 h-10 rounded-xl shadow-lg"
                   />
                   <div className="absolute -inset-1 rounded-full border border-brand-mid/20" />
                 </div>
