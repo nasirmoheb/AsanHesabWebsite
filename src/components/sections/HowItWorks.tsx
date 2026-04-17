@@ -32,19 +32,19 @@ export default function HowItWorks() {
 
           {[
             {
-              step: "۱",
+              step: t("how.step1_num"),
               title: t("how.step1_title"),
               desc: t("how.step1_desc"),
               icon: <Users />,
             },
             {
-              step: "۲",
+              step: t("how.step2_num"),
               title: t("how.step2_title"),
               desc: t("how.step2_desc"),
               icon: <Building2 />,
             },
             {
-              step: "۳",
+              step: t("how.step3_num"),
               title: t("how.step3_title"),
               desc: t("how.step3_desc"),
               icon: <TrendingUp />,

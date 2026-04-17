@@ -30,8 +30,7 @@ export function LanguageSwitcher() {
         whileHover={{ scale: 1.03 }}
         whileTap={{ scale: 0.97 }}
       >
-        <span className="text-base">{currentLang.flag}</span>
-        <span className="hidden sm:inline text-xs">{currentLang.name}</span>
+        <span className="text-xs font-semibold">{currentLang.name}</span>
         <motion.span
           animate={{ rotate: open ? 180 : 0 }}
           transition={{ duration: 0.2 }}
@@ -63,7 +62,6 @@ export function LanguageSwitcher() {
                 }`}
                 whileHover={{ x: dir === "rtl" ? -2 : 2 }}
               >
-                <span className="text-base">{lang.flag}</span>
                 <span>{lang.name}</span>
                 {locale === lang.code && (
                   <motion.span

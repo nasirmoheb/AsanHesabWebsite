@@ -30,7 +30,7 @@ export default function FeaturesSection({ features, bentoFeatures }: FeaturesSec
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeIn className="text-center mb-16">
-            <Badge className="mb-4 bg-white dark:bg-gray-800 text-brand-deep border-brand-pale dark:border-brand-mid/30 px-4 py-2 rounded-full text-sm font-medium shadow-sm">
+            <Badge className="mb-4 bg-white dark:bg-gray-800 text-brand-deep dark:text-brand-light border-brand-pale dark:border-brand-mid/30 px-4 py-2 rounded-full text-sm font-medium shadow-sm">
               <Award className="w-4 h-4 ml-1" />
               {t("features.badge")}
             </Badge>
@@ -70,8 +70,8 @@ export default function FeaturesSection({ features, bentoFeatures }: FeaturesSec
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeIn className="text-center mb-16">
             <h2 className="text-3xl md:text-5xl font-black text-gray-900 dark:text-gray-100 mb-4">
-              یک نگاه به قدرت{" "}
-              <span className="text-gradient">آسان حساب</span>
+              {t("bento.heading_before")}{" "}
+              <span className="text-gradient">{t("bento.title_highlight")}</span>
             </h2>
           </FadeIn>
 

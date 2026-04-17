@@ -48,13 +48,13 @@ export default function DashboardShowcase() {
                 </div>
                 <div className="flex-1 flex justify-center">
                   <div className="bg-white/5 rounded-lg px-4 py-1 text-xs text-white/30">
-                    آسان حساب — داشبورد مدیریت
+                    {t("dashboard.browser_url")}
                   </div>
                 </div>
               </div>
               <img
                 src="/dashboard-preview.png"
-                alt="داشبورد آسان حساب"
+                alt={t("dashboard.alt_text")}
                 className="w-full"
               />
             </div>

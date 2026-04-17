@@ -121,7 +121,7 @@ function RotatingPhrase() {
   return (
     <div className="flex items-center justify-center lg:justify-start gap-2 flex-wrap" dir="rtl">
       <span className="text-base md:text-lg text-gray-500 dark:text-gray-400 leading-relaxed">
-        نرم‌افزار حسابداری
+        {t("hero.accounting_sw")}
       </span>
       {/* Clean pill container */}
       <span className="relative inline-flex items-center justify-center min-w-[155px] h-[2.2rem] md:min-w-[195px] md:h-[2.7rem]">
@@ -151,7 +151,7 @@ function RotatingPhrase() {
         />
       </span>
       <span className="text-base md:text-lg text-gray-500 dark:text-gray-400 leading-relaxed">
-        مخصوص کسب‌وکار شما
+        {t("hero.for_your_biz")}
       </span>
     </div>
   );
@@ -1129,7 +1129,7 @@ export default function Home() {
               whileHover={{ scale: 1.02 }}
             >
               <motion.img
-                src="/logo.svg"
+                src="/logo-asanhesab.png"
                 alt="آسان حساب"
                 className="w-11 h-11 rounded-xl shadow-lg shadow-brand-mid/25"
                 whileHover={{ rotate: [0, -10, 10, 0] }}

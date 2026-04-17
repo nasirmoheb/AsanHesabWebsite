@@ -12,13 +12,12 @@ interface LanguageInfo {
   code: Locale;
   name: string;
   dir: "rtl" | "ltr";
-  flag: string;
 }
 
 export const languages: LanguageInfo[] = [
-  { code: "fa", name: "دری", dir: "rtl", flag: "🇦🇫" },
-  { code: "en", name: "English", dir: "ltr", flag: "🇺🇸" },
-  { code: "ps", name: "پشتو", dir: "rtl", flag: "🇦🇫" },
+  { code: "fa", name: "دری", dir: "rtl" },
+  { code: "en", name: "English", dir: "ltr" },
+  { code: "ps", name: "پشتو", dir: "rtl" },
 ];
 
 export function getLanguageInfo(code: Locale): LanguageInfo {
@@ -44,11 +43,11 @@ const fa: Translations = {
   "hero.line2_before": "حالا",
   "hero.line2_highlight": "آسان‌تر",
   "hero.line2_after": "از همیشه!",
-  "hero.accounting_sw": "نرم‌افزار حسابdاری",
+  "hero.accounting_sw": "نرم‌افزار حسابداری",
   "hero.for_your_biz": "مخصوص کسب‌وکار شما",
   "hero.cta_primary": "دانلود رایگان نسخه آزمایشی",
   "hero.cta_secondary": "تماشای ویدیو",
-  "hero.sub_desc": "بدون نیاز به دانش حسابdاری — همین امروز شروع کنید!",
+  "hero.sub_desc": "بدون نیاز به دانش حسابداری — همین امروز شروع کنید!",
 
   // Rotating phrases
   "phrase.in_dari": "به زبان دری",
@@ -291,6 +290,20 @@ const fa: Translations = {
   "float.ssl": "SSL امن",
   "float.protected": "محافظت شده",
   "float.invoice_count": "۱۲ عدد",
+
+  // New translation keys for components
+  "bento.heading_before": "یک نگاه به قدرت",
+  "dashboard.browser_url": "آسان حساب — داشبورد مدیریت",
+  "dashboard.alt_text": "داشبورد آسان حساب",
+  "how.step1_num": "۱",
+  "how.step2_num": "۲",
+  "how.step3_num": "۳",
+  "cta.social_proof": "هزاران کاربر افغان پیش از شما این تصمیم را گرفته‌اند.",
+  "cta.social_proof_cta": "به آن‌ها بپیوندید و مدیریت مالی خود را برای همیشه متحول کنید.",
+  "cta.download_free": "دانلود رایگان",
+  "cta.offline_note": "بدون نیاز به اینترنت • کاملاً آفلاین • هر وقت بخواهید",
+  "footer.privacy": "حریم خصوصی",
+  "footer.terms": "شرایط استفاده",
 };
 
 const en: Translations = {
@@ -555,6 +568,20 @@ const en: Translations = {
   "float.ssl": "SSL Secure",
   "float.protected": "Protected",
   "float.invoice_count": "12 Items",
+
+  // New translation keys for components
+  "bento.heading_before": "A Look at the Power of",
+  "dashboard.browser_url": "AsanHesab — Management Dashboard",
+  "dashboard.alt_text": "AsanHesab Dashboard",
+  "how.step1_num": "1",
+  "how.step2_num": "2",
+  "how.step3_num": "3",
+  "cta.social_proof": "Thousands of Afghan users have already made this decision.",
+  "cta.social_proof_cta": "Join them and transform your financial management forever.",
+  "cta.download_free": "Free Download",
+  "cta.offline_note": "No Internet Required • Fully Offline • Anytime",
+  "footer.privacy": "Privacy Policy",
+  "footer.terms": "Terms of Use",
 };
 
 const ps: Translations = {
@@ -580,16 +607,16 @@ const ps: Translations = {
 
   // Rotating phrases
   "phrase.in_dari": "په دری ژبه",
-  "phrase.no_internet": "ب大发 انټرنیټ",
+  "phrase.no_internet": "بدي انټرنیټ",
   "phrase.solar_calendar": "شمسی تقویم",
   "phrase.simple": "ساده او اسان",
-  "phrase.offline": "ب大利ه آفلاین",
+  "phrase.offline": "بديله آفلاین",
 
   // Trust signals
   "trust.install": "په ۵ دقیقو نصب",
-  "trust.offline": "بده انټرنیټ ته اړتیا",
+  "trust.offline": "بدي انټرنیټ ته اړتیا",
   "trust.support": "تل موجود ملاتړ",
-  "trust.secure": "بلاله آفلاین او خوندي",
+  "trust.secure": "بله آفلاین او خوندي",
   "trust.active_users": "+۵,۰۰۰",
   "trust.users_label": "فعال کاروونکي",
   "trust.satisfied_users": "منظم کاروونکي",
@@ -602,7 +629,7 @@ const ps: Translations = {
 
   // Marquee trust items
   "marquee.secure": "خوندي او باوري",
-  "marquee.no_internet": "بده انټرنیټ",
+  "marquee.no_internet": "بدي انټرنیټ",
   "marquee.dari": "په دری ژبه",
   "marquee.solar": "شمسی تقویم",
   "marquee.fast": "ګړندی او اسان",
@@ -632,12 +659,12 @@ const ps: Translations = {
   "features.badge": "پیاوړي ځانګړتیاوې",
   "features.title_before": "هر څه هغه چې ",
   "features.title_highlight": "اړتیا لرئ",
-  "features.f1_title": "بلاله په دری ژبه",
+  "features.f1_title": "بله په دری ژبه",
   "features.f1_desc": "ټول انټرفیس، راپورونه او تنظیمات په دری او پښتو ژبه دي.",
   "features.f2_title": "شمسی هجري تقویم",
   "features.f2_desc": "ټول نیټې او راپورونه په شمسي تقویم ښکاري.",
   "features.f3_title": "د ټولو لپاره ساده",
-  "features.f3_desc": "حتی بده حسابداري پوهې په اسانۍ سره کار کولی شئ.",
+  "features.f3_desc": "حتی بدي حسابداري پوهې په اسانۍ سره کار کولی شئ.",
   "features.f4_title": "فاکتور صادرول",
   "features.f4_desc": "د څو کلیکونو سره مسلکي فاکتورونه صادر او ولیږئ.",
   "features.f5_title": "هوښیار راپورونه",
@@ -645,9 +672,9 @@ const ps: Translations = {
   "features.f6_title": "بشپړ خوندیتوب",
   "features.f6_desc": "پرمختللي رمزګذاري او اتوماتیک ورځنی بیکاپ.",
   "features.f7_title": "اسانه نصب",
-  "features.f7_desc": "په خپل کمپیوټر اسانۍ سره نصب کړئ او بده انټرنیټ کار وکړئ.",
+  "features.f7_desc": "په خپل کمپیوټر اسانۍ سره نصب کړئ او بدي انټرنیټ کار وکړئ.",
   "features.f8_title": "افغاني پيسې",
-  "features.f8_desc": "ټول محاسبې په افغاني اسعارو بده د اسعارو تبادله.",
+  "features.f8_desc": "ټول محاسبې په افغاني اسعارو بدي د اسعارو تبادله.",
 
   // Bento features
   "bento.title_before": "د ",
@@ -674,9 +701,9 @@ const ps: Translations = {
 
   // How it works
   "how.badge": "اسانه پیل",
-  "how.title": "په دری پړاوو کې پیل کړئ",
+  "how.title": "په دريو پړاونو کې پیل کړئ",
   "how.step1_title": "ډاونلوډ او نصب",
-  "how.step1_desc": "سافټویر ډاونلوډ او په لږ مخکې د یوې دقیقې په جوړ کړئ. بده انټرنیټ.",
+  "how.step1_desc": "سافټویر ډاونلوډ او په لږ وخت کې نصب کړئ. بدي انټرنیټ.",
   "how.step2_title": "سوداګرۍ تنظیم",
   "how.step2_desc": "هوښیار ویزارد تاسو سره د اساسي معلوماتو دننولو کې مرسته کوي.",
   "how.step3_title": "حسابداري پیل",
@@ -697,7 +724,7 @@ const ps: Translations = {
   "testimonials.title_highlight": "اسان حساب",
   "testimonials.title_after2": " خوښوي",
   "t1.name": "محمد احمد رحیمي",
-  "t1.role": "د برېښنایي_stuffو دوکانوال، کابل",
+  "t1.role": "د برېښنایي وسایلو دوکانوال، کابل",
   "t1.text": "د اسان حساب مخکې، زما دوکان حساب کتاب په ډفټر کې ساتل. اوس هر څه اسانه او منظم دی. ریښتا زما ژوند بدل کړ!",
   "t2.name": "فاطمه نوري",
   "t2.role": "د سوداګرۍ شرکت مدیره، هرات",
@@ -718,7 +745,7 @@ const ps: Translations = {
   // Pricing
   "pricing.badge": "منصفانه بیه",
   "pricing.title": "د هرې سوداګرۍ لپاره پلان",
-  "pricing.subtitle": "وړیا ازموینه — بده انټرنیټ",
+  "pricing.subtitle": "وړیا ازموینه — بدي انټرنیټ",
   "pricing.basic": "اساسي",
   "pricing.basic_price": "۲,۵۰۰",
   "pricing.basic_period": "افغانۍ / میاشتنی",
@@ -755,7 +782,7 @@ const ps: Translations = {
   "pricing.contact": "اړیکه ونیسئ",
 
   // FAQ
-  "faq.title": "دusual پوښتنې",
+  "faq.title": "دودیزې پوښتنې",
   "faq.q1": "ایا د اسان حساب کارولو لپاره حسابداري پوهنه ته اړتیا شته؟",
   "faq.a1": "هوکه، په کلکه نه! اسان حساب د هغو خلکو لپاره ډیزاین شوی چې هیڅ حسابداري پوهنه نلري. انټرفیس په دری ژبه او ډیر ساده دی. د څو کلیکونو سره فاکتور صادر او راپورونه وګورئ کولی شئ.",
   "faq.q2": "ایا شمسی هجري تقویم ملاتړ کیږي؟",
@@ -773,7 +800,7 @@ const ps: Translations = {
   "cta.desc": "زرګونه افغان کاروونکي د تاسو مخکې دا تصمیم نیولي دي. ورسره یوځای شئ او خپل مالي مدیریت تل لپاره بدل کړئ.",
   "cta.download": "وړیا ډاونلوډ",
   "cta.contact": "اړیکه ونیسئ",
-  "cta.note": "بده انټرنیټ • بشپړ آفلاین • هر وخت",
+  "cta.note": "بدي انټرنیټ • بشپړ آفلاین • هر وخت",
 
   // Footer
   "footer.cta_title": "د پیل کولو لپاره چمتو یاست؟",
@@ -821,6 +848,20 @@ const ps: Translations = {
   "float.ssl": "SSL خوندي",
   "float.protected": "محافظت شوی",
   "float.invoice_count": "۱۲ قلم",
+
+  // New translation keys for components
+  "bento.heading_before": "د قدرت یو نظر",
+  "dashboard.browser_url": "اسان حساب — مدیریتي داشبورد",
+  "dashboard.alt_text": "د اسان حساب داشبورد",
+  "how.step1_num": "۱",
+  "how.step2_num": "۲",
+  "how.step3_num": "۳",
+  "cta.social_proof": "زرګونه افغان کاروونکي د تاسو مخکې دا تصمیم نیولي دي.",
+  "cta.social_proof_cta": "ورسره یوځای شئ او خپل مالي مدیریت تل لپاره بدل کړئ.",
+  "cta.download_free": "وړیا ډاونلوډ",
+  "cta.offline_note": "بدي انټرنیټ • بشپړ آفلاین • هر وخت",
+  "footer.privacy": "د محرمیت تګلاره",
+  "footer.terms": "د کارولو شرایط",
 };
 
 const dictionaries: Record<Locale, Translations> = { fa, en, ps };

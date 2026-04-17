@@ -42,7 +42,7 @@ export default function FinalCTA() {
               transition={{ duration: 4, repeat: Infinity }}
             >
               <img
-                src="/logo.svg"
+                src="/logo-asanhesab.png"
                 alt="آسان حساب"
                 className="w-full h-full rounded-2xl object-contain"
               />
@@ -53,8 +53,8 @@ export default function FinalCTA() {
               {t("cta.title_line2")}
             </h2>
             <p className="text-white/60 text-lg md:text-xl mb-10 max-w-2xl mx-auto leading-relaxed">
-              هزاران کاربر افغان پیش از شما این تصمیم را گرفته‌اند.
-              به آن‌ها بپیوندید و مدیریت مالی خود را برای همیشه متحول کنید.
+              {t("cta.social_proof")}{" "}
+              {t("cta.social_proof_cta")}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <motion.div whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.97 }}>
@@ -63,7 +63,7 @@ export default function FinalCTA() {
                   className="bg-white text-brand-deep hover:bg-gray-50 border-0 px-10 py-7 text-lg rounded-2xl shadow-2xl font-bold transition-all"
                 >
                   <Zap className="w-5 h-5 ml-2" />
-                  دانلود رایگان
+                  {t("cta.download_free")}
                   <ArrowLeft className="w-5 h-5 mr-2" />
                 </Button>
               </motion.div>
@@ -78,7 +78,7 @@ export default function FinalCTA() {
               </motion.div>
             </div>
             <p className="text-white/30 text-sm mt-8">
-              بدون نیاز به اینترنت • کاملاً آفلاین • هر وقت بخواهید
+              {t("cta.offline_note")}
             </p>
           </FadeIn>
         </div>
@@ -107,7 +107,7 @@ export default function FinalCTA() {
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button className="bg-white text-brand-deep hover:bg-gray-50 border-0 px-8 py-5 rounded-xl text-sm font-bold shadow-lg">
                 <Zap className="w-4 h-4 ml-2" />
-                دانلود رایگان
+                {t("cta.download_free")}
               </Button>
             </motion.div>
           </motion.div>
@@ -118,7 +118,7 @@ export default function FinalCTA() {
               <div className="flex items-center gap-3 mb-4">
                 <div className="relative">
                   <img
-                    src="/logo.svg"
+                    src="/logo-asanhesab.png"
                     alt="آسان حساب"
                     className="w-10 h-10 rounded-xl shadow-lg"
                   />
@@ -184,7 +184,7 @@ export default function FinalCTA() {
             <div>
               <h4 className="text-white font-bold mb-4 text-sm flex items-center gap-2">
                 <span className="w-1 h-4 rounded-full gradient-brand inline-block" />
-                شرکت
+                {t("footer.company")}
               </h4>
               <ul className="space-y-3 text-sm">
                 {[t("footer.company_about"), t("footer.company_contact"), t("footer.company_blog"), t("footer.company_careers")].map((l) => (
@@ -201,7 +201,7 @@ export default function FinalCTA() {
             <div>
               <h4 className="text-white font-bold mb-4 text-sm flex items-center gap-2">
                 <span className="w-1 h-4 rounded-full gradient-brand inline-block" />
-                پشتیبانی
+                {t("footer.support")}
               </h4>
               <ul className="space-y-3 text-sm">
                 {[t("footer.support_help"), t("footer.support_tutorials"), t("footer.support_faq"), t("footer.support_phone")].map(
@@ -223,10 +223,10 @@ export default function FinalCTA() {
             </p>
             <div className="flex items-center gap-6 text-xs">
               <a href="#" className="hover:text-brand-light transition-colors">
-                حریم خصوصی
+                {t("footer.privacy")}
               </a>
               <a href="#" className="hover:text-brand-light transition-colors">
-                شرایط استفاده
+                {t("footer.terms")}
               </a>
             </div>
           </div>

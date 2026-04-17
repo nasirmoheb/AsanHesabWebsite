@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     "حسابداری آسان",
   ],
   icons: {
-    icon: "/logo.svg",
+    icon: "/logo-asanhesab.png",
   },
 };
 

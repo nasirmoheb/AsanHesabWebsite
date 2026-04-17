@@ -44,7 +44,7 @@ export default function ProblemSection() {
           ].map((item, i) => (
             <StaggerItem key={i}>
               <motion.div
-                className="bg-white dark:bg-gray-800/50 rounded-2xl p-6 border border-gray-100 dark:border-gray-700/50 h-full hover:border-red-200 dark:hover:border-red-800/50 hover:shadow-xl hover:shadow-red-100/30 transition-all duration-500 group cursor-default"
+                className="bg-white dark:bg-gray-800/50 rounded-2xl p-6 border border-gray-100 dark:border-gray-700/50 h-full hover:border-red-200 dark:hover:border-red-800/50 hover:shadow-xl hover:shadow-red-100/30 dark:hover:shadow-red-900/30 transition-all duration-500 group cursor-default"
                 whileHover={{ y: -4 }}
               >
                 <div className="w-12 h-12 bg-red-50 dark:bg-red-900/30 rounded-xl flex items-center justify-center text-red-400 mb-4 group-hover:scale-110 transition-transform">

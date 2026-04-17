@@ -36,7 +36,7 @@ export default function MarqueeSection({ stats }: MarqueeSectionProps) {
                 <span className="text-lg md:text-2xl font-black text-brand-deep tabular-nums">
                   {s.value.toLocaleString("fa-AF")}{s.suffix}
                 </span>
-                <span className="text-[10px] md:text-xs text-gray-400 font-medium whitespace-nowrap">
+                <span className="text-[10px] md:text-xs text-gray-400 dark:text-gray-500 font-medium whitespace-nowrap">
                   {s.label}
                 </span>
               </div>
@@ -66,7 +66,7 @@ export default function MarqueeSection({ stats }: MarqueeSectionProps) {
                   <div className="w-5 h-5 md:w-6 md:h-6 rounded-md bg-brand-surface/60 flex items-center justify-center text-brand-mid">
                     {item.icon}
                   </div>
-                  <span className="text-[10px] md:text-xs text-gray-400 font-medium whitespace-nowrap">{item.text}</span>
+                  <span className="text-[10px] md:text-xs text-gray-400 dark:text-gray-500 font-medium whitespace-nowrap">{item.text}</span>
                 </div>
                 <div className="w-1 h-1 rounded-full bg-brand-pale" />
               </div>

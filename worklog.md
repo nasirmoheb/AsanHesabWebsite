@@ -135,3 +135,26 @@ Stage Summary:
 - Mobile UX: Theme toggle and language switcher now visible in mobile top bar
 - Removed ~390KB of unused image assets from public/
 - Build: Clean, no errors
+---
+Task ID: 2
+Agent: main
+Task: Fix dark mode, translations, language selector, and logo
+
+Work Log:
+- Fixed 18 corrupted Pashto translation entries (Chinese characters, English words mixed in, typos)
+- Fixed 2 Dari translation entries with Latin 'd' instead of Arabic 'د'
+- Removed flag/emoji badges from language switcher - now shows clean language names only
+- Removed unused 'flag' field from LanguageInfo interface
+- Resized logo-asanhesab.png from 293KB (1490x1490) to 2.8KB (96x96) using sharp
+- Reverted all logo references from SVG back to the optimized PNG
+- Fixed hardcoded Dari text in RotatingPhrase to use t() function
+- Verified dark mode: ThemeProvider with class strategy works, html dir/lang updates on language switch
+- Verified translations: I18nProvider correctly updates document.documentElement.dir and lang
+- Build: Clean, compiled successfully
+
+Stage Summary:
+- Translation fixes: 18 Pashto + 2 Dari corrupted entries fixed
+- Language selector: Clean text-only dropdown, no emoji/flags
+- Logo: 293KB → 2.8KB (99% size reduction) at 96x96px
+- Dark mode: Working correctly with next-themes class strategy
+- Build: Clean pass
