@@ -238,7 +238,11 @@ function GlowOrb({
    ROTATING PHRASE — ANIMATED MARKETING LINE
    ═══════════════════════════════════════════ */
 
-function RotatingPhrase() {
+/* ═══════════════════════════════════════════
+   TERMINAL-STYLE ROTATING PHRASE
+   ═══════════════════════════════════════════ */
+
+function TerminalRotatingPhrase() {
   const phrases = [
     "به زبان دری",
     "بدون اینترنت",
@@ -246,51 +250,248 @@ function RotatingPhrase() {
     "ساده و آسان",
     "کاملاً آفلاین",
   ];
-  const [index, setIndex] = useState(0);
+  const [displayed, setDisplayed] = useState("");
+  const [phraseIndex, setPhraseIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [started, setStarted] = useState(false);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setIndex((prev) => (prev + 1) % phrases.length);
-    }, 2800);
-    return () => clearInterval(timer);
-  }, [phrases.length]);
+    const startDelay = setTimeout(() => setStarted(true), 1500);
+    return () => clearTimeout(startDelay);
+  }, []);
+
+  useEffect(() => {
+    if (!started) return;
+    const currentPhrase = phrases[phraseIndex];
+    let timeout: ReturnType<typeof setTimeout>;
+
+    if (!isDeleting && displayed.length < currentPhrase.length) {
+      timeout = setTimeout(() => {
+        setDisplayed(currentPhrase.slice(0, displayed.length + 1));
+      }, 90 + Math.random() * 40);
+    } else if (!isDeleting && displayed.length === currentPhrase.length) {
+      timeout = setTimeout(() => setIsDeleting(true), 2200);
+    } else if (isDeleting && displayed.length > 0) {
+      timeout = setTimeout(() => {
+        setDisplayed(currentPhrase.slice(0, displayed.length - 1));
+      }, 40 + Math.random() * 20);
+    } else if (isDeleting && displayed.length === 0) {
+      setIsDeleting(false);
+      setPhraseIndex((prev) => (prev + 1) % phrases.length);
+    }
+
+    return () => clearTimeout(timeout);
+  }, [displayed, isDeleting, phraseIndex, started, phrases]);
 
   return (
     <div className="flex items-center justify-center lg:justify-start gap-2 flex-wrap" dir="rtl">
       <span className="text-base md:text-lg text-gray-500 leading-relaxed">
         نرم‌افزار حسابداری
       </span>
-      {/* Pill container with decorative accents */}
-      <span className="relative inline-flex items-center justify-center min-w-[155px] h-[2.2rem] md:min-w-[195px] md:h-[2.7rem]">
-        {/* Pill background */}
-        <span className="absolute inset-0 rounded-full bg-gradient-to-l from-brand-pale/70 to-brand-surface/80 border border-brand-pale/60" />
-        {/* Decorative side accent dots */}
-        <span className="absolute right-2.5 top-1/2 -translate-y-1/2 w-1 h-1 rounded-full bg-brand-mid/30" />
-        <span className="absolute left-2.5 top-1/2 -translate-y-1/2 w-1 h-1 rounded-full bg-brand-mid/30" />
-        <AnimatePresence mode="wait">
+      {/* Terminal prompt container */}
+      <span className="relative inline-flex items-center min-w-[155px] h-[2.2rem] md:min-w-[195px] md:h-[2.7rem]">
+        <span className="absolute inset-0 rounded-xl terminal-prompt" />
+        {/* Terminal header dots */}
+        <span className="absolute right-2 top-1.5 flex gap-1 opacity-60">
+          <span className="w-[5px] h-[5px] rounded-full bg-red-400/80" />
+          <span className="w-[5px] h-[5px] rounded-full bg-yellow-400/80" />
+          <span className="w-[5px] h-[5px] rounded-full bg-green-400/80" />
+        </span>
+        <span className="flex items-center gap-1 px-3.5 pl-2 w-full relative z-10" style={{ direction: "ltr" }}>
+          <span className="text-emerald-400 text-xs font-bold font-mono shrink-0">~$</span>
+          <span className="text-white/90 text-sm font-mono leading-relaxed whitespace-nowrap">
+            {displayed}
+          </span>
+          {/* Blinking cursor */}
           <motion.span
-            key={index}
-            initial={{ opacity: 0, scale: 0.7, filter: "blur(8px)" }}
-            animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-            exit={{ opacity: 0, scale: 1.15, filter: "blur(8px)" }}
-            transition={{ duration: 0.45, ease: [0.25, 0.4, 0.25, 1] }}
-            className="relative text-sm md:text-base font-black text-gradient-glow leading-relaxed whitespace-nowrap z-10"
-          >
-            {phrases[index]}
-          </motion.span>
-        </AnimatePresence>
-        {/* Glowing blinking cursor */}
-        <motion.span
-          className="absolute left-3.5 top-1/2 -translate-y-1/2 w-[2px] h-4 bg-brand-mid rounded-full z-10"
-          animate={{ opacity: [1, 0, 1] }}
-          transition={{ duration: 1, repeat: Infinity, ease: "steps(2)" }}
-          style={{ boxShadow: "0 0 6px rgba(0,127,255,0.6), 0 0 12px rgba(0,127,255,0.2)" }}
-        />
+            className="w-[7px] h-[14px] bg-brand-light rounded-sm shrink-0"
+            animate={{ opacity: [1, 0, 1] }}
+            transition={{ duration: 0.8, repeat: Infinity, ease: "steps(2)" }}
+            style={{ boxShadow: "0 0 6px rgba(93,173,226,0.6), 0 0 12px rgba(93,173,226,0.2)" }}
+          />
+        </span>
       </span>
       <span className="text-base md:text-lg text-gray-500 leading-relaxed">
         مخصوص کسب‌وکار شما
       </span>
     </div>
+  );
+}
+
+/* ═══════════════════════════════════════════
+   CHAR REVEAL — TYPEWRITER CHAR-BY-CHAR
+   ═══════════════════════════════════════════ */
+
+function CharReveal({
+  text,
+  className,
+  delayStart = 0,
+  charDelay = 0.04,
+  onComplete,
+}: {
+  text: string;
+  className?: string;
+  delayStart?: number;
+  charDelay?: number;
+  onComplete?: () => void;
+}) {
+  const chars = text.split("");
+  const [revealedCount, setRevealedCount] = useState(0);
+  const hasStarted = useRef(false);
+
+  useEffect(() => {
+    if (hasStarted.current) return;
+    hasStarted.current = true;
+
+    const startTimer = setTimeout(() => {
+      let count = 0;
+      const interval = setInterval(() => {
+        count++;
+        setRevealedCount(count);
+        if (count >= chars.length) {
+          clearInterval(interval);
+          onComplete?.();
+        }
+      }, charDelay * 1000);
+      return () => clearInterval(interval);
+    }, delayStart * 1000);
+
+    return () => clearTimeout(startTimer);
+  }, [text]);
+
+  return (
+    <span className={className} style={{ display: "inline-block" }}>
+      {chars.map((char, i) => (
+        <motion.span
+          key={i}
+          style={{ display: "inline-block" }}
+          initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
+          animate={{
+            opacity: i < revealedCount ? 1 : 0,
+            y: i < revealedCount ? 0 : 20,
+            filter: i < revealedCount ? "blur(0px)" : "blur(8px)",
+          }}
+          transition={{ duration: 0.25 }}
+        >
+          {char === " " ? "\u00A0" : char}
+        </motion.span>
+      ))}
+    </span>
+  );
+}
+
+/* ═══════════════════════════════════════════
+   PARTICLE BURST — ON HEADING COMPLETE
+   ═══════════════════════════════════════════ */
+
+function ParticleBurst({ show }: { show: boolean }) {
+  if (!show) return null;
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 5 }}>
+      {[...Array(24)].map((_, i) => {
+        const angle = (i / 24) * Math.PI * 2;
+        const distance = 60 + Math.random() * 80;
+        const size = 2 + Math.random() * 4;
+        const colors = ["#0047AB", "#007FFF", "#5DADE2", "#D6EEFF"];
+        return (
+          <motion.div
+            key={i}
+            className="absolute rounded-full"
+            style={{
+              left: "50%",
+              top: "50%",
+              width: size,
+              height: size,
+              background: colors[i % colors.length],
+            }}
+            initial={{ x: 0, y: 0, opacity: 1, scale: 0 }}
+            animate={{
+              x: Math.cos(angle) * distance,
+              y: Math.sin(angle) * distance,
+              opacity: 0,
+              scale: 1,
+            }}
+            transition={{ duration: 0.8 + Math.random() * 0.4, ease: "easeOut" }}
+          />
+        );
+      })}
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════
+   ANIMATED SPARKLINE — SVG
+   ═══════════════════════════════════════════ */
+
+function AnimatedSparkline() {
+  const data = [8, 15, 12, 22, 18, 28, 24, 32, 26, 35, 30, 38];
+  const pathData = data.map((p, i) => `${i * 7},${42 - p}`).join(" L ");
+  const areaPath = `M 0,42 L ${data.map((p, i) => `${i * 7},${42 - p}`).join(" L ")} L ${data.length * 7 - 7},42 Z`;
+
+  return (
+    <svg viewBox="0 0 80 42" className="w-full h-full" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="sparkGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#007FFF" stopOpacity="0.25" />
+          <stop offset="100%" stopColor="#007FFF" stopOpacity="0" />
+        </linearGradient>
+      </defs>
+      {/* Filled area */}
+      <motion.path
+        d={areaPath}
+        fill="url(#sparkGrad)"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.5, delay: 1.5 }}
+      />
+      {/* Line */}
+      <motion.path
+        d={`M ${pathData}`}
+        fill="none"
+        stroke="#007FFF"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        initial={{ pathLength: 0 }}
+        animate={{ pathLength: 1 }}
+        transition={{ duration: 2, delay: 1, ease: "easeOut" }}
+      />
+      {/* End dot */}
+      <motion.circle
+        cx={(data.length - 1) * 7}
+        cy={42 - data[data.length - 1]}
+        r="2"
+        fill="#007FFF"
+        initial={{ opacity: 0, scale: 0 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 2.8, type: "spring" }}
+      />
+    </svg>
+  );
+}
+
+/* ═══════════════════════════════════════════
+   LIVE CLOCK
+   ═══════════════════════════════════════════ */
+
+function LiveClock() {
+  const [time, setTime] = useState("");
+  useEffect(() => {
+    const update = () => {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, "0");
+      const m = String(now.getMinutes()).padStart(2, "0");
+      const s = String(now.getSeconds()).padStart(2, "0");
+      setTime(`${h}:${m}:${s}`);
+    };
+    update();
+    const timer = setInterval(update, 1000);
+    return () => clearInterval(timer);
+  }, []);
+  return (
+    <span className="text-[7px] md:text-[8px] text-gray-400 font-mono tabular-nums">
+      {time}
+    </span>
   );
 }
 
@@ -549,6 +750,7 @@ function HeroTiltCard() {
   const cardRef = useRef<HTMLDivElement>(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
+  const [holoKey, setHoloKey] = useState(0);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
@@ -558,6 +760,11 @@ function HeroTiltCard() {
     const rotateY = ((e.clientX - centerX) / rect.width) * 8;
     const rotateX = -((e.clientY - centerY) / rect.height) * 6;
     setTilt({ x: rotateX, y: rotateY });
+  };
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+    setHoloKey((k) => k + 1);
   };
 
   const handleMouseLeave = () => {
@@ -579,7 +786,7 @@ function HeroTiltCard() {
       ref={cardRef}
       className="relative z-10 mx-auto w-[280px] sm:w-[360px] md:w-[420px]"
       onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
+      onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       initial={{ opacity: 0, y: 60, scale: 0.9 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -587,26 +794,42 @@ function HeroTiltCard() {
       style={{ perspective: "1200px" }}
     >
       <motion.div
-        className="rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl shadow-brand-deep/20 bg-white relative"
+        className="rounded-2xl md:rounded-3xl overflow-hidden relative"
+        style={{
+          background: "rgba(255,255,255,0.7)",
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          boxShadow: isHovered
+            ? "0 30px 60px rgba(0,71,171,0.18), 0 0 40px rgba(0,127,255,0.08), inset 0 1px 0 rgba(255,255,255,0.8)"
+            : "0 20px 40px rgba(0,71,171,0.12), 0 0 0 1px rgba(255,255,255,0.6)",
+        }}
         animate={{
           rotateX: tilt.x,
           rotateY: tilt.y,
         }}
         transition={{ type: "spring", stiffness: 150, damping: 20 }}
       >
-        {/* Glowing edge effect on hover */}
+        {/* Holographic shine overlay on hover */}
+        {isHovered && (
+          <div key={holoKey} className="absolute inset-0 rounded-2xl md:rounded-3xl z-30 pointer-events-none overflow-hidden">
+            <div className="absolute inset-0 holo-shine" />
+          </div>
+        )}
+
+        {/* Glassmorphism border glow */}
         <motion.div
-          className="absolute inset-0 rounded-2xl md:rounded-3xl z-30 pointer-events-none"
+          className="absolute inset-0 rounded-2xl md:rounded-3xl z-20 pointer-events-none"
           style={{
-            boxShadow: isHovered
-              ? "inset 0 0 0 2px rgba(0,127,255,0.4), 0 0 30px rgba(0,127,255,0.15), 0 0 60px rgba(0,71,171,0.08)"
-              : "inset 0 0 0 1px rgba(255,255,255,0.6)",
-            transition: "box-shadow 0.4s ease",
+            background: "linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 50%, rgba(0,127,255,0.08) 100%)",
+            border: "1px solid rgba(255,255,255,0.3)",
           }}
         />
 
-        {/* Desktop App Title Bar — proper traffic light dots */}
-        <div className="bg-gradient-to-l from-gray-100 to-gray-200/90 border-b border-gray-300/60 px-3 py-2 flex items-center justify-between relative z-20">
+        {/* Desktop App Title Bar */}
+        <div className="relative z-20 px-3 py-2 flex items-center justify-between" style={{
+          background: "linear-gradient(180deg, rgba(248,250,252,0.8) 0%, rgba(235,245,255,0.6) 100%)",
+          borderBottom: "1px solid rgba(0,127,255,0.08)",
+        }}>
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-1.5">
               <motion.div className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" whileHover={{ scale: 1.2 }} />
@@ -617,23 +840,23 @@ function HeroTiltCard() {
             <span className="text-[9px] text-gray-500 font-medium truncate">آسان حساب — داشبورد</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <div className="w-5 h-5 rounded bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center">
+            <LiveClock />
+            <div className="w-5 h-5 rounded bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center shadow-sm">
               <Calculator className="w-2.5 h-2.5 text-white" />
             </div>
           </div>
         </div>
 
-        {/* Dashboard Body with Frosted Glass Sidebar */}
+        {/* Dashboard Body */}
         <div className="flex" style={{ height: "auto" }}>
-          {/* Frosted Glass Sidebar */}
+          {/* Frosted Glass Sidebar with wave animation */}
           <motion.div
-            className="w-9 md:w-10 shrink-0 border-l border-gray-100 flex flex-col items-center py-2.5 gap-2.5 relative"
+            className="w-9 md:w-10 shrink-0 flex flex-col items-center py-2 gap-2 relative"
             style={{
-              background: "linear-gradient(180deg, rgba(235,245,255,0.95) 0%, rgba(214,238,255,0.9) 100%)",
-              backdropFilter: "blur(10px)",
+              background: "linear-gradient(180deg, rgba(235,245,255,0.6) 0%, rgba(214,238,255,0.4) 100%)",
+              backdropFilter: "blur(12px)",
+              borderLeft: "1px solid rgba(0,127,255,0.06)",
             }}
-            animate={{ opacity: [0.85, 1, 0.85] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           >
             {sidebarIcons.map((item, i) => (
               <motion.div
@@ -644,9 +867,17 @@ function HeroTiltCard() {
                     : "bg-white/60 text-gray-400 hover:bg-white hover:text-gray-600"
                 }`}
                 whileHover={{ scale: 1.15 }}
+                animate={isHovered ? {
+                  y: [0, -3, 0],
+                } : {}}
+                transition={{
+                  duration: 0.4,
+                  delay: isHovered ? i * 0.08 : 0,
+                  ease: "easeInOut",
+                }}
                 initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.6 + i * 0.08 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
               >
                 <item.Icon className="w-3 h-3 md:w-3.5 md:h-3.5" />
               </motion.div>
@@ -663,8 +894,8 @@ function HeroTiltCard() {
             </motion.div>
           </motion.div>
 
-          {/* Main Content Area */}
-          <div className="flex-1 p-2 md:p-2.5 space-y-1.5 min-w-0">
+          {/* Main Content Area — tighter padding */}
+          <div className="flex-1 p-1.5 md:p-2 space-y-1 min-w-0">
             {/* Top Bar */}
             <div className="flex items-center justify-between">
               <div className="min-w-0">
@@ -672,8 +903,8 @@ function HeroTiltCard() {
                 <p className="text-[6px] md:text-[7px] text-gray-400">۱۴۰۴/۰۱/۱۵ - اسد</p>
               </div>
               <div className="flex items-center gap-1.5 shrink-0">
-                <div className="px-1.5 py-0.5 bg-blue-50 rounded-full text-[6px] md:text-[7px] text-blue-600 font-bold">آفلاین</div>
-                <div className="relative w-5 h-5 rounded-full bg-brand-pale flex items-center justify-center">
+                <div className="px-1.5 py-0.5 bg-blue-50/80 rounded-full text-[6px] md:text-[7px] text-blue-600 font-bold" style={{ backdropFilter: "blur(4px)" }}>آفلاین</div>
+                <div className="relative w-5 h-5 rounded-full bg-brand-pale/80 flex items-center justify-center">
                   <Bell className="w-2.5 h-2.5 text-brand-deep" />
                   <motion.span
                     className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full flex items-center justify-center text-[6px] text-white font-bold border border-white"
@@ -686,7 +917,7 @@ function HeroTiltCard() {
               </div>
             </div>
 
-            {/* Compact KPI Row with gradient backgrounds */}
+            {/* Compact KPI Row */}
             <div className="grid grid-cols-3 gap-1">
               {[
                 { label: "درآمد کل", value: 850000, unit: "Afs", color: "from-brand-deep/[0.08] to-brand-mid/[0.05]", iconColor: "from-brand-deep to-brand-mid", icon: <TrendingUp className="w-2.5 h-2.5" /> },
@@ -695,7 +926,8 @@ function HeroTiltCard() {
               ].map((kpi, i) => (
                 <motion.div
                   key={i}
-                  className={`bg-gradient-to-br ${kpi.color} rounded-xl p-1.5 border border-gray-100/50`}
+                  className={`bg-gradient-to-br ${kpi.color} rounded-xl p-1.5 border border-white/40`}
+                  style={{ backdropFilter: "blur(4px)" }}
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5 + i * 0.12 }}
@@ -712,10 +944,11 @@ function HeroTiltCard() {
               ))}
             </div>
 
-            {/* Charts Row — compact */}
+            {/* Charts + Sparkline Row */}
             <div className="grid grid-cols-5 gap-1">
               <motion.div
-                className="col-span-3 bg-gradient-to-b from-brand-surface/30 to-white rounded-xl p-1.5 border border-brand-pale/20"
+                className="col-span-3 bg-gradient-to-b from-brand-surface/20 to-white/60 rounded-xl p-1.5 border border-brand-pale/15"
+                style={{ backdropFilter: "blur(4px)" }}
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.7 }}
@@ -724,25 +957,29 @@ function HeroTiltCard() {
                   <p className="text-[7px] font-bold text-gray-700">نمودار ماهانه</p>
                   <span className="text-[6px] text-brand-mid font-bold bg-brand-pale/40 px-1 py-0.5 rounded-full">+۴۷٪</span>
                 </div>
-                <div className="h-11 md:h-14">
+                <div className="h-10 md:h-13">
                   <AnimatedBarChart />
                 </div>
               </motion.div>
               <motion.div
-                className="col-span-2 bg-white rounded-xl p-1.5 border border-gray-100/50"
+                className="col-span-2 bg-white/60 rounded-xl p-1.5 border border-white/40"
+                style={{ backdropFilter: "blur(4px)" }}
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.9 }}
               >
-                <p className="text-[7px] font-bold text-gray-700 mb-0.5">ترکیب مالی</p>
-                <AnimatedDonutChart />
+                <p className="text-[7px] font-bold text-gray-700 mb-0.5">فعالیت هفتگی</p>
+                <div className="h-9 md:h-11">
+                  <AnimatedSparkline />
+                </div>
               </motion.div>
             </div>
 
             {/* Bottom Row — compact */}
             <div className="grid grid-cols-5 gap-1">
               <motion.div
-                className="col-span-3 bg-gradient-to-b from-[#0d1117] to-[#161b22] rounded-xl p-1.5 border border-gray-800/50 overflow-hidden"
+                className="col-span-3 bg-gradient-to-b from-[#0d1117]/90 to-[#161b22]/90 rounded-xl p-1.5 border border-gray-800/40 overflow-hidden"
+                style={{ backdropFilter: "blur(4px)" }}
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1.1 }}
@@ -752,7 +989,7 @@ function HeroTiltCard() {
                     <motion.div className="w-1 h-1 rounded-full bg-emerald-400" animate={{ scale: [1, 1.4, 1], opacity: [1, 0.5, 1] }} transition={{ duration: 2, repeat: Infinity }} />
                     <p className="text-[7px] font-bold text-gray-300">آخرین تراکنش‌ها</p>
                   </div>
-                  <span className="text-[6px] text-gray-500 bg-gray-800 px-1 py-0.5 rounded-full">امروز</span>
+                  <span className="text-[6px] text-gray-500 bg-gray-800/60 px-1 py-0.5 rounded-full">امروز</span>
                 </div>
                 <LiveTransactionFeed />
               </motion.div>
@@ -769,14 +1006,13 @@ function HeroTiltCard() {
         </div>
 
         {/* Gradient overlay at bottom */}
-        <div className="h-1 bg-gradient-to-l from-brand-deep via-brand-mid to-brand-light opacity-60 relative z-10" />
-        <div className="absolute bottom-0 left-0 right-0 h-6 bg-gradient-to-t from-white/20 to-transparent pointer-events-none z-10" />
+        <div className="h-1 bg-gradient-to-l from-brand-deep via-brand-mid to-brand-light opacity-50 relative z-10" />
       </motion.div>
 
       {/* Breathing ambient glow behind card */}
       <motion.div
         className="absolute -inset-4 rounded-[2rem] blur-2xl -z-10"
-        style={{ background: "linear-gradient(135deg, rgba(0,127,255,0.15) via rgba(0,71,171,0.08) to rgba(93,173,226,0.1))" }}
+        style={{ background: "linear-gradient(135deg, rgba(0,127,255,0.12) via rgba(0,71,171,0.06) to rgba(93,173,226,0.08))" }}
         animate={{
           scale: [1, 1.04, 1],
           opacity: [0.8, 1, 0.8],
@@ -786,12 +1022,12 @@ function HeroTiltCard() {
 
       {/* Decorative corner accents */}
       <motion.div
-        className="absolute -top-3 -right-3 w-6 h-6 border-t-2 border-r-2 border-brand-mid/40 rounded-tr-lg"
+        className="absolute -top-3 -right-3 w-6 h-6 border-t-2 border-r-2 border-brand-mid/30 rounded-tr-lg"
         animate={{ opacity: [0.3, 0.7, 0.3] }}
         transition={{ duration: 3, repeat: Infinity }}
       />
       <motion.div
-        className="absolute -bottom-3 -left-3 w-6 h-6 border-b-2 border-l-2 border-brand-mid/40 rounded-bl-lg"
+        className="absolute -bottom-3 -left-3 w-6 h-6 border-b-2 border-l-2 border-brand-mid/30 rounded-bl-lg"
         animate={{ opacity: [0.5, 0.3, 0.5] }}
         transition={{ duration: 3, repeat: Infinity }}
       />
@@ -806,6 +1042,9 @@ export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [showParticles, setShowParticles] = useState(false);
+
+  const { scrollYProgress } = useScroll();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
@@ -1038,6 +1277,11 @@ export default function Home() {
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
       >
+        {/* Scroll Progress Bar */}
+        <motion.div
+          className="scroll-progress-bar"
+          style={{ scaleX: scrollYProgress }}
+        />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-18 md:h-20">
             <motion.div
@@ -1137,7 +1381,7 @@ export default function Home() {
       </motion.nav>
 
       {/* ══════════ HERO — CODE-ONLY CREATIVE SHOWCASE ══════════ */}
-      <section className="relative pt-24 pb-8 md:pt-28 md:pb-10 overflow-hidden">
+      <section className="relative pt-24 pb-4 md:pt-28 md:pb-6 overflow-hidden">
         {/* Layered animated background */}
         <div className="absolute inset-0">
           {/* Base gradient + Aurora */}
@@ -1274,7 +1518,7 @@ export default function Home() {
                 </motion.div>
               </FadeIn>
 
-              {/* Heading — ultra creative with floating accents */}
+              {/* Heading — ultra creative with typewriter char reveal */}
               <FadeIn delay={0.1}>
                 <div className="relative mb-6" style={{ direction: 'rtl' }}>
                   {/* Decorative floating shapes around heading */}
@@ -1294,27 +1538,51 @@ export default function Home() {
                     transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
                   />
 
-                  <h1 style={{ lineHeight: 1.05 }}>
-                    {/* Line 1: حسابداری — dark, massive */}
-                    <motion.span
-                      className="block font-black text-gray-900 relative inline-block"
-                      style={{ fontSize: "clamp(2.8rem, 7.5vw, 5.8rem)", letterSpacing: "-0.02em" }}
-                      initial={{ opacity: 0, x: 50, filter: "blur(10px)" }}
-                      animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-                      transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.4, 0.25, 1] }}
-                    >
-                      حسابداری
-                    </motion.span>
+                  {/* Particle burst on heading complete */}
+                  <ParticleBurst show={showParticles} />
 
-                    {/* Line 2: را آسان — gradient hero, bigger, animated underline */}
-                    <motion.span
-                      className="block relative mt-1"
-                      style={{ fontSize: "clamp(3.4rem, 9vw, 7rem)", letterSpacing: "-0.03em" }}
-                      initial={{ opacity: 0, x: 50, filter: "blur(10px)" }}
-                      animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-                      transition={{ duration: 0.8, delay: 0.45, ease: [0.25, 0.4, 0.25, 1] }}
-                    >
-                      <span className="text-gradient-hero font-black">را آسان</span>
+                  <h1 style={{ lineHeight: 1.05 }}>
+                    {/* Line 1: حسابداری — char by char reveal */}
+                    <span className="block font-black text-gray-900 relative" style={{ fontSize: "clamp(2.8rem, 7.5vw, 5.8rem)", letterSpacing: "-0.02em" }}>
+                      <CharReveal
+                        text="حسابداری"
+                        delayStart={0.4}
+                        charDelay={0.06}
+                      />
+                    </span>
+
+                    {/* Line 2: را آسان — with pulsing glow */}
+                    <span className="block relative mt-1" style={{ fontSize: "clamp(3.4rem, 9vw, 7rem)", letterSpacing: "-0.03em" }}>
+                      {/* Pulsing glow behind text */}
+                      <motion.span
+                        className="absolute inset-0 font-black pointer-events-none"
+                        aria-hidden
+                        style={{
+                          fontSize: "clamp(3.4rem, 9vw, 7rem)",
+                          letterSpacing: "-0.03em",
+                          background: "linear-gradient(135deg, #0047AB, #007FFF, #5DADE2)",
+                          WebkitBackgroundClip: "text",
+                          WebkitTextFillColor: "transparent",
+                        }}
+                        animate={{
+                          filter: [
+                            "blur(12px) brightness(1)",
+                            "blur(20px) brightness(1.3)",
+                            "blur(12px) brightness(1)",
+                          ],
+                          opacity: [0.25, 0.45, 0.25],
+                        }}
+                        transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+                      >
+                        را آسان
+                      </motion.span>
+                      <span className="text-gradient-hero font-black">
+                        <CharReveal
+                          text="را آسان"
+                          delayStart={0.85}
+                          charDelay={0.07}
+                        />
+                      </span>
                       {/* Animated gradient underline */}
                       <motion.span
                         className="absolute -bottom-2 right-0 h-[7px] w-full rounded-full"
@@ -1323,9 +1591,9 @@ export default function Home() {
                         }}
                         initial={{ scaleX: 0, originX: 1, opacity: 0 }}
                         animate={{ scaleX: 1, opacity: 0.55 }}
-                        transition={{ duration: 1, delay: 1, ease: [0.25, 0.4, 0.25, 1] }}
+                        transition={{ duration: 1, delay: 1.6, ease: [0.25, 0.4, 0.25, 1] }}
                       />
-                      {/* Secondary thinner underline for depth */}
+                      {/* Secondary thinner underline */}
                       <motion.span
                         className="absolute -bottom-[11px] right-4 h-[3px] rounded-full"
                         style={{
@@ -1334,23 +1602,37 @@ export default function Home() {
                         }}
                         initial={{ scaleX: 0, originX: 1, opacity: 0 }}
                         animate={{ scaleX: 1, opacity: 0.25 }}
-                        transition={{ duration: 1.2, delay: 1.2, ease: [0.25, 0.4, 0.25, 1] }}
+                        transition={{ duration: 1.2, delay: 1.8, ease: [0.25, 0.4, 0.25, 1] }}
                       />
-                    </motion.span>
+                    </span>
 
-                    {/* Line 3: کنید! — dark with animated sparkle */}
+                    {/* Line 3: کنید! — with wiggle animation */}
                     <motion.span
                       className="block relative mt-1"
-                      initial={{ opacity: 0, x: 50, filter: "blur(10px)" }}
-                      animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-                      transition={{ duration: 0.8, delay: 0.7, ease: [0.25, 0.4, 0.25, 1] }}
+                      animate={{
+                        rotate: [0, 0, 0, 0, -3, 3, -2, 2, -1, 1, 0, 0],
+                      }}
+                      transition={{
+                        duration: 0.7,
+                        delay: 2.2,
+                        ease: "easeInOut",
+                        repeat: 0,
+                        times: [0, 0.15, 0.3, 0.4, 0.45, 0.55, 0.6, 0.7, 0.75, 0.85, 0.9, 1],
+                      }}
                     >
-                      <span className="font-black text-gray-900" style={{ fontSize: "clamp(2.8rem, 7.5vw, 5.8rem)", letterSpacing: "-0.02em" }}>کنید!</span>
+                      <span className="font-black text-gray-900" style={{ fontSize: "clamp(2.8rem, 7.5vw, 5.8rem)", letterSpacing: "-0.02em" }}>
+                        <CharReveal
+                          text="کنید!"
+                          delayStart={1.3}
+                          charDelay={0.06}
+                          onComplete={() => setShowParticles(true)}
+                        />
+                      </span>
                       {/* Animated sparkle burst */}
                       <motion.span
                         className="inline-block mr-1 relative"
                         animate={{ rotate: [0, 12, 0, -12, 0] }}
-                        transition={{ duration: 3, delay: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                        transition={{ duration: 3, delay: 2.5, repeat: Infinity, ease: "easeInOut" }}
                       >
                         <Sparkles className="w-9 h-9 sm:w-11 sm:h-11 md:w-14 md:h-14 text-brand-mid/25 -mt-1" />
                       </motion.span>
@@ -1359,10 +1641,10 @@ export default function Home() {
                 </div>
               </FadeIn>
 
-              {/* Description — Animated Rotating Phrases */}
+              {/* Description — Terminal Rotating Phrases */}
               <FadeIn delay={0.2}>
                 <div className="mb-8">
-                  <RotatingPhrase />
+                  <TerminalRotatingPhrase />
                   <motion.p
                     className="text-sm text-gray-400 mt-2 max-w-lg mx-auto lg:mx-0 lg:mr-0"
                     initial={{ opacity: 0 }}
@@ -1726,54 +2008,13 @@ export default function Home() {
           </FadeIn>
         </div>
 
-        {/* Creative Scroll Indicator */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 md:mt-8">
-          <motion.div
-            className="flex flex-col items-center gap-3"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.5, duration: 1 }}
-          >
-            {/* Mouse icon */}
-            <motion.div
-              className="relative w-7 h-11 rounded-[14px] border-2 border-brand-mid/40 flex justify-center pt-2"
-              animate={{ y: [0, 5, 0] }}
-              transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-            >
-              {/* Scroll wheel */}
-              <motion.div
-                className="w-1 h-2.5 bg-brand-mid rounded-full"
-                animate={{ y: [0, 8, 0], opacity: [0.8, 0.2, 0.8], scaleY: [1, 0.5, 1] }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              />
-              {/* Top fade */}
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1 h-1.5 rounded-full bg-brand-mid/30" />
-            </motion.div>
-            {/* Arrow chevrons */}
-            <motion.div
-              className="flex flex-col items-center gap-0.5"
-              animate={{ opacity: [0.3, 0.8, 0.3] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            >
-              <svg width="12" height="7" viewBox="0 0 12 7" fill="none">
-                <path d="M1 1L6 6L11 1" stroke="#007FFF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </motion.div>
-            {/* Learn more text */}
-            <motion.span
-              className="text-xs text-brand-mid/60 font-medium mt-1"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: [0.4, 0.8, 0.4] }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-            >
-              بیشتر بدانید
-            </motion.span>
-          </motion.div>
-        </div>
       </section>
 
+      {/* Gradient divider — hero to marquee */}
+      <div className="gradient-divider-section" />
+
       {/* ══════════ MARQUEE TRUST BAR ══════════ */}
-      <section className="py-6 bg-white border-y border-brand-pale/40 overflow-hidden">
+      <section className="py-6 bg-white overflow-hidden">
         <div className="flex" style={{ animation: "marquee 30s linear infinite", width: "max-content" }}>
           {[...stats, ...stats, ...stats, ...stats].map((s, i) => (
             <div key={i} className="flex items-center gap-8 px-8">
@@ -1790,6 +2031,8 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      <div className="gradient-divider-section" />
 
       {/* ══════════ PROBLEM / PAIN SECTION ══════════ */}
       <section className="py-20 md:py-28 relative overflow-hidden">
@@ -1834,6 +2077,8 @@ export default function Home() {
           </StaggerContainer>
         </div>
       </section>
+
+      <div className="gradient-divider-section" />
 
       {/* ══════════ FEATURES — ASYMMETRIC ICON GRID ══════════ */}
       <section id="features" className="py-20 md:py-28 gradient-brand-soft relative overflow-hidden">
@@ -1880,6 +2125,8 @@ export default function Home() {
           </StaggerContainer>
         </div>
       </section>
+
+      <div className="gradient-divider-section" />
 
       {/* ══════════ BENTO GRID FEATURES ══════════ */}
       <section className="py-20 md:py-28 relative overflow-hidden">
@@ -1948,6 +2195,8 @@ export default function Home() {
           </StaggerContainer>
         </div>
       </section>
+
+      <div className="gradient-divider-section" />
 
       {/* ══════════ DASHBOARD SHOWCASE ══════════ */}
       <section id="dashboard" className="py-20 md:py-28 gradient-brand-dark relative overflow-hidden">
@@ -2023,6 +2272,8 @@ export default function Home() {
           </FadeIn>
         </div>
       </section>
+
+      <div className="gradient-divider-section" />
 
       {/* ══════════ HOW IT WORKS — CREATIVE TIMELINE ══════════ */}
       <section className="py-20 md:py-28 relative overflow-hidden">
@@ -2109,6 +2360,8 @@ export default function Home() {
         </div>
       </section>
 
+      <div className="gradient-divider-section" />
+
       {/* ══════════ BUSINESS TYPES — HORIZONTAL SCROLL CARDS ══════════ */}
       <section className="py-20 md:py-28 gradient-brand-soft relative overflow-hidden">
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -2142,6 +2395,8 @@ export default function Home() {
           </StaggerContainer>
         </div>
       </section>
+
+      <div className="gradient-divider-section" />
 
       {/* ══════════ TESTIMONIALS — CREATIVE CAROUSEL GRID ══════════ */}
       <section id="testimonials" className="py-20 md:py-28 relative overflow-hidden">
@@ -2219,6 +2474,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <div className="gradient-divider-section" />
 
       {/* ══════════ PRICING — CREATIVE CARDS ══════════ */}
       <section id="pricing" className="py-20 md:py-28 gradient-brand-soft relative overflow-hidden">
@@ -2300,6 +2557,8 @@ export default function Home() {
         </div>
       </section>
 
+      <div className="gradient-divider-section" />
+
       {/* ══════════ FAQ ══════════ */}
       <section id="faq" className="py-20 md:py-28">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -2350,6 +2609,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <div className="gradient-divider-section" />
 
       {/* ══════════ FINAL CTA — DRAMATIC ══════════ */}
       <section className="py-24 md:py-36 relative overflow-hidden">
@@ -2420,16 +2681,45 @@ export default function Home() {
       </section>
 
       {/* ══════════ FOOTER ══════════ */}
-      <footer className="bg-[#0a0a1a] text-gray-400 pt-16 pb-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <footer className="relative text-gray-400 pt-16 pb-8 overflow-hidden">
+        {/* Gradient background */}
+        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, #0a0a1a 0%, #0d1225 40%, #0a1628 100%)" }} />
+        {/* Subtle glow accents */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[200px] opacity-10 pointer-events-none" style={{ background: "radial-gradient(ellipse, #007FFF 0%, transparent 70%)" }} />
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Top CTA strip */}
+          <motion.div
+            className="gradient-brand rounded-2xl p-6 md:p-8 mb-14 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-right"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <div>
+              <h3 className="text-xl md:text-2xl font-black text-white mb-1">آماده شروع هستید؟</h3>
+              <p className="text-white/70 text-sm">همین حالا آسان حساب را دانلود و شروع کنید.</p>
+            </div>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button className="bg-white text-brand-deep hover:bg-gray-50 border-0 px-8 py-5 rounded-xl text-sm font-bold shadow-lg">
+                <Zap className="w-4 h-4 ml-2" />
+                دانلود رایگان
+              </Button>
+            </motion.div>
+          </motion.div>
+
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+            {/* Brand column */}
             <div className="sm:col-span-2 lg:col-span-1">
               <div className="flex items-center gap-3 mb-4">
-                <img
-                  src="/logo-asanhesab.png"
-                  alt="آسان حساب"
-                  className="w-10 h-10 rounded-full shadow-lg"
-                />
+                <div className="relative">
+                  <img
+                    src="/logo-asanhesab.png"
+                    alt="آسان حساب"
+                    className="w-10 h-10 rounded-full shadow-lg"
+                  />
+                  <div className="absolute -inset-1 rounded-full border border-brand-mid/20" />
+                </div>
                 <div>
                   <span className="text-lg font-black text-white">آسان حساب</span>
                   <span className="text-[10px] text-gray-600 block -mt-0.5 tracking-wider">
@@ -2437,41 +2727,84 @@ export default function Home() {
                   </span>
                 </div>
               </div>
-              <p className="text-sm leading-relaxed text-gray-500 mb-4">
+              <p className="text-sm leading-relaxed text-gray-500 mb-5">
                 اولین نرم‌افزار حسابداری به زبان دری با تقویم هجری شمسی، مخصوص بازار افغانستان.
               </p>
+              {/* Social Links */}
+              <div className="flex items-center gap-2">
+                {[
+                  { label: "Facebook", icon: (
+                    <svg viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                  )},
+                  { label: "Telegram", icon: (
+                    <svg viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+                  )},
+                  { label: "Instagram", icon: (
+                    <svg viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+                  )},
+                  { label: "YouTube", icon: (
+                    <svg viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                  )},
+                ].map((social) => (
+                  <motion.a
+                    key={social.label}
+                    href="#"
+                    aria-label={social.label}
+                    className="w-9 h-9 rounded-lg flex items-center justify-center text-gray-500 hover:text-white transition-all duration-300 hover:bg-white/10"
+                    whileHover={{ scale: 1.1, y: -2 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    {social.icon}
+                  </motion.a>
+                ))}
+              </div>
             </div>
+            {/* Product column */}
             <div>
-              <h4 className="text-white font-bold mb-4 text-sm">محصول</h4>
+              <h4 className="text-white font-bold mb-4 text-sm flex items-center gap-2">
+                <span className="w-1 h-4 rounded-full gradient-brand inline-block" />
+                محصول
+              </h4>
               <ul className="space-y-3 text-sm">
                 {["ویژگی‌ها", "قیمت‌ها", "آپدیت‌ها", "نسخه دسکتاپ"].map((l) => (
                   <li key={l}>
-                    <a href="#" className="hover:text-brand-light transition-colors">
+                    <a href="#" className="hover:text-brand-light transition-colors inline-flex items-center gap-1 group">
+                      <span className="w-0 group-hover:w-2 h-px bg-brand-light transition-all duration-300" />
                       {l}
                     </a>
                   </li>
                 ))}
               </ul>
             </div>
+            {/* Company column */}
             <div>
-              <h4 className="text-white font-bold mb-4 text-sm">شرکت</h4>
+              <h4 className="text-white font-bold mb-4 text-sm flex items-center gap-2">
+                <span className="w-1 h-4 rounded-full gradient-brand inline-block" />
+                شرکت
+              </h4>
               <ul className="space-y-3 text-sm">
                 {["درباره ما", "تماس با ما", "بلاگ", "فرصت‌ها"].map((l) => (
                   <li key={l}>
-                    <a href="#" className="hover:text-brand-light transition-colors">
+                    <a href="#" className="hover:text-brand-light transition-colors inline-flex items-center gap-1 group">
+                      <span className="w-0 group-hover:w-2 h-px bg-brand-light transition-all duration-300" />
                       {l}
                     </a>
                   </li>
                 ))}
               </ul>
             </div>
+            {/* Support column */}
             <div>
-              <h4 className="text-white font-bold mb-4 text-sm">پشتیبانی</h4>
+              <h4 className="text-white font-bold mb-4 text-sm flex items-center gap-2">
+                <span className="w-1 h-4 rounded-full gradient-brand inline-block" />
+                پشتیبانی
+              </h4>
               <ul className="space-y-3 text-sm">
                 {["مرکز راهنما", "آموزش ویدیویی", "سوالات متداول", "تماس تلفنی"].map(
                   (l) => (
                     <li key={l}>
-                      <a href="#" className="hover:text-brand-light transition-colors">
+                      <a href="#" className="hover:text-brand-light transition-colors inline-flex items-center gap-1 group">
+                        <span className="w-0 group-hover:w-2 h-px bg-brand-light transition-all duration-300" />
                         {l}
                       </a>
                     </li>

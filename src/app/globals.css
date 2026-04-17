@@ -333,6 +333,69 @@
   box-shadow: 0 0 6px rgba(0, 127, 255, 0.5), 0 0 12px rgba(0, 127, 255, 0.2);
 }
 
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  15% { transform: rotate(-3deg); }
+  30% { transform: rotate(3deg); }
+  45% { transform: rotate(-2deg); }
+  60% { transform: rotate(2deg); }
+  75% { transform: rotate(-1deg); }
+  90% { transform: rotate(0deg); }
+}
+
+@keyframes glow-pulse-text {
+  0%, 100% { filter: drop-shadow(0 0 8px rgba(0, 127, 255, 0.3)) drop-shadow(0 0 20px rgba(0, 71, 171, 0.15)); }
+  50% { filter: drop-shadow(0 0 16px rgba(0, 127, 255, 0.5)) drop-shadow(0 0 40px rgba(0, 71, 171, 0.25)); }
+}
+
+@keyframes particle-fly {
+  0% { transform: translate(0, 0) scale(1); opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes holo-sweep {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.terminal-prompt {
+  background: linear-gradient(135deg, #0d1117 0%, #161b22 50%, #0d1117 100%);
+  border: 1px solid rgba(0, 127, 255, 0.2);
+  box-shadow: 0 0 15px rgba(0, 127, 255, 0.08), inset 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+.holo-shine {
+  background: linear-gradient(
+    105deg,
+    transparent 38%,
+    rgba(255, 255, 255, 0.15) 42%,
+    rgba(255, 255, 255, 0.35) 48%,
+    rgba(255, 255, 255, 0.55) 50%,
+    rgba(255, 255, 255, 0.35) 52%,
+    rgba(255, 255, 255, 0.15) 58%,
+    transparent 62%
+  );
+  background-size: 200% 100%;
+  animation: holo-sweep 0.8s ease-in-out forwards;
+}
+
+.gradient-divider-section {
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, #0047AB 15%, #007FFF 50%, #5DADE2 85%, transparent 100%);
+  opacity: 0.3;
+}
+
+.scroll-progress-bar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 3px;
+  transform-origin: right;
+  background: linear-gradient(90deg, #0047AB, #007FFF, #5DADE2);
+  z-index: 51;
+}
+
 html {
   scroll-behavior: smooth;
 }
