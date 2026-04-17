@@ -2870,7 +2870,7 @@ export default function Home() {
 
       {/* WhatsApp Contact Button */}
       <motion.a
-        href="https://wa.me/0093799422717"
+        href="https://wa.me/93799422717"
         target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-6 left-6 z-50 w-14 h-14 bg-[#25D366] rounded-full shadow-xl shadow-[#25D366]/30 flex items-center justify-center text-white"
