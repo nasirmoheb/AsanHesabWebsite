@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import dynamic from "next/dynamic";
 import {
   motion,
@@ -10,14 +10,20 @@ import {
   AnimatePresence,
 } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { useI18n } from "@/lib/i18n";
 import {
+  FadeIn,
+  StaggerContainer,
+  StaggerItem,
+  AnimatedCounter,
+  ParallaxSection,
+  GlowOrb,
+} from "@/components/ui/animation-components";
+import {
   Calculator,
   CalendarDays,
-  FileText,
   BarChart3,
   Shield,
   Users,
@@ -30,20 +36,13 @@ import {
   TrendingUp,
   Wallet,
   Receipt,
-  PieChart,
-  Clock,
   Headphones,
-  Award,
   Zap,
-  Heart,
-  ChevronDown,
   Building2,
   Truck,
   Store,
   Sparkles,
   Layers,
-  Lock,
-  Database,
   Monitor,
   WifiOff,
   Bell,
@@ -56,181 +55,22 @@ import {
   PlayCircle,
 } from "lucide-react";
 
+/* ─── Dynamic imports for below-fold sections ─── */
+const MarqueeSection = dynamic(() => import("@/components/sections/MarqueeSection"), { ssr: false });
+const ProblemSection = dynamic(() => import("@/components/sections/ProblemSection"), { ssr: false });
+const FeaturesSection = dynamic(() => import("@/components/sections/FeaturesSection"), { ssr: false });
+const DashboardShowcase = dynamic(() => import("@/components/sections/DashboardShowcase"), { ssr: false });
+const HowItWorks = dynamic(() => import("@/components/sections/HowItWorks"), { ssr: false });
+const BusinessTypes = dynamic(() => import("@/components/sections/BusinessTypes"), { ssr: false });
+const TestimonialsSection = dynamic(() => import("@/components/sections/TestimonialsSection"), { ssr: false });
+const PricingSection = dynamic(() => import("@/components/sections/PricingSection"), { ssr: false });
+const FAQSection = dynamic(() => import("@/components/sections/FAQSection"), { ssr: false });
+const FinalCTA = dynamic(() => import("@/components/sections/FinalCTA"), { ssr: false });
+
 /* ═══════════════════════════════════════════
-   UTILITY COMPONENTS (memoized for performance)
+   UTILITY COMPONENTS now imported from
+   @/components/ui/animation-components
    ═══════════════════════════════════════════ */
-
-const FadeIn = React.memo(function FadeIn({
-  children,
-  className = "",
-  delay = 0,
-  direction = "up",
-}: {
-  children: React.ReactNode;
-  className?: string;
-  delay?: number;
-  direction?: "up" | "down" | "left" | "right" | "none";
-}) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-60px" });
-  const dirMap = {
-    up: { y: 50, x: 0 },
-    down: { y: -50, x: 0 },
-    left: { y: 0, x: 50 },
-    right: { y: 0, x: -50 },
-    none: { y: 0, x: 0 },
-  };
-  const d = dirMap[direction];
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: d.y, x: d.x }}
-      animate={isInView ? { opacity: 1, y: 0, x: 0 } : {}}
-      transition={{ duration: 0.7, delay, ease: [0.25, 0.4, 0.25, 1] }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  );
-});
-
-const StaggerContainer = React.memo(function StaggerContainer({
-  children,
-  className = "",
-  stagger = 0.1,
-}: {
-  children: React.ReactNode;
-  className?: string;
-  stagger?: number;
-}) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-60px" });
-  return (
-    <motion.div
-      ref={ref}
-      initial="hidden"
-      animate={isInView ? "visible" : "hidden"}
-      variants={{
-        hidden: {},
-        visible: { transition: { staggerChildren: stagger } },
-      }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  );
-});
-
-const StaggerItem = React.memo(function StaggerItem({
-  children,
-  className = "",
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
-  return (
-    <motion.div
-      variants={{
-        hidden: { opacity: 0, y: 30, scale: 0.95 },
-        visible: {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          transition: { duration: 0.6, ease: [0.25, 0.4, 0.25, 1] },
-        },
-      }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  );
-});
-
-function AnimatedCounter({
-  target,
-  suffix = "",
-}: {
-  target: number;
-  suffix?: string;
-}) {
-  const [count, setCount] = useState(0);
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
-  useEffect(() => {
-    if (!isInView) return;
-    let start = 0;
-    const duration = 2000;
-    const increment = target / (duration / 16);
-    const timer = setInterval(() => {
-      start += increment;
-      if (start >= target) {
-        setCount(target);
-        clearInterval(timer);
-      } else {
-        setCount(Math.floor(start));
-      }
-    }, 16);
-    return () => clearInterval(timer);
-  }, [isInView, target]);
-  return (
-    <span ref={ref}>
-      {count.toLocaleString("fa-AF")}
-      {suffix}
-    </span>
-  );
-}
-
-function ParallaxSection({
-  children,
-  speed = 0.3,
-  className = "",
-}: {
-  children: React.ReactNode;
-  speed?: number;
-  className?: string;
-}) {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
-  const y = useTransform(scrollYProgress, [0, 1], [0, speed * 100]);
-  return (
-    <motion.div ref={ref} style={{ y }} className={className}>
-      {children}
-    </motion.div>
-  );
-}
-
-function GlowOrb({
-  color,
-  size,
-  top,
-  right,
-  left,
-}: {
-  color: string;
-  size: string;
-  top?: string;
-  right?: string;
-  left?: string;
-}) {
-  return (
-    <div
-      className={`absolute ${top} ${right} ${left} w-[${size}] h-[${size}] rounded-full opacity-20 blur-3xl pointer-events-none`}
-      style={{
-        background: color,
-        width: size,
-        height: size,
-        top,
-        right,
-        left,
-        filter: "blur(80px)",
-      }}
-    />
-  );
-}
 
 /* ═══════════════════════════════════════════
    ROTATING PHRASE — ANIMATED MARKETING LINE
@@ -1038,10 +878,10 @@ function HeroTiltCard() {
    MAIN LANDING PAGE
    ═══════════════════════════════════════════ */
 export default function Home() {
-  const { t, locale, dir } = useI18n();
+  const { t, dir } = useI18n();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
+
   const isRtl = dir === "rtl";
 
   const { scrollYProgress } = useScroll();
@@ -1707,14 +1547,14 @@ export default function Home() {
                   ].map((item, i) => (
                     <motion.div
                       key={i}
-                      className="flex items-center gap-2 bg-brand-surface/40 rounded-full px-3.5 py-2 border border-brand-pale/50 backdrop-blur-sm"
+                      className="flex items-center gap-2 bg-brand-surface/40 dark:bg-white/5 rounded-full px-3.5 py-2 border border-brand-pale/50 dark:border-brand-mid/20 backdrop-blur-sm"
                       initial={{ opacity: 0, y: 12 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.8 + i * 0.1, duration: 0.5 }}
                       whileHover={{ scale: 1.04, borderColor: "rgba(0,127,255,0.3)" }}
                     >
                       <span className="text-brand-mid">{item.icon}</span>
-                      <span className="text-xs text-gray-500 font-medium">{item.text}</span>
+                      <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">{item.text}</span>
                     </motion.div>
                   ))}
                 </div>
@@ -1732,7 +1572,7 @@ export default function Home() {
                     {["م", "ف", "ح", "ز"].map((letter, i) => (
                       <div
                         key={i}
-                        className="w-8 h-8 rounded-full border-2 border-white flex items-center justify-center text-[10px] font-bold text-white shadow-sm"
+                        className="w-8 h-8 rounded-full border-2 border-white dark:border-gray-700 flex items-center justify-center text-[10px] font-bold text-white shadow-sm"
                         style={{
                           background: `linear-gradient(135deg, hsl(${210 + i * 15}, 70%, ${50 + i * 5}%), hsl(${220 + i * 15}, 60%, ${40 + i * 5}%))`,
                           zIndex: 4 - i,
@@ -1743,8 +1583,8 @@ export default function Home() {
                     ))}
                   </div>
                   <div className="text-xs">
-                    <span className="font-bold text-gray-700">+۵,۰۰۰</span>{" "}
-                    <span className="text-gray-400">کاربر راضی</span>
+                    <span className="font-bold text-gray-700 dark:text-gray-300">+۵,۰۰۰</span>{" "}
+                    <span className="text-gray-400 dark:text-gray-500">کاربر راضی</span>
                   </div>
                   <div className="flex gap-0.5">
                     {[...Array(5)].map((_, i) => (
@@ -1818,10 +1658,10 @@ export default function Home() {
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-0 h-0 hidden lg:block" style={{ zIndex: 10 }}>
                   {[
                     { Icon: Calculator, dist: 210, duration: 28, size: "w-10 h-10", bg: "gradient-brand", delay: 0 },
-                    { Icon: CalendarDays, dist: 240, duration: 38, size: "w-9 h-9", bg: "bg-white border border-brand-pale/50", delay: 3, iconColor: "text-brand-mid" },
-                    { Icon: Wallet, dist: 190, duration: 32, size: "w-8 h-8", bg: "bg-amber-50 border border-amber-200/50", delay: 6, iconColor: "text-amber-500" },
-                    { Icon: BarChart3, dist: 260, duration: 45, size: "w-9 h-9", bg: "bg-white border border-brand-pale/50", delay: 1.5, iconColor: "text-brand-deep" },
-                    { Icon: Shield, dist: 225, duration: 34, size: "w-7 h-7", bg: "bg-emerald-50 border border-emerald-200/50", delay: 4.5, iconColor: "text-emerald-500" },
+                    { Icon: CalendarDays, dist: 240, duration: 38, size: "w-9 h-9", bg: "bg-white dark:bg-gray-800 border border-brand-pale/50 dark:border-brand-mid/20", delay: 3, iconColor: "text-brand-mid" },
+                    { Icon: Wallet, dist: 190, duration: 32, size: "w-8 h-8", bg: "bg-amber-50 dark:bg-amber-900/30 border border-amber-200/50 dark:border-amber-700/30", delay: 6, iconColor: "text-amber-500" },
+                    { Icon: BarChart3, dist: 260, duration: 45, size: "w-9 h-9", bg: "bg-white dark:bg-gray-800 border border-brand-pale/50 dark:border-brand-mid/20", delay: 1.5, iconColor: "text-brand-deep dark:text-brand-light" },
+                    { Icon: Shield, dist: 225, duration: 34, size: "w-7 h-7", bg: "bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200/50 dark:border-emerald-700/30", delay: 4.5, iconColor: "text-emerald-500" },
                   ].map((item, i) => (
                     <motion.div
                       key={i}
@@ -1853,8 +1693,8 @@ export default function Home() {
                         <TrendingUp className="w-5 h-5 text-white" />
                       </div>
                       <div>
-                        <p className="text-[10px] text-gray-400 font-medium">{t("float.revenue_growth")}</p>
-                        <p className="text-xl font-black text-brand-deep">+۴۷٪</p>
+                        <p className="text-[10px] text-gray-400 dark:text-gray-500 font-medium">{t("float.revenue_growth")}</p>
+                        <p className="text-xl font-black text-brand-deep dark:text-brand-light">+۴۷٪</p>
                       </div>
                     </div>
                     {/* Mini sparkline */}
@@ -1899,12 +1739,12 @@ export default function Home() {
                     whileHover={{ scale: 1.1 }}
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-11 h-11 bg-amber-50 rounded-xl flex items-center justify-center">
+                      <div className="w-11 h-11 bg-amber-50 dark:bg-amber-900/30 rounded-xl flex items-center justify-center">
                         <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
                       </div>
                       <div>
-                        <p className="text-[10px] text-gray-400 font-medium">{t("float.customer_satisfaction")}</p>
-                        <p className="text-xl font-black text-gray-900">۴.۹/۵</p>
+                        <p className="text-[10px] text-gray-400 dark:text-gray-500 font-medium">{t("float.customer_satisfaction")}</p>
+                        <p className="text-xl font-black text-gray-900 dark:text-white">۴.۹/۵</p>
                       </div>
                     </div>
                     <div className="flex gap-0.5 mt-2">
@@ -1929,7 +1769,7 @@ export default function Home() {
                   transition={{ delay: 1.5, type: "spring" }}
                 >
                   <motion.div
-                    className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl shadow-brand-deep/10 p-3.5 border border-brand-pale/40"
+                    className="bg-white/90 dark:bg-gray-800/70 backdrop-blur-xl rounded-2xl shadow-xl shadow-brand-deep/10 p-3.5 border border-brand-pale/40 dark:border-brand-mid/20"
                     style={{ animation: "float 8s ease-in-out infinite 2s" }}
                     whileHover={{ scale: 1.1 }}
                   >
@@ -1938,8 +1778,8 @@ export default function Home() {
                         <Receipt className="w-4 h-4 text-white" />
                       </div>
                       <div>
-                        <p className="text-[10px] text-gray-400 font-medium">{t("float.today_invoices")}</p>
-                        <p className="text-lg font-black text-brand-deep">۱۲ عدد</p>
+                        <p className="text-[10px] text-gray-400 dark:text-gray-500 font-medium">{t("float.today_invoices")}</p>
+                        <p className="text-lg font-black text-brand-deep dark:text-brand-light">۱۲ عدد</p>
                       </div>
                     </div>
                   </motion.div>
@@ -1953,17 +1793,17 @@ export default function Home() {
                   transition={{ delay: 1.7, type: "spring" }}
                 >
                   <motion.div
-                    className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl shadow-brand-deep/10 p-3 border border-brand-pale/40"
+                    className="bg-white/90 dark:bg-gray-800/70 backdrop-blur-xl rounded-2xl shadow-xl shadow-brand-deep/10 p-3 border border-brand-pale/40 dark:border-brand-mid/20"
                     style={{ animation: "float 9s ease-in-out infinite 2.5s" }}
                     whileHover={{ scale: 1.1 }}
                   >
                     <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 bg-emerald-50 rounded-lg flex items-center justify-center">
-                        <Shield className="w-3.5 h-3.5 text-emerald-500" />
+                      <div className="w-8 h-8 bg-emerald-50 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center">
+                        <Shield className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" />
                       </div>
                       <div>
-                        <p className="text-[9px] text-gray-400">{t("float.ssl")}</p>
-                        <p className="text-xs font-bold text-emerald-600">{t("float.protected")}</p>
+                        <p className="text-[9px] text-gray-400 dark:text-gray-500">{t("float.ssl")}</p>
+                        <p className="text-xs font-bold text-emerald-600 dark:text-emerald-400">{t("float.protected")}</p>
                       </div>
                     </div>
                   </motion.div>
@@ -2002,856 +1842,52 @@ export default function Home() {
       <div className="gradient-divider-section" />
 
       {/* ══════════ ENHANCED MARQUEE TRUST BAR ══════════ */}
-      <section className="relative py-4 md:py-5 overflow-hidden bg-white dark:bg-gray-950">
-        {/* Fade edges */}
-        <div className="absolute inset-y-0 right-0 w-12 md:w-20 bg-gradient-to-l from-white dark:from-gray-950 to-transparent z-10 pointer-events-none" />
-        <div className="absolute inset-y-0 left-0 w-12 md:w-20 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
-
-        {/* Row 1 — Stats scrolling right-to-left */}
-        <div className="relative">
-          <div className="flex" style={{ animation: "marquee 35s linear infinite", width: "max-content" }}>
-            {[...stats, ...stats, ...stats, ...stats, ...stats].map((s, i) => (
-              <div key={`r1-${i}`} className="flex items-center gap-2.5 px-5 md:px-10">
-                <div className="flex items-center gap-2 bg-brand-surface/50 rounded-full pl-3 pr-4 md:pl-4 md:pr-5 py-1.5 md:py-2 border border-brand-pale/30">
-                  <span className="text-lg md:text-2xl font-black text-brand-deep tabular-nums">
-                    {s.value.toLocaleString("fa-AF")}{s.suffix}
-                  </span>
-                  <span className="text-[10px] md:text-xs text-gray-400 font-medium whitespace-nowrap">
-                    {s.label}
-                  </span>
-                </div>
-                <div className="w-1.5 h-1.5 rounded-full bg-brand-mid/20" />
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Row 2 — Trust keywords scrolling left-to-right */}
-        <div className="relative mt-2">
-          <div className="flex" style={{ animation: "marquee-reverse 28s linear infinite", width: "max-content" }}>
-            {(() => {
-              const trustItems = [
-                { icon: <Shield className="w-3 h-3 md:w-3.5 md:h-3.5" />, text: t("marquee.secure") },
-                { icon: <WifiOff className="w-3 h-3 md:w-3.5 md:h-3.5" />, text: t("marquee.no_internet") },
-                { icon: <Globe className="w-3 h-3 md:w-3.5 md:h-3.5" />, text: t("marquee.dari") },
-                { icon: <CalendarDays className="w-3 h-3 md:w-3.5 md:h-3.5" />, text: t("marquee.solar") },
-                { icon: <Zap className="w-3 h-3 md:w-3.5 md:h-3.5" />, text: t("marquee.fast") },
-                { icon: <Lock className="w-3 h-3 md:w-3.5 md:h-3.5" />, text: t("marquee.data_protection") },
-                { icon: <Monitor className="w-3 h-3 md:w-3.5 md:h-3.5" />, text: t("marquee.desktop") },
-                { icon: <Database className="w-3 h-3 md:w-3.5 md:h-3.5" />, text: t("marquee.offline_storage") },
-              ];
-              return [...trustItems, ...trustItems, ...trustItems, ...trustItems, ...trustItems].map((item, i) => (
-                <div key={`r2-${i}`} className="flex items-center gap-4 md:gap-6 px-5 md:px-10">
-                  <div className="flex items-center gap-1.5 md:gap-2">
-                    <div className="w-5 h-5 md:w-6 md:h-6 rounded-md bg-brand-surface/60 flex items-center justify-center text-brand-mid">
-                      {item.icon}
-                    </div>
-                    <span className="text-[10px] md:text-xs text-gray-400 font-medium whitespace-nowrap">{item.text}</span>
-                  </div>
-                  <div className="w-1 h-1 rounded-full bg-brand-pale" />
-                </div>
-              ));
-            })()}
-          </div>
-        </div>
-      </section>
+      <MarqueeSection stats={stats} />
 
       <div className="gradient-divider-section" />
 
       {/* ══════════ PROBLEM / PAIN SECTION ══════════ */}
-      <section className="py-20 md:py-28 relative overflow-hidden">
-        <GlowOrb color="#007FFF" size="400px" top="-100px" left="-100px" />
-        <GlowOrb color="#0047AB" size="300px" bottom="-50px" right="-50px" />
-
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeIn className="text-center mb-16">
-            <Badge className="mb-4 bg-red-50 dark:bg-red-950 text-red-500 dark:text-red-400 border-red-200/60 dark:border-red-800/40 px-4 py-2 rounded-full text-sm font-medium">
-              {t("problem.badge")}
-            </Badge>
-            <h2 className="text-3xl md:text-5xl font-black text-gray-900 dark:text-gray-100 mb-4">
-              {t("problem.title_before")}
-              <span className="text-red-500"> {t("problem.title_highlight")}</span> {t("problem.title_after")}
-            </h2>
-          </FadeIn>
-
-          <StaggerContainer className="grid md:grid-cols-2 lg:grid-cols-3 gap-5" stagger={0.08}>
-            {[
-              { icon: <FileText />, problem: t("problem.paper"), desc: t("problem.paper_desc") },
-              { icon: <Globe />, problem: t("problem.english_sw"), desc: t("problem.english_sw_desc") },
-              { icon: <PieChart />, problem: t("problem.opacity"), desc: t("problem.opacity_desc") },
-              { icon: <Clock />, problem: t("problem.time_waste"), desc: t("problem.time_waste_desc") },
-              { icon: <Receipt />, problem: t("problem.unprofessional"), desc: t("problem.unprofessional_desc") },
-              { icon: <Shield />, problem: t("problem.data_loss"), desc: t("problem.data_loss_desc") },
-            ].map((item, i) => (
-              <StaggerItem key={i}>
-                <motion.div
-                  className="bg-white dark:bg-gray-800/50 rounded-2xl p-6 border border-gray-100 dark:border-gray-700/50 h-full hover:border-red-200 dark:hover:border-red-800/50 hover:shadow-xl hover:shadow-red-100/30 transition-all duration-500 group cursor-default"
-                  whileHover={{ y: -4 }}
-                >
-                  <div className="w-12 h-12 bg-red-50 rounded-xl flex items-center justify-center text-red-400 mb-4 group-hover:scale-110 transition-transform">
-                    {item.icon}
-                  </div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">
-                    {item.problem}
-                  </h3>
-                  <p className="text-gray-400 dark:text-gray-300 text-sm leading-relaxed">{item.desc}</p>
-                </motion.div>
-              </StaggerItem>
-            ))}
-          </StaggerContainer>
-        </div>
-      </section>
+      <ProblemSection />
 
       <div className="gradient-divider-section" />
 
-      {/* ══════════ FEATURES — ASYMMETRIC ICON GRID ══════════ */}
-      <section id="features" className="py-20 md:py-28 gradient-brand-soft relative overflow-hidden">
-        {/* Subtle dot pattern */}
-        <div
-          className="absolute inset-0 opacity-[0.04]"
-          style={{
-            backgroundImage: "radial-gradient(circle, #0047AB 1px, transparent 1px)",
-            backgroundSize: "30px 30px",
-          }}
-        />
-
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeIn className="text-center mb-16">
-            <Badge className="mb-4 bg-white dark:bg-gray-800 text-brand-deep border-brand-pale dark:border-brand-mid/30 px-4 py-2 rounded-full text-sm font-medium shadow-sm">
-              <Award className="w-4 h-4 ml-1" />
-              {t("features.badge")}
-            </Badge>
-            <h2 className="text-3xl md:text-5xl font-black text-gray-900 dark:text-gray-100 mb-4">
-              {t("features.title_before")}
-              <span className="text-gradient"> {t("features.title_highlight")}</span>
-            </h2>
-          </FadeIn>
-
-          <StaggerContainer className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5" stagger={0.06}>
-            {features.map((f, i) => (
-              <StaggerItem key={i}>
-                <motion.div
-                  className="bg-white/80 dark:bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-white/50 dark:border-gray-700/30 h-full hover:shadow-2xl hover:shadow-brand-deep/10 transition-all duration-500 group cursor-default"
-                  whileHover={{ y: -6, scale: 1.02 }}
-                >
-                  <motion.div
-                    className="w-14 h-14 gradient-brand rounded-2xl flex items-center justify-center text-white mb-5 shadow-lg shadow-brand-mid/20"
-                    whileHover={{ rotate: [0, -5, 5, 0], scale: 1.1 }}
-                    transition={{ duration: 0.4 }}
-                  >
-                    {f.icon}
-                  </motion.div>
-                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">{f.title}</h3>
-                  <p className="text-gray-400 dark:text-gray-300 text-sm leading-relaxed">{f.desc}</p>
-                </motion.div>
-              </StaggerItem>
-            ))}
-          </StaggerContainer>
-        </div>
-      </section>
-
-      <div className="gradient-divider-section" />
-
-      {/* ══════════ BENTO GRID FEATURES ══════════ */}
-      <section className="py-20 md:py-28 relative overflow-hidden">
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeIn className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-black text-gray-900 dark:text-gray-100 mb-4">
-              یک نگاه به قدرت{" "}
-              <span className="text-gradient">آسان حساب</span>
-            </h2>
-          </FadeIn>
-
-          <StaggerContainer className="grid md:grid-cols-3 gap-5 auto-rows-[minmax(180px,auto)]" stagger={0.1}>
-            {bentoFeatures.map((f, i) => (
-              <StaggerItem key={i} className={f.span}>
-                <motion.div
-                  className={`rounded-3xl p-8 h-full flex flex-col justify-between relative overflow-hidden group cursor-default transition-all duration-500 ${
-                    f.gradient
-                      ? "gradient-brand text-white"
-                      : "bg-white dark:bg-gray-800/50 border border-gray-100 dark:border-gray-700/50 hover:border-brand-pale hover:shadow-xl hover:shadow-brand-deep/5"
-                  }`}
-                  whileHover={{ y: -4, scale: 1.01 }}
-                >
-                  {f.gradient && (
-                    <div className="absolute top-0 left-0 w-full h-full opacity-10">
-                      <div
-                        className="absolute inset-0"
-                        style={{
-                          backgroundImage:
-                            "radial-gradient(circle at 20% 80%, rgba(255,255,255,0.3) 0%, transparent 50%)",
-                        }}
-                      />
-                    </div>
-                  )}
-                  <div>
-                    <div
-                      className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-5 ${
-                        f.gradient ? "bg-white/20" : "bg-brand-surface text-brand-deep"
-                      }`}
-                    >
-                      {f.icon}
-                    </div>
-                    <h3
-                      className={`text-xl font-bold mb-3 ${
-                        f.gradient ? "text-white" : "text-gray-900"
-                      }`}
-                    >
-                      {f.title}
-                    </h3>
-                    <p
-                      className={`text-sm leading-relaxed ${
-                        f.gradient ? "text-white/80" : "text-gray-400"
-                      }`}
-                    >
-                      {f.desc}
-                    </p>
-                  </div>
-                  {f.gradient && (
-                    <motion.div
-                      className="absolute -bottom-10 -left-10 w-40 h-40 bg-white/5 rounded-full"
-                      whileHover={{ scale: 1.5 }}
-                    />
-                  )}
-                </motion.div>
-              </StaggerItem>
-            ))}
-          </StaggerContainer>
-        </div>
-      </section>
+      {/* ══════════ FEATURES + BENTO GRID ══════════ */}
+      <FeaturesSection features={features} bentoFeatures={bentoFeatures} />
 
       <div className="gradient-divider-section" />
 
       {/* ══════════ DASHBOARD SHOWCASE ══════════ */}
-      <section id="dashboard" className="py-20 md:py-28 gradient-brand-dark relative overflow-hidden">
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle, #fff 1px, transparent 1px)",
-            backgroundSize: "30px 30px",
-          }}
-        />
-
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeIn className="text-center mb-12">
-            <h2 className="text-3xl md:text-5xl font-black text-white mb-4">
-              {t("dashboard.title")}
-            </h2>
-            <p className="text-brand-light/60 text-lg max-w-2xl mx-auto">
-              {t("dashboard.desc")}
-            </p>
-          </FadeIn>
-
-          <FadeIn delay={0.2}>
-            <motion.div
-              className="relative"
-              whileHover={{ scale: 1.01 }}
-              transition={{ duration: 0.5 }}
-            >
-              {/* Glow behind */}
-              <div className="absolute -inset-4 bg-brand-mid/20 rounded-[2rem] blur-3xl" />
-              {/* Browser mockup frame */}
-              <div className="relative bg-[#1a1a2e] rounded-2xl overflow-hidden shadow-2xl">
-                {/* Browser bar */}
-                <div className="flex items-center gap-2 px-4 py-3 bg-[#16162a] border-b border-white/5">
-                  <div className="flex gap-1.5">
-                    <div className="w-3 h-3 rounded-full bg-red-400/80" />
-                    <div className="w-3 h-3 rounded-full bg-yellow-400/80" />
-                    <div className="w-3 h-3 rounded-full bg-green-400/80" />
-                  </div>
-                  <div className="flex-1 flex justify-center">
-                    <div className="bg-white/5 rounded-lg px-4 py-1 text-xs text-white/30">
-                      آسان حساب — داشبورد مدیریت
-                    </div>
-                  </div>
-                </div>
-                <img
-                  src="/dashboard-preview.png"
-                  alt="داشبورد آسان حساب"
-                  className="w-full"
-                />
-              </div>
-            </motion.div>
-          </FadeIn>
-
-          {/* Feature pills floating below */}
-          <FadeIn delay={0.4}>
-            <div className="flex flex-wrap justify-center gap-3 mt-10">
-              {[
-                t("dashboard.pill1"),
-                t("dashboard.pill2"),
-                t("dashboard.pill3"),
-                t("dashboard.pill4"),
-              ].map((tag, i) => (
-                <motion.span
-                  key={i}
-                  className="glass px-4 py-2 rounded-full text-sm text-white/80"
-                  whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.2)" }}
-                >
-                  {tag}
-                </motion.span>
-              ))}
-            </div>
-          </FadeIn>
-        </div>
-      </section>
+      <DashboardShowcase />
 
       <div className="gradient-divider-section" />
 
       {/* ══════════ HOW IT WORKS — CREATIVE TIMELINE ══════════ */}
-      <section className="py-20 md:py-28 relative overflow-hidden">
-        <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeIn className="text-center mb-16">
-            <Badge className="mb-4 bg-brand-surface text-brand-deep border-brand-pale px-4 py-2 rounded-full text-sm font-medium">
-              {t("how.badge")}
-            </Badge>
-            <h2 className="text-3xl md:text-5xl font-black text-gray-900 dark:text-gray-100 mb-4">
-              {t("how.title")}
-            </h2>
-          </FadeIn>
-
-          <div className="relative">
-            {/* Vertical line */}
-            <div className="absolute top-0 bottom-0 right-1/2 translate-x-1/2 w-px bg-gradient-to-b from-brand-pale via-brand-mid to-brand-pale hidden md:block" />
-
-            {[
-              {
-                step: "۱",
-                title: t("how.step1_title"),
-                desc: t("how.step1_desc"),
-                icon: <Users />,
-              },
-              {
-                step: "۲",
-                title: t("how.step2_title"),
-                desc: t("how.step2_desc"),
-                icon: <Building2 />,
-              },
-              {
-                step: "۳",
-                title: t("how.step3_title"),
-                desc: t("how.step3_desc"),
-                icon: <TrendingUp />,
-              },
-            ].map((item, i) => (
-              <FadeIn
-                key={i}
-                delay={i * 0.2}
-                direction={i % 2 === 0 ? "right" : "left"}
-                className={`mb-12 last:mb-0 md:flex items-center ${
-                  i % 2 === 0 ? "md:flex-row-reverse" : ""
-                }`}
-              >
-                <div className="md:w-1/2 md:px-8">
-                  <motion.div
-                    className={`bg-white dark:bg-gray-800/50 rounded-3xl p-8 border border-gray-100 dark:border-gray-700/50 hover:shadow-2xl hover:shadow-brand-deep/5 transition-all duration-500 ${
-                      i % 2 === 0 ? "md:mr-auto" : "md:ml-auto"
-                    } max-w-sm`}
-                    whileHover={{ y: -4 }}
-                  >
-                    <div className="w-14 h-14 gradient-brand rounded-2xl flex items-center justify-center text-white mb-5 shadow-lg shadow-brand-mid/20">
-                      {item.icon}
-                    </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-3">
-                      {item.title}
-                    </h3>
-                    <p className="text-gray-400 text-sm leading-relaxed">
-                      {item.desc}
-                    </p>
-                  </motion.div>
-                </div>
-
-                {/* Center node */}
-                <div className="hidden md:flex md:w-0 justify-center relative z-10">
-                  <motion.div
-                    className="w-14 h-14 gradient-brand rounded-full flex items-center justify-center text-white font-black text-lg shadow-xl shadow-brand-mid/30"
-                    whileHover={{ scale: 1.2 }}
-                  >
-                    {item.step}
-                  </motion.div>
-                  {/* Pulse ring */}
-                  <motion.div
-                    className="absolute w-14 h-14 gradient-brand rounded-full opacity-30"
-                    animate={{ scale: [1, 1.8], opacity: [0.3, 0] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  />
-                </div>
-                <div className="md:w-1/2" />
-              </FadeIn>
-            ))}
-          </div>
-        </div>
-      </section>
+      <HowItWorks />
 
       <div className="gradient-divider-section" />
 
       {/* ══════════ BUSINESS TYPES — HORIZONTAL SCROLL CARDS ══════════ */}
-      <section className="py-20 md:py-28 gradient-brand-soft relative overflow-hidden">
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeIn className="text-center mb-12">
-            <h2 className="text-3xl md:text-5xl font-black text-gray-900 dark:text-gray-100 mb-4">
-              {t("biz.title")}
-            </h2>
-          </FadeIn>
-
-          <StaggerContainer className="flex flex-wrap justify-center gap-4" stagger={0.06}>
-            {[
-              { icon: <Store />, label: t("biz.stores") },
-              { icon: <Truck />, label: t("biz.transport") },
-              { icon: <Building2 />, label: t("biz.trade") },
-              { icon: <Receipt />, label: t("biz.restaurants") },
-              { icon: <FileText />, label: t("biz.education") },
-              { icon: <Users />, label: t("biz.clinics") },
-            ].map((biz, i) => (
-              <StaggerItem key={i}>
-                <motion.div
-                  className="bg-white dark:bg-gray-800/50 rounded-2xl px-6 py-5 flex items-center gap-4 border border-white/50 dark:border-gray-700/30 cursor-default"
-                  whileHover={{ y: -4, scale: 1.03, shadow: "0 20px 40px rgba(0,71,171,0.1)" }}
-                >
-                  <div className="w-10 h-10 gradient-brand rounded-xl flex items-center justify-center text-white shadow-md shadow-brand-mid/20">
-                    {biz.icon}
-                  </div>
-                  <span className="text-sm font-bold text-gray-700 dark:text-gray-200">{biz.label}</span>
-                </motion.div>
-              </StaggerItem>
-            ))}
-          </StaggerContainer>
-        </div>
-      </section>
+      <BusinessTypes />
 
       <div className="gradient-divider-section" />
 
       {/* ══════════ TESTIMONIALS — CREATIVE CAROUSEL GRID ══════════ */}
-      <section id="testimonials" className="py-20 md:py-28 relative overflow-hidden">
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeIn className="text-center mb-16">
-            <Badge className="mb-4 bg-brand-surface text-brand-deep border-brand-pale px-4 py-2 rounded-full text-sm font-medium">
-              <Heart className="w-4 h-4 ml-1" />
-              {t("testimonials.badge")}
-            </Badge>
-            <h2 className="text-3xl md:text-5xl font-black text-gray-900 dark:text-gray-100 mb-4">
-              {t("testimonials.title_before")}{" "}
-              <span className="text-gradient">{t("testimonials.title_highlight")}</span>
-            </h2>
-          </FadeIn>
-
-          {/* Creative grid: 2 large + 4 small */}
-          <div className="grid md:grid-cols-3 gap-5">
-            {/* Large card */}
-            <FadeIn className="md:col-span-2 md:row-span-2">
-              <motion.div
-                className="gradient-brand rounded-3xl p-8 md:p-10 h-full text-white relative overflow-hidden"
-                whileHover={{ scale: 1.01 }}
-              >
-                <div className="absolute top-0 right-0 w-60 h-60 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2" />
-                <div className="absolute bottom-0 left-0 w-40 h-40 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/2" />
-                <div className="relative">
-                  <div className="flex gap-1 mb-6">
-                    {Array.from({ length: 5 }).map((_, j) => (
-                      <Star key={j} className="w-5 h-5 fill-amber-300 text-amber-300" />
-                    ))}
-                  </div>
-                  <p className="text-2xl md:text-3xl font-bold leading-relaxed mb-8 text-white/95">
-                    &ldquo;{testimonials[0].text}&rdquo;
-                  </p>
-                  <div className="flex items-center gap-4 border-t border-white/10 pt-6">
-                    <div className="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center text-xl font-black backdrop-blur-sm">
-                      {testimonials[0].name.charAt(0)}
-                    </div>
-                    <div>
-                      <p className="font-bold text-lg">{testimonials[0].name}</p>
-                      <p className="text-white/50 text-sm">{testimonials[0].role}</p>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            </FadeIn>
-
-            {/* Small cards */}
-            {testimonials.slice(1).map((t, i) => (
-              <FadeIn key={i} delay={i * 0.1}>
-                <motion.div
-                  className="bg-white dark:bg-gray-800/50 rounded-2xl p-6 border border-gray-100 dark:border-gray-700/50 h-full hover:shadow-xl hover:shadow-brand-deep/5 transition-all duration-500 group"
-                  whileHover={{ y: -3 }}
-                >
-                  <div className="flex gap-1 mb-3">
-                    {Array.from({ length: t.rating }).map((_, j) => (
-                      <Star key={j} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                    ))}
-                  </div>
-                  <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-4 line-clamp-4">
-                    &ldquo;{t.text}&rdquo;
-                  </p>
-                  <div className="flex items-center gap-3 border-t border-gray-50 pt-3">
-                    <div className="w-9 h-9 gradient-brand rounded-lg flex items-center justify-center text-white text-sm font-bold">
-                      {t.name.charAt(0)}
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-sm font-bold text-gray-900 dark:text-white truncate">{t.name}</p>
-                      <p className="text-xs text-gray-400 dark:text-gray-500 truncate">{t.city}</p>
-                    </div>
-                  </div>
-                </motion.div>
-              </FadeIn>
-            ))}
-          </div>
-        </div>
-      </section>
+      <TestimonialsSection testimonials={testimonials} />
 
       <div className="gradient-divider-section" />
 
       {/* ══════════ PRICING — CREATIVE CARDS ══════════ */}
-      <section id="pricing" className="py-20 md:py-28 gradient-brand-soft relative overflow-hidden">
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage: "radial-gradient(circle, #0047AB 1px, transparent 1px)",
-            backgroundSize: "25px 25px",
-          }}
-        />
-
-        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeIn className="text-center mb-16">
-            <Badge className="mb-4 bg-white dark:bg-gray-800 text-brand-deep border-brand-pale dark:border-brand-mid/30 px-4 py-2 rounded-full text-sm font-medium shadow-sm">
-              {t("pricing.badge")}
-            </Badge>
-            <h2 className="text-3xl md:text-5xl font-black text-gray-900 dark:text-gray-100 mb-4">
-              {t("pricing.title")}
-            </h2>
-            <p className="text-gray-400 text-lg">
-              {t("pricing.subtitle")}
-            </p>
-          </FadeIn>
-
-          <div className="grid md:grid-cols-3 gap-6 items-start">
-            {pricingPlans.map((plan, i) => (
-              <FadeIn key={i} delay={i * 0.15}>
-                <motion.div
-                  className={`relative rounded-3xl overflow-hidden ${
-                    plan.popular ? "md:-mt-4 md:mb-4" : ""
-                  }`}
-                  whileHover={{ y: -6 }}
-                >
-                  {plan.popular && (
-                    <div className="gradient-brand text-white text-center py-2 text-sm font-bold">
-                      {t("pricing.popular")}
-                    </div>
-                  )}
-                  <div
-                    className={`bg-white dark:bg-gray-800/60 p-8 border ${
-                      plan.popular
-                        ? "border-brand-mid/30 shadow-2xl shadow-brand-deep/10"
-                        : "border-gray-100"
-                    }`}
-                  >
-                    <div className="text-center mb-6">
-                      <h3 className="text-xl font-black text-gray-900 dark:text-white mb-1">{plan.name}</h3>
-                      <p className="text-xs text-gray-400 dark:text-gray-500 mb-5">{plan.desc}</p>
-                      <div className="flex items-baseline justify-center gap-1">
-                        <span className="text-4xl font-black text-gradient">{plan.price}</span>
-                        <span className="text-xs text-gray-400">{plan.period}</span>
-                      </div>
-                    </div>
-                    <ul className="space-y-3 mb-8">
-                      {plan.features.map((f, j) => (
-                        <li key={j} className="flex items-start gap-3">
-                          <CheckCircle2 className="w-4 h-4 text-brand-mid flex-shrink-0 mt-0.5" />
-                          <span className="text-sm text-gray-500 dark:text-gray-400">{f}</span>
-                        </li>
-                      ))}
-                    </ul>
-                    <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
-                      <Button
-                        className={`w-full py-5 rounded-xl text-sm font-bold transition-all ${
-                          plan.popular
-                            ? "gradient-brand text-white border-0 shadow-lg shadow-brand-mid/25"
-                            : "border-2 border-brand-pale text-brand-deep hover:bg-brand-surface hover:border-brand-mid"
-                        }`}
-                        variant={plan.popular ? "default" : "outline"}
-                      >
-                        {plan.cta}
-                      </Button>
-                    </motion.div>
-                  </div>
-                </motion.div>
-              </FadeIn>
-            ))}
-          </div>
-        </div>
-      </section>
+      <PricingSection pricingPlans={pricingPlans} />
 
       <div className="gradient-divider-section" />
 
       {/* ══════════ FAQ ══════════ */}
-      <section id="faq" className="py-20 md:py-28">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <FadeIn className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-black text-gray-900 dark:text-gray-100 mb-4">
-              {t("faq.title")}
-            </h2>
-          </FadeIn>
-
-          <div className="space-y-3">
-            {faqs.map((faq, i) => (
-              <FadeIn key={i} delay={i * 0.06}>
-                <motion.div
-                  className="bg-white dark:bg-gray-800/50 rounded-2xl border border-gray-100 dark:border-gray-700/50 overflow-hidden"
-                  whileHover={{ shadow: "0 4px 20px rgba(0,71,171,0.05)" }}
-                >
-                  <button
-                    className="w-full flex items-center justify-between p-5 md:p-6 text-right"
-                    onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                  >
-                    <span className="font-bold text-gray-900 text-sm md:text-base">
-                      {faq.q}
-                    </span>
-                    <motion.div
-                      animate={{ rotate: openFaq === i ? 180 : 0 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <ChevronDown className="w-5 h-5 text-brand-mid flex-shrink-0" />
-                    </motion.div>
-                  </button>
-                  <AnimatePresence>
-                    {openFaq === i && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3, ease: [0.25, 0.4, 0.25, 1] }}
-                      >
-                        <div className="px-5 md:px-6 pb-5 md:pb-6 text-gray-400 dark:text-gray-300 text-sm leading-relaxed border-t border-gray-50 dark:border-gray-700/50 pt-4">
-                          {faq.a}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.div>
-              </FadeIn>
-            ))}
-          </div>
-        </div>
-      </section>
+      <FAQSection faqs={faqs} />
 
       <div className="gradient-divider-section" />
 
-      {/* ══════════ FINAL CTA — DRAMATIC ══════════ */}
-      <section className="py-24 md:py-36 relative overflow-hidden">
-        <div className="absolute inset-0 gradient-brand" />
-        {/* Animated decorations */}
-        <div className="absolute inset-0">
-          <motion.div
-            className="absolute top-[20%] right-[10%] w-[300px] h-[300px] bg-white/5 rounded-full"
-            style={{ animation: "float 8s ease-in-out infinite" }}
-          />
-          <motion.div
-            className="absolute bottom-[10%] left-[10%] w-[200px] h-[200px] bg-white/5 rounded-full"
-            style={{ animation: "float 10s ease-in-out infinite 2s" }}
-          />
-          <motion.div
-            className="absolute top-[50%] left-[50%] w-[500px] h-[500px] bg-white/3 blob"
-          />
-        </div>
-
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <FadeIn>
-            <motion.div
-              className="w-20 h-20 bg-white/15 backdrop-blur-sm rounded-3xl flex items-center justify-center mx-auto mb-8 border border-white/20 p-2"
-              animate={{ rotate: [0, 5, -5, 0], scale: [1, 1.05, 1] }}
-              transition={{ duration: 4, repeat: Infinity }}
-            >
-              <img
-                src="/logo-asanhesab.png"
-                alt="آسان حساب"
-                className="w-full h-full rounded-2xl object-contain"
-              />
-            </motion.div>
-            <h2 className="text-3xl md:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight">
-              {t("cta.title_line1")}
-              <br />
-              {t("cta.title_line2")}
-            </h2>
-            <p className="text-white/60 text-lg md:text-xl mb-10 max-w-2xl mx-auto leading-relaxed">
-              هزاران کاربر افغان پیش از شما این تصمیم را گرفته‌اند.
-              به آن‌ها بپیوندید و مدیریت مالی خود را برای همیشه متحول کنید.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <motion.div whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.97 }}>
-                <Button
-                  size="lg"
-                  className="bg-white text-brand-deep hover:bg-gray-50 border-0 px-10 py-7 text-lg rounded-2xl shadow-2xl font-bold transition-all"
-                >
-                  <Zap className="w-5 h-5 ml-2" />
-                  دانلود رایگان
-                  <ArrowLeft className="w-5 h-5 mr-2" />
-                </Button>
-              </motion.div>
-              <motion.div whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.97 }}>
-                <Button
-                  size="lg"
-                  className="bg-white/10 hover:bg-white/20 text-white border border-white/20 px-10 py-7 text-lg rounded-2xl backdrop-blur-sm transition-all"
-                >
-                  <Headphones className="w-5 h-5 ml-2" />
-                  {t("footer.company_contact")}
-                </Button>
-              </motion.div>
-            </div>
-            <p className="text-white/30 text-sm mt-8">
-              بدون نیاز به اینترنت • کاملاً آفلاین • هر وقت بخواهید
-            </p>
-          </FadeIn>
-        </div>
-      </section>
-
-      {/* ══════════ FOOTER ══════════ */}
-      <footer className="relative text-gray-400 pt-16 pb-8 overflow-hidden">
-        {/* Gradient background */}
-        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, #0a0a1a 0%, #0d1225 40%, #0a1628 100%)" }} />
-        {/* Subtle glow accents */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[200px] opacity-10 pointer-events-none" style={{ background: "radial-gradient(ellipse, #007FFF 0%, transparent 70%)" }} />
-
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Top CTA strip */}
-          <motion.div
-            className="gradient-brand rounded-2xl p-6 md:p-8 mb-14 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-right"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <div>
-              <h3 className="text-xl md:text-2xl font-black text-white mb-1">{t("footer.cta_title")}</h3>
-              <p className="text-white/70 text-sm">{t("footer.cta_desc")}</p>
-            </div>
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button className="bg-white text-brand-deep hover:bg-gray-50 border-0 px-8 py-5 rounded-xl text-sm font-bold shadow-lg">
-                <Zap className="w-4 h-4 ml-2" />
-                دانلود رایگان
-              </Button>
-            </motion.div>
-          </motion.div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
-            {/* Brand column */}
-            <div className="sm:col-span-2 lg:col-span-1">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="relative">
-                  <img
-                    src="/logo-asanhesab.png"
-                    alt="آسان حساب"
-                    className="w-10 h-10 rounded-full shadow-lg"
-                  />
-                  <div className="absolute -inset-1 rounded-full border border-brand-mid/20" />
-                </div>
-                <div>
-                  <span className="text-lg font-black text-white">آسان حساب</span>
-                  <span className="text-[10px] text-gray-600 block -mt-0.5 tracking-wider">
-                    ASANHESAB
-                  </span>
-                </div>
-              </div>
-              <p className="text-sm leading-relaxed text-gray-500 mb-5">
-                {t("footer.brand_desc")}
-              </p>
-              {/* Social Links */}
-              <div className="flex items-center gap-2">
-                {[
-                  { label: "Facebook", icon: (
-                    <svg viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                  )},
-                  { label: "Telegram", icon: (
-                    <svg viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
-                  )},
-                  { label: "Instagram", icon: (
-                    <svg viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
-                  )},
-                  { label: "YouTube", icon: (
-                    <svg viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-                  )},
-                ].map((social) => (
-                  <motion.a
-                    key={social.label}
-                    href="#"
-                    aria-label={social.label}
-                    className="w-9 h-9 rounded-lg flex items-center justify-center text-gray-500 dark:text-gray-400 hover:text-white transition-all duration-300 hover:bg-white/10"
-                    whileHover={{ scale: 1.1, y: -2 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    {social.icon}
-                  </motion.a>
-                ))}
-              </div>
-            </div>
-            {/* Product column */}
-            <div>
-              <h4 className="text-white font-bold mb-4 text-sm flex items-center gap-2">
-                <span className="w-1 h-4 rounded-full gradient-brand inline-block" />
-                {t("footer.product")}
-              </h4>
-              <ul className="space-y-3 text-sm">
-                {[t("footer.product_features"), t("footer.product_pricing"), t("footer.product_updates"), t("footer.product_desktop")].map((l) => (
-                  <li key={l}>
-                    <a href="#" className="hover:text-brand-light transition-colors inline-flex items-center gap-1 group">
-                      <span className="w-0 group-hover:w-2 h-px bg-brand-light transition-all duration-300" />
-                      {l}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            {/* Company column */}
-            <div>
-              <h4 className="text-white font-bold mb-4 text-sm flex items-center gap-2">
-                <span className="w-1 h-4 rounded-full gradient-brand inline-block" />
-                شرکت
-              </h4>
-              <ul className="space-y-3 text-sm">
-                {[t("footer.company_about"), t("footer.company_contact"), t("footer.company_blog"), t("footer.company_careers")].map((l) => (
-                  <li key={l}>
-                    <a href="#" className="hover:text-brand-light transition-colors inline-flex items-center gap-1 group">
-                      <span className="w-0 group-hover:w-2 h-px bg-brand-light transition-all duration-300" />
-                      {l}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            {/* Support column */}
-            <div>
-              <h4 className="text-white font-bold mb-4 text-sm flex items-center gap-2">
-                <span className="w-1 h-4 rounded-full gradient-brand inline-block" />
-                پشتیبانی
-              </h4>
-              <ul className="space-y-3 text-sm">
-                {[t("footer.support_help"), t("footer.support_tutorials"), t("footer.support_faq"), t("footer.support_phone")].map(
-                  (l) => (
-                    <li key={l}>
-                      <a href="#" className="hover:text-brand-light transition-colors inline-flex items-center gap-1 group">
-                        <span className="w-0 group-hover:w-2 h-px bg-brand-light transition-all duration-300" />
-                        {l}
-                      </a>
-                    </li>
-                  )
-                )}
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-xs text-gray-600">
-              {t("footer.copyright")} &copy; آسان حساب ۱۴۰۴
-            </p>
-            <div className="flex items-center gap-6 text-xs">
-              <a href="#" className="hover:text-brand-light transition-colors">
-                حریم خصوصی
-              </a>
-              <a href="#" className="hover:text-brand-light transition-colors">
-                شرایط استفاده
-              </a>
-            </div>
-          </div>
-        </div>
-      </footer>
+      {/* ══════════ FINAL CTA + FOOTER ══════════ */}
+      <FinalCTA />
       {/* ══════════ FLOATING BUTTONS ══════════ */}
       {/* Back to Top Button */}
       <AnimatePresence>
