@@ -85,9 +85,47 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
+/* Dark mode colors — complements brand blue (#0047AB → #007FFF) */
+.dark {
+  --background: oklch(0.13 0.02 260);
+  --foreground: oklch(0.95 0 0);
+  --card: oklch(0.17 0.02 260);
+  --card-foreground: oklch(0.95 0 0);
+  --popover: oklch(0.17 0.02 260);
+  --popover-foreground: oklch(0.95 0 0);
+  --primary: oklch(0.75 0.15 240);
+  --primary-foreground: oklch(0.15 0.02 260);
+  --secondary: oklch(0.22 0.02 260);
+  --secondary-foreground: oklch(0.9 0 0);
+  --muted: oklch(0.22 0.02 260);
+  --muted-foreground: oklch(0.6 0.01 260);
+  --accent: oklch(0.22 0.03 260);
+  --accent-foreground: oklch(0.9 0 0);
+  --destructive: oklch(0.65 0.2 25);
+  --border: oklch(0.28 0.03 260);
+  --input: oklch(0.25 0.02 260);
+  --ring: oklch(0.55 0.15 240);
+  --chart-1: oklch(0.6 0.18 240);
+  --chart-2: oklch(0.55 0.12 200);
+  --chart-3: oklch(0.5 0.08 220);
+  --chart-4: oklch(0.7 0.12 200);
+  --chart-5: oklch(0.65 0.15 180);
+  --sidebar: oklch(0.15 0.02 260);
+  --sidebar-foreground: oklch(0.95 0 0);
+  --sidebar-primary: oklch(0.75 0.15 240);
+  --sidebar-primary-foreground: oklch(0.15 0.02 260);
+  --sidebar-accent: oklch(0.22 0.03 260);
+  --sidebar-accent-foreground: oklch(0.9 0 0);
+  --sidebar-border: oklch(0.28 0.03 260);
+  --sidebar-ring: oklch(0.55 0.15 240);
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    transition-property: background-color, border-color;
+    transition-duration: 300ms;
+    transition-timing-function: ease;
   }
   body {
     @apply bg-background text-foreground;
@@ -405,6 +443,18 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
@@ -418,4 +468,127 @@ html {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(135deg, #0056D6, #5DADE2);
+}
+
+/* ═══════════════════════════════════════════
+   DARK MODE ENHANCEMENTS
+   ═══════════════════════════════════════════ */
+
+/* Dark mode scrollbar */
+.dark ::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #0056D6, #007FFF);
+}
+
+/* Dark mode brand-soft gradient */
+.dark .gradient-brand-soft {
+  background: linear-gradient(135deg, #0a1628 0%, #0f1f3a 50%, #0a1628 100%);
+}
+
+/* Dark mode glass effects */
+.dark .glass-card {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(0, 127, 255, 0.12);
+}
+.dark .glass {
+  background: rgba(15, 23, 42, 0.4);
+  border: 1px solid rgba(0, 127, 255, 0.15);
+}
+.dark .glass-dark {
+  background: rgba(0, 71, 171, 0.15);
+  border: 1px solid rgba(0, 127, 255, 0.2);
+}
+
+/* Dark mode hero aurora — deeper blue glow */
+.dark .hero-aurora {
+  background: linear-gradient(
+    -45deg,
+    rgba(0, 71, 171, 0.08),
+    rgba(0, 127, 255, 0.12),
+    rgba(93, 173, 226, 0.06),
+    rgba(0, 71, 171, 0.05),
+    rgba(0, 127, 255, 0.1)
+  );
+  background-size: 400% 400%;
+  animation: aurora 15s ease infinite;
+}
+
+/* Dark mode shimmer — blue tinted */
+.dark .shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(0, 127, 255, 0) 0%,
+    rgba(0, 127, 255, 0.2) 50%,
+    rgba(0, 127, 255, 0) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+/* Dark mode holo-shine — reduced intensity */
+.dark .holo-shine {
+  background: linear-gradient(
+    105deg,
+    transparent 38%,
+    rgba(0, 127, 255, 0.08) 42%,
+    rgba(0, 127, 255, 0.15) 48%,
+    rgba(0, 127, 255, 0.25) 50%,
+    rgba(0, 127, 255, 0.15) 52%,
+    rgba(0, 127, 255, 0.08) 58%,
+    transparent 62%
+  );
+  background-size: 200% 100%;
+  animation: holo-sweep 0.8s ease-in-out forwards;
+}
+
+/* Dark mode gradient divider section */
+.dark .gradient-divider-section {
+  background: linear-gradient(90deg, transparent 0%, rgba(0,127,255,0.3) 15%, rgba(0,127,255,0.5) 50%, rgba(93,173,226,0.3) 85%, transparent 100%);
+  opacity: 0.25;
+}
+
+/* Dark mode gradient divider (animated) */
+.dark .gradient-divider {
+  opacity: 0.3;
+}
+
+/* Dark mode glass-card-hover */
+.dark .glass-card-hover:hover {
+  box-shadow: 0 20px 40px rgba(0, 71, 171, 0.25), 0 0 0 1px rgba(0, 127, 255, 0.15);
+}
+
+/* Dark mode terminal prompt */
+.dark .terminal-prompt {
+  background: linear-gradient(135deg, #0a0f1a 0%, #0d1425 50%, #0a0f1a 100%);
+  border: 1px solid rgba(0, 127, 255, 0.25);
+  box-shadow: 0 0 20px rgba(0, 127, 255, 0.1), inset 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Dark mode noise overlay — reduced opacity */
+.dark .noise-overlay::after {
+  opacity: 0.04;
+}
+
+/* Dark mode scroll progress bar */
+.dark .scroll-progress-bar {
+  background: linear-gradient(90deg, #007FFF, #5DADE2, #89CFF0);
+}
+
+/* Dark mode text gradient glow — brighter */
+.dark .text-gradient-glow {
+  filter: drop-shadow(0 0 15px rgba(0, 127, 255, 0.5)) drop-shadow(0 0 30px rgba(0, 127, 255, 0.25));
+}
+
+/* Dark mode pulse-glow — stronger */
+@keyframes pulse-glow-dark {
+  0%, 100% { box-shadow: 0 0 20px rgba(0, 127, 255, 0.15), 0 0 40px rgba(0, 127, 255, 0.08); }
+  50% { box-shadow: 0 0 30px rgba(0, 127, 255, 0.3), 0 0 60px rgba(0, 127, 255, 0.15); }
+}
+
+/* Dark mode hero-underline */
+.dark .hero-underline {
+  background: linear-gradient(90deg, #007FFF 0%, #5DADE2 50%, #89CFF0 100%);
+  opacity: 0.6;
 }

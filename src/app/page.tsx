@@ -1,16 +1,19 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import dynamic from "next/dynamic";
 import {
   motion,
   useInView,
   useScroll,
   useTransform,
-  useMotionValueEvent,
   AnimatePresence,
 } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { LanguageSwitcher } from "@/components/language-switcher";
+import { useI18n } from "@/lib/i18n";
 import {
   Calculator,
   CalendarDays,
@@ -18,7 +21,6 @@ import {
   BarChart3,
   Shield,
   Users,
-  Smartphone,
   Globe,
   CheckCircle2,
   Star,
@@ -43,27 +45,22 @@ import {
   Lock,
   Database,
   Monitor,
-  Cpu,
   WifiOff,
   Bell,
   ArrowUp,
-  MessageCircle,
   Home as HomeIcon,
   LayoutDashboard,
   Settings,
-  LogOut,
   FileSpreadsheet,
-  Search,
-  ClipboardList,
   Download,
-  FilePlus2,
+  PlayCircle,
 } from "lucide-react";
 
 /* ═══════════════════════════════════════════
-   UTILITY COMPONENTS
+   UTILITY COMPONENTS (memoized for performance)
    ═══════════════════════════════════════════ */
 
-function FadeIn({
+const FadeIn = React.memo(function FadeIn({
   children,
   className = "",
   delay = 0,
@@ -96,9 +93,9 @@ function FadeIn({
       {children}
     </motion.div>
   );
-}
+});
 
-function StaggerContainer({
+const StaggerContainer = React.memo(function StaggerContainer({
   children,
   className = "",
   stagger = 0.1,
@@ -123,9 +120,9 @@ function StaggerContainer({
       {children}
     </motion.div>
   );
-}
+});
 
-function StaggerItem({
+const StaggerItem = React.memo(function StaggerItem({
   children,
   className = "",
 }: {
@@ -148,7 +145,7 @@ function StaggerItem({
       {children}
     </motion.div>
   );
-}
+});
 
 function AnimatedCounter({
   target,
@@ -240,13 +237,14 @@ function GlowOrb({
    ═══════════════════════════════════════════ */
 
 function RotatingPhrase() {
-  const phrases = [
-    "به زبان دری",
-    "بدون اینترنت",
-    "تقویم شمسی",
-    "ساده و آسان",
-    "کاملاً آفلاین",
-  ];
+  const { t } = useI18n();
+  const phrases = useMemo(() => [
+    t("phrase.in_dari"),
+    t("phrase.no_internet"),
+    t("phrase.solar_calendar"),
+    t("phrase.simple"),
+    t("phrase.offline"),
+  ], [t]);
   const [displayed, setDisplayed] = useState("");
   const [phraseIndex, setPhraseIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -282,7 +280,7 @@ function RotatingPhrase() {
 
   return (
     <div className="flex items-center justify-center lg:justify-start gap-2 flex-wrap" dir="rtl">
-      <span className="text-base md:text-lg text-gray-500 leading-relaxed">
+      <span className="text-base md:text-lg text-gray-500 dark:text-gray-400 leading-relaxed">
         نرم‌افزار حسابداری
       </span>
       {/* Clean pill container */}
@@ -312,7 +310,7 @@ function RotatingPhrase() {
           style={{ boxShadow: "0 0 6px rgba(0,127,255,0.6), 0 0 12px rgba(0,127,255,0.2)" }}
         />
       </span>
-      <span className="text-base md:text-lg text-gray-500 leading-relaxed">
+      <span className="text-base md:text-lg text-gray-500 dark:text-gray-400 leading-relaxed">
         مخصوص کسب‌وکار شما
       </span>
     </div>
@@ -1040,9 +1038,11 @@ function HeroTiltCard() {
    MAIN LANDING PAGE
    ═══════════════════════════════════════════ */
 export default function Home() {
+  const { t, locale, dir } = useI18n();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const isRtl = dir === "rtl";
 
   const { scrollYProgress } = useScroll();
 
@@ -1052,54 +1052,54 @@ export default function Home() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const navLinks = [
-    { label: "ویژگی‌ها", href: "#features" },
-    { label: "داشبورد", href: "#dashboard" },
-    { label: "نظرات", href: "#testimonials" },
-    { label: "قیمت‌ها", href: "#pricing" },
-    { label: "سوالات", href: "#faq" },
-  ];
+  const navLinks = useMemo(() => [
+    { label: t("nav.features"), href: "#features" },
+    { label: t("nav.dashboard"), href: "#dashboard" },
+    { label: t("nav.testimonials"), href: "#testimonials" },
+    { label: t("nav.pricing"), href: "#pricing" },
+    { label: t("nav.faq"), href: "#faq" },
+  ], [t]);
 
   const features = [
     {
       icon: <Globe className="w-7 h-7" />,
-      title: "کاملاً به زبان دری",
-      desc: "تمام رابط کاربری، گزارش‌ها و تنظیمات به زبان دری و پشتو طراحی شده است.",
+      title: t("features.f1_title"),
+      desc: t("features.f1_desc"),
     },
     {
       icon: <CalendarDays className="w-7 h-7" />,
-      title: "تقویم هجری شمسی",
-      desc: "تمام تاریخ‌ها و گزارش‌ها به تاریخ شمسی نمایش داده می‌شوند.",
+      title: t("features.f2_title"),
+      desc: t("features.f2_desc"),
     },
     {
       icon: <Sparkles className="w-7 h-7" />,
-      title: "ساده برای همه",
-      desc: "حتی بدون دانش حسابداری می‌توانید به راحتی کار کنید.",
+      title: t("features.f3_title"),
+      desc: t("features.f3_desc"),
     },
     {
       icon: <Receipt className="w-7 h-7" />,
-      title: "صدور فاکتور",
-      desc: "با چند کلیک فاکتورهای حرفه‌ای صادر کنید و ارسال نمایید.",
+      title: t("features.f4_title"),
+      desc: t("features.f4_desc"),
     },
     {
       icon: <BarChart3 className="w-7 h-7" />,
-      title: "گزارش‌های هوشمند",
-      desc: "داشبورد با نمودارهای زیبا و قابل فهم، لحظه‌ای و دقیق.",
+      title: t("features.f5_title"),
+      desc: t("features.f5_desc"),
     },
     {
       icon: <Shield className="w-7 h-7" />,
-      title: "امنیت کامل",
-      desc: "رمزگذاری پیشرفته و پشتیبان‌گیری خودکار روزانه.",
+      title: t("features.f6_title"),
+      desc: t("features.f6_desc"),
     },
     {
       icon: <Monitor className="w-7 h-7" />,
-      title: "نصب آسان",
-      desc: "به راحتی روی کامپیوتر خود نصب کنید و بدون نیاز به اینترنت کار کنید.",
+      title: t("features.f7_title"),
+      desc: t("features.f7_desc"),
     },
     {
       icon: <Wallet className="w-7 h-7" />,
-      title: "پول افغانی",
-      desc: "تمام محاسبات به واحد پول افغانی بدون نیاز به تبدیل ارز.",
+      title: t("features.f8_title"),
+      desc: t("features.f8_desc"),
     },
   ];
 
@@ -1107,75 +1107,75 @@ export default function Home() {
     {
       span: "md:col-span-2 md:row-span-2",
       icon: <BarChart3 className="w-10 h-10" />,
-      title: "داشبورد مدیریتی هوشمند",
-      desc: "با یک نگاه، تصویر کامل مالی کسب‌وکار خود را ببینید. نمودارهای تعاملی، شاخص‌های کلیدی و گزارش‌های لحظه‌ای همه در یک صفحه.",
+      title: t("bento.smart_dashboard"),
+      desc: t("bento.smart_dashboard_desc"),
       gradient: true,
     },
     {
       span: "md:col-span-1",
       icon: <Receipt className="w-7 h-7" />,
-      title: "فاکتور آنی",
-      desc: "در کمتر از ۳۰ ثانیه فاکتور حرفه‌ای بسازید.",
+      title: t("bento.instant_invoice"),
+      desc: t("bento.instant_invoice_desc"),
     },
     {
       span: "md:col-span-1",
       icon: <Shield className="w-7 h-7" />,
-      title: "پشتیبان‌گیری خودکار",
-      desc: "پشتیبان‌گیری خودکار اطلاعات روی کامپیوتر شما انجام می‌شود.",
+      title: t("bento.auto_backup"),
+      desc: t("bento.auto_backup_desc"),
     },
     {
       span: "md:col-span-1",
       icon: <Globe className="w-7 h-7" />,
-      title: "پشتیبانی محلی",
-      desc: "تیم پشتیبانی به زبان دری همیشه در دسترس است.",
+      title: t("bento.local_support"),
+      desc: t("bento.local_support_desc"),
     },
     {
       span: "md:col-span-1",
       icon: <CalendarDays className="w-7 h-7" />,
-      title: "تقویم هجری",
-      desc: "تاریخ‌ها و گزارش‌ها به تقویم شمسی.",
+      title: t("bento.solar_cal"),
+      desc: t("bento.solar_cal_desc"),
     },
   ];
 
   const testimonials = [
     {
       name: "محمد احمد رحیمی",
-      role: "صاحب فروشگاه لوازم الکترونیک، کابل",
+      role: t("t1.role"),
       text: "قبل از آسان حساب، حسابداری فروشگاهم را در دفترچه یادداشت می‌کردم. حالا همه چیز راحت و مرتب است. واقعاً زندگیم را تغییر داد!",
       rating: 5,
       city: "کابل",
     },
     {
       name: "فاطمه نوری",
-      role: "مدیر شرکت بازرگانی، هرات",
+      role: t("t2.role"),
       text: "به عنوان یک زن کارآفرین، داشتن نرم‌افزار حسابداری به زبان دری برای من خیلی مهم بود. آسان حساب بهترین انتخاب من بود.",
       rating: 5,
       city: "هرات",
     },
     {
       name: "حاجی عبدالسلام",
-      role: "صاحب شرکت حمل و نقل، مزار شریف",
+      role: t("t3.role"),
       text: "من هیچ دانش حسابداری ندارم ولی با آسان حساب به راحتی درآمد و هزینه‌های شرکت حمل‌ونقل‌ام را مدیریت می‌کنم. عالی است!",
       rating: 5,
       city: "مزار شریف",
     },
     {
       name: "زهرا موسوی",
-      role: "دارنده بوتیک پوشاک، قندهار",
+      role: t("t4.role"),
       text: "تقویم هجری شمسی و زبان دری باعث شد آسان حساب را انتخاب کنم. خیلی راحت فاکتور صادر می‌کنم و مشتریانم راضی هستند.",
       rating: 5,
       city: "قندهار",
     },
     {
       name: "غلام حیدر",
-      role: "صاحب رستوران، جلال‌آباد",
+      role: t("t5.role"),
       text: "آسان حساب کمک کرد تا هزینه‌های رستورانم را کنترل کنم و سودآوری‌ام را افزایش دهم.",
       rating: 5,
       city: "جلال‌آباد",
     },
     {
       name: "مریم صدیقی",
-      role: "مدیر موسسه آموزشی، بامیان",
+      role: t("t6.role"),
       text: "مدیریت شهریه دانش‌آموزان و هزینه‌های موسسه قبل از آسان حساب خیلی سخت بود. حالا همه چیز سیستماتیک و شفاف است.",
       rating: 5,
       city: "بامیان",
@@ -1184,10 +1184,10 @@ export default function Home() {
 
   const pricingPlans = [
     {
-      name: "پایه",
+      name: t("pricing.basic"),
       price: "۲,۵۰۰",
       period: "افغانی / ماهانه",
-      desc: "کسب‌وکارهای کوچک",
+      desc: t("pricing.basic_desc"),
       features: [
         "یک کاربر",
         "صدور فاکتور نامحدود",
@@ -1195,14 +1195,14 @@ export default function Home() {
         "تقویم هجری شمسی",
         "پشتیبانی تلفنی",
       ],
-      cta: "دانلود رایگان",
+      cta: t("pricing.download"),
       popular: false,
     },
     {
-      name: "حرفه‌ای",
+      name: t("pricing.pro"),
       price: "۵,۵۰۰",
       period: "افغانی / ماهانه",
-      desc: "کسب‌وکارهای متوسط",
+      desc: t("pricing.pro_desc"),
       features: [
         "۵ کاربر",
         "تمام امکانات پایه",
@@ -1216,10 +1216,10 @@ export default function Home() {
       popular: true,
     },
     {
-      name: "سازمانی",
+      name: t("pricing.org"),
       price: "۱۲,۰۰۰",
       period: "افغانی / ماهانه",
-      desc: "شرکت‌ها و سازمان‌ها",
+      desc: t("pricing.org_desc"),
       features: [
         "کاربران نامحدود",
         "تمام امکانات حرفه‌ای",
@@ -1229,48 +1229,48 @@ export default function Home() {
         "آموزش تیم",
         "پشتیبانی VIP",
       ],
-      cta: "تماس بگیرید",
+      cta: t("pricing.contact"),
       popular: false,
     },
   ];
 
   const faqs = [
     {
-      q: "آیا استفاده از آسان حساب نیاز به دانش حسابداری دارد؟",
+      q: t("faq.q1"),
       a: "خیر، اصلاً! آسان حساب مخصوص افرادی طراحی شده که هیچ دانش حسابداری ندارند. رابط کاربری به زبان دری و بسیار ساده است. با چند کلیک می‌توانید فاکتور صادر کنید و گزارش‌ها را ببینید. ویدیوهای آموزشی رایگان به زبان دری نیز موجود است.",
     },
     {
-      q: "آیا تقویم هجری شمسی پشتیبانی می‌شود؟",
+      q: t("faq.q2"),
       a: "بله، به صورت کامل. تمام تاریخ‌ها، گزارش‌ها، فاکتورها و صورت‌حساب‌ها به تاریخ شمسی نمایش داده می‌شوند. امکان تبدیل تاریخ بین شمسی و میلادی نیز وجود دارد.",
     },
     {
-      q: "آیا برای استفاده نیاز به اینترنت دارم؟",
+      q: t("faq.q3"),
       a: "خیر! آسان حساب کاملاً آفلاین کار می‌کند. بدون نیاز به اینترنت، تمام عملیات حسابداری، صدور فاکتور و گزارش‌گیری را انجام دهید. اطلاعات شما فقط روی کامپیوتر خودتان ذخیره می‌شود.",
     },
     {
-      q: "اطلاعات مالی من چقدر امن است؟",
+      q: t("faq.q4"),
       a: "بالاترین سطح امنیت: رمزگذاری پیشرفته اطلاعات، پشتیبان‌گیری خودکار روی کامپیوتر شما، بدون ارسال اطلاعات به اینترنت. تمام داده‌های مالی شما فقط روی دستگاه خودتان ذخیره می‌شود.",
     },
     {
-      q: "آیا نسخه رایگان وجود دارد؟",
+      q: t("faq.q5"),
       a: "بله! نسخه آزمایشی رایگان با تمام امکانات. بدون نیاز به اینترنت و بدون تعهد.",
     },
   ];
 
   const stats = [
-    { value: 5000, suffix: "+", label: "کاربر فعال" },
-    { value: 120000, suffix: "+", label: "فاکتور صادر شده" },
-    { value: 34, suffix: "", label: "ولایت تحت پوشش" },
-    { value: 99, suffix: "٪", label: "رضایت مشتریان" },
+    { value: 5000, suffix: "+", label: t("stat.active_users") },
+    { value: 120000, suffix: "+", label: t("stat.invoices") },
+    { value: 34, suffix: "", label: t("stat.provinces") },
+    { value: 99, suffix: "٪", label: t("stat.satisfaction") },
   ];
 
   return (
-    <div className="min-h-screen flex flex-col overflow-x-hidden">
+    <div className="min-h-screen flex flex-col overflow-x-hidden bg-background text-foreground" style={{ direction: dir }}>
       {/* ══════════ NAVBAR ══════════ */}
       <motion.nav
         className={`fixed top-0 right-0 left-0 z-50 transition-all duration-500 ${
           scrolled
-            ? "bg-white/80 backdrop-blur-xl shadow-lg shadow-brand-deep/5 border-b border-brand-pale/50"
+            ? "bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl shadow-lg shadow-brand-deep/5 border-b border-brand-pale/50 dark:border-brand-mid/20"
             : "bg-transparent"
         }`}
         initial={{ y: -100 }}
@@ -1308,7 +1308,7 @@ export default function Home() {
                 <a
                   key={link.href}
                   href={link.href}
-                  className="relative px-4 py-2 text-sm font-medium text-gray-500 hover:text-brand-deep transition-colors group"
+                  className="relative px-4 py-2 text-sm font-medium text-gray-500 dark:text-gray-300 hover:text-brand-deep dark:hover:text-brand-light transition-colors group"
                 >
                   {link.label}
                   <span className="absolute bottom-0 right-1/2 translate-x-1/2 w-0 h-0.5 gradient-brand rounded-full group-hover:w-6 transition-all duration-300" />
@@ -1316,21 +1316,23 @@ export default function Home() {
               ))}
             </div>
 
-            <div className="hidden md:flex items-center gap-3">
+            <div className="hidden md:flex items-center gap-2">
+              <LanguageSwitcher />
+              <ThemeToggle />
               <Button className="gradient-brand hover:opacity-90 text-white border-0 px-6 rounded-full shadow-lg shadow-brand-mid/25 hover:shadow-brand-mid/40 transition-all duration-300 hover:scale-105">
                 <Zap className="w-4 h-4 ml-2" />
-                دانلود رایگان
+                {t("nav.download")}
               </Button>
             </div>
 
             <button
-              className="md:hidden p-2 rounded-xl hover:bg-brand-surface transition-colors"
+              className={`w-6 h-6 ${isRtl ? "ml-2" : "mr-2"} rounded-xl hover:bg-brand-surface dark:hover:bg-white/10 transition-colors`}
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? (
-                <X className="w-6 h-6 text-brand-deep" />
+                <X className="w-6 h-6 text-brand-deep dark:text-brand-light" />
               ) : (
-                <Menu className="w-6 h-6 text-brand-deep" />
+                <Menu className="w-6 h-6 text-brand-deep dark:text-brand-light" />
               )}
             </button>
           </div>
@@ -1343,7 +1345,7 @@ export default function Home() {
               animate={{ opacity: 1, height: "auto", y: 0 }}
               exit={{ opacity: 0, height: 0, y: -10 }}
               transition={{ duration: 0.3 }}
-              className="md:hidden bg-white/95 backdrop-blur-xl border-t border-brand-pale/50 shadow-xl"
+              className="md:hidden bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border-t border-brand-pale/50 dark:border-brand-mid/20 shadow-xl"
             >
               <div className="px-4 py-6 space-y-1">
                 {navLinks.map((link, i) => (
@@ -1353,16 +1355,16 @@ export default function Home() {
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.05 }}
-                    className="block text-gray-600 hover:text-brand-deep hover:bg-brand-surface py-3 px-4 rounded-xl text-sm font-medium transition-all"
+                    className="block text-gray-600 dark:text-gray-300 hover:text-brand-deep dark:hover:text-brand-light hover:bg-brand-surface dark:hover:bg-white/5 py-3 px-4 rounded-xl text-sm font-medium transition-all"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     {link.label}
                   </motion.a>
                 ))}
-                <div className="pt-4 mt-4 border-t border-gray-100">
+                <div className="pt-4 mt-4 border-t border-gray-100 dark:border-gray-800">
                   <Button className="w-full gradient-brand text-white border-0 rounded-xl">
                     <Zap className="w-4 h-4 ml-2" />
-                    دانلود رایگان
+                    {t("nav.download")}
                   </Button>
                 </div>
               </div>
@@ -1376,7 +1378,7 @@ export default function Home() {
         {/* Layered animated background */}
         <div className="absolute inset-0">
           {/* Base gradient + Aurora */}
-          <div className="absolute inset-0 bg-gradient-to-bl from-[#f0f7ff] via-white to-[#e8f0fe]" />
+          <div className="absolute inset-0 bg-gradient-to-bl from-[#f0f7ff] dark:from-[#0a1628] via-white dark:via-[#0f172a] to-[#e8f0fe] dark:to-[#0d1b30]" />
           <div className="absolute inset-0 hero-aurora" />
           {/* Animated mesh gradients with parallax */}
           <ParallaxSection speed={0.15} className="absolute top-[-20%] right-[-10%]">
@@ -1446,7 +1448,7 @@ export default function Home() {
             />
           </svg>
           {/* Floating particles with varying sizes */}
-          {[...Array(15)].map((_, i) => (
+          {[...Array(isRtl ? 6 : 15)].map((_, i) => (
             <motion.div
               key={i}
               className="absolute rounded-full bg-brand-mid/20"
@@ -1494,7 +1496,7 @@ export default function Home() {
               {/* Badge */}
               <FadeIn>
                 <motion.div
-                  className="inline-flex items-center gap-2 bg-white/70 backdrop-blur-md border border-brand-pale/50 rounded-full px-5 py-2.5 mb-8 shadow-sm"
+                  className="inline-flex items-center gap-2 bg-white/70 dark:bg-white/10 backdrop-blur-md border border-brand-pale/50 dark:border-brand-mid/30 rounded-full px-5 py-2.5 mb-8 shadow-sm"
                   whileHover={{ scale: 1.04, boxShadow: "0 8px 30px rgba(0,71,171,0.12)" }}
                 >
                   <motion.span
@@ -1504,7 +1506,7 @@ export default function Home() {
                     <Sparkles className="w-4 h-4 text-brand-mid" />
                   </motion.span>
                   <span className="text-sm font-semibold text-brand-deep">
-                    نرم‌افزار حسابداری ویژه بازار افغانستان
+                    {t("hero.badge")}
                   </span>
                 </motion.div>
               </FadeIn>
@@ -1544,18 +1546,18 @@ export default function Home() {
                     >
                       {/* Line 1 — management text */}
                       <span
-                        className="block font-bold text-gray-600"
+                        className="block font-bold text-gray-600 dark:text-gray-300"
                         style={{ fontSize: "clamp(1.5rem, 3.8vw, 2.6rem)", letterSpacing: "-0.01em" }}
                       >
-                        مدیریت تجارت شما،
+                        {t("hero.line1")},
                       </span>
 
                       {/* Line 2 — bold with brand-blue highlighted "آسان‌تر" */}
                       <span
-                        className="block font-black text-gray-900 mt-1"
+                        className="block font-black text-gray-900 dark:text-gray-100 mt-1"
                         style={{ fontSize: "clamp(2.6rem, 7.5vw, 5rem)", letterSpacing: "-0.03em" }}
                       >
-                        حالا{" "}
+                        {t("hero.line2_before")}{" "}
                         {/* Brand-blue highlighted "آسان‌تر" */}
                         <span className="relative inline-block">
                           {/* Pulsing brand glow */}
@@ -1583,7 +1585,7 @@ export default function Home() {
                             آسان‌تر
                           </span>
                         </span>
-                        {" "}از همیشه!
+                        {" "}{t("hero.line2_after")}
                       </span>
                     </motion.div>
 
@@ -1623,12 +1625,12 @@ export default function Home() {
                 <div className="mb-8">
                   <RotatingPhrase />
                   <motion.p
-                    className="text-sm text-gray-400 mt-2 max-w-lg mx-auto lg:mx-0 lg:mr-0"
+                    className="text-sm text-gray-400 dark:text-gray-500 mt-2 max-w-lg mx-auto lg:mx-0 lg:mr-0"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 1.5, duration: 1 }}
                   >
-                    بدون نیاز به دانش حسابداری — همین امروز شروع کنید!
+                    {t("hero.sub_desc")}
                   </motion.p>
                 </div>
               </FadeIn>
@@ -1643,7 +1645,7 @@ export default function Home() {
                     >
                       <span className="relative z-10 flex items-center">
                         <Zap className="w-5 h-5 ml-2" />
-                        دانلود رایگان نسخه آزمایشی
+                        {t("hero.cta_primary")}
                         <ArrowLeft className="w-5 h-5 mr-2" />
                       </span>
                       <motion.div
@@ -1662,10 +1664,10 @@ export default function Home() {
                     <Button
                       size="lg"
                       variant="outline"
-                      className="px-8 py-6 text-base rounded-2xl border-brand-pale bg-white/60 backdrop-blur-md hover:border-brand-mid hover:bg-brand-surface transition-all shadow-sm"
+                      className="px-8 py-6 text-base rounded-2xl border-brand-pale dark:border-brand-mid/30 bg-white/60 dark:bg-white/10 backdrop-blur-md hover:border-brand-mid hover:bg-brand-surface transition-all shadow-sm"
                     >
-                      <PlayCircleIcon className="w-5 h-5 ml-2 text-brand-mid" />
-                      تماشای ویدیو
+                      <PlayCircle className="w-5 h-5 ml-2 text-brand-mid" />
+                      {t("hero.cta_secondary")}
                     </Button>
                   </motion.div>
                 </div>
@@ -1698,10 +1700,10 @@ export default function Home() {
               <FadeIn delay={0.4}>
                 <div className="flex flex-wrap items-center gap-3 md:gap-4 mt-8 justify-center lg:justify-start">
                   {[
-                    { icon: <Download className="w-3.5 h-3.5" />, text: "نصب در ۵ دقیقه" },
-                    { icon: <WifiOff className="w-3.5 h-3.5" />, text: "بدون نیاز به اینترنت" },
-                    { icon: <Headphones className="w-3.5 h-3.5" />, text: "پشتیبانی دایمی" },
-                    { icon: <Shield className="w-3.5 h-3.5" />, text: "کاملاً آفلاین و امن" },
+                    { icon: <Download className="w-3.5 h-3.5" />, text: t("trust.install") },
+                    { icon: <WifiOff className="w-3.5 h-3.5" />, text: t("trust.offline") },
+                    { icon: <Headphones className="w-3.5 h-3.5" />, text: t("trust.support") },
+                    { icon: <Shield className="w-3.5 h-3.5" />, text: t("trust.secure") },
                   ].map((item, i) => (
                     <motion.div
                       key={i}
@@ -1842,7 +1844,7 @@ export default function Home() {
                   transition={{ delay: 1, type: "spring", stiffness: 180 }}
                 >
                   <motion.div
-                    className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl shadow-brand-deep/10 p-4 border border-brand-pale/40"
+                    className="bg-white/90 dark:bg-gray-800/70 backdrop-blur-xl rounded-2xl shadow-xl shadow-brand-deep/10 p-4 border border-brand-pale/40 dark:border-brand-mid/20"
                     style={{ animation: "float 6s ease-in-out infinite" }}
                     whileHover={{ scale: 1.1 }}
                   >
@@ -1851,7 +1853,7 @@ export default function Home() {
                         <TrendingUp className="w-5 h-5 text-white" />
                       </div>
                       <div>
-                        <p className="text-[10px] text-gray-400 font-medium">رشد درآمد</p>
+                        <p className="text-[10px] text-gray-400 font-medium">{t("float.revenue_growth")}</p>
                         <p className="text-xl font-black text-brand-deep">+۴۷٪</p>
                       </div>
                     </div>
@@ -1892,7 +1894,7 @@ export default function Home() {
                   transition={{ delay: 1.3, type: "spring", stiffness: 180 }}
                 >
                   <motion.div
-                    className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl shadow-brand-deep/10 p-4 border border-brand-pale/40"
+                    className="bg-white/90 dark:bg-gray-800/70 backdrop-blur-xl rounded-2xl shadow-xl shadow-brand-deep/10 p-4 border border-brand-pale/40 dark:border-brand-mid/20"
                     style={{ animation: "float 7s ease-in-out infinite 1.5s" }}
                     whileHover={{ scale: 1.1 }}
                   >
@@ -1901,7 +1903,7 @@ export default function Home() {
                         <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
                       </div>
                       <div>
-                        <p className="text-[10px] text-gray-400 font-medium">رضایت مشتری</p>
+                        <p className="text-[10px] text-gray-400 font-medium">{t("float.customer_satisfaction")}</p>
                         <p className="text-xl font-black text-gray-900">۴.۹/۵</p>
                       </div>
                     </div>
@@ -1936,7 +1938,7 @@ export default function Home() {
                         <Receipt className="w-4 h-4 text-white" />
                       </div>
                       <div>
-                        <p className="text-[10px] text-gray-400 font-medium">فاکتور امروز</p>
+                        <p className="text-[10px] text-gray-400 font-medium">{t("float.today_invoices")}</p>
                         <p className="text-lg font-black text-brand-deep">۱۲ عدد</p>
                       </div>
                     </div>
@@ -1960,8 +1962,8 @@ export default function Home() {
                         <Shield className="w-3.5 h-3.5 text-emerald-500" />
                       </div>
                       <div>
-                        <p className="text-[9px] text-gray-400">SSL امن</p>
-                        <p className="text-xs font-bold text-emerald-600">محافظت شده</p>
+                        <p className="text-[9px] text-gray-400">{t("float.ssl")}</p>
+                        <p className="text-xs font-bold text-emerald-600">{t("float.protected")}</p>
                       </div>
                     </div>
                   </motion.div>
@@ -1981,7 +1983,7 @@ export default function Home() {
               {stats.map((s, i) => (
                 <motion.div
                   key={i}
-                  className="rounded-2xl p-3 md:p-4 text-center bg-white/80 border border-brand-pale/40 shadow-sm md:shadow-md"
+                  className="rounded-2xl p-3 md:p-4 text-center bg-white/80 dark:bg-gray-800/50 border border-brand-pale/40 dark:border-brand-mid/20 shadow-sm md:shadow-md"
                   whileHover={{ scale: 1.05, boxShadow: "0 10px 30px rgba(0,71,171,0.1)" }}
                 >
                   <p className="text-xl md:text-2xl font-black text-brand-deep tabular-nums">
@@ -2000,9 +2002,9 @@ export default function Home() {
       <div className="gradient-divider-section" />
 
       {/* ══════════ ENHANCED MARQUEE TRUST BAR ══════════ */}
-      <section className="relative py-4 md:py-5 overflow-hidden bg-white">
+      <section className="relative py-4 md:py-5 overflow-hidden bg-white dark:bg-gray-950">
         {/* Fade edges */}
-        <div className="absolute inset-y-0 right-0 w-12 md:w-20 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
+        <div className="absolute inset-y-0 right-0 w-12 md:w-20 bg-gradient-to-l from-white dark:from-gray-950 to-transparent z-10 pointer-events-none" />
         <div className="absolute inset-y-0 left-0 w-12 md:w-20 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
 
         {/* Row 1 — Stats scrolling right-to-left */}
@@ -2029,14 +2031,14 @@ export default function Home() {
           <div className="flex" style={{ animation: "marquee-reverse 28s linear infinite", width: "max-content" }}>
             {(() => {
               const trustItems = [
-                { icon: <Shield className="w-3 h-3 md:w-3.5 md:h-3.5" />, text: "امن و مطمئن" },
-                { icon: <WifiOff className="w-3 h-3 md:w-3.5 md:h-3.5" />, text: "بدون اینترنت" },
-                { icon: <Globe className="w-3 h-3 md:w-3.5 md:h-3.5" />, text: "به زبان دری" },
-                { icon: <CalendarDays className="w-3 h-3 md:w-3.5 md:h-3.5" />, text: "تقویم شمسی" },
-                { icon: <Zap className="w-3 h-3 md:w-3.5 md:h-3.5" />, text: "سریع و آسان" },
-                { icon: <Lock className="w-3 h-3 md:w-3.5 md:h-3.5" />, text: "محافظت از داده‌ها" },
-                { icon: <Monitor className="w-3 h-3 md:w-3.5 md:h-3.5" />, text: "برای دسکتاپ" },
-                { icon: <Database className="w-3 h-3 md:w-3.5 md:h-3.5" />, text: "ذخیره آفلاین" },
+                { icon: <Shield className="w-3 h-3 md:w-3.5 md:h-3.5" />, text: t("marquee.secure") },
+                { icon: <WifiOff className="w-3 h-3 md:w-3.5 md:h-3.5" />, text: t("marquee.no_internet") },
+                { icon: <Globe className="w-3 h-3 md:w-3.5 md:h-3.5" />, text: t("marquee.dari") },
+                { icon: <CalendarDays className="w-3 h-3 md:w-3.5 md:h-3.5" />, text: t("marquee.solar") },
+                { icon: <Zap className="w-3 h-3 md:w-3.5 md:h-3.5" />, text: t("marquee.fast") },
+                { icon: <Lock className="w-3 h-3 md:w-3.5 md:h-3.5" />, text: t("marquee.data_protection") },
+                { icon: <Monitor className="w-3 h-3 md:w-3.5 md:h-3.5" />, text: t("marquee.desktop") },
+                { icon: <Database className="w-3 h-3 md:w-3.5 md:h-3.5" />, text: t("marquee.offline_storage") },
               ];
               return [...trustItems, ...trustItems, ...trustItems, ...trustItems, ...trustItems].map((item, i) => (
                 <div key={`r2-${i}`} className="flex items-center gap-4 md:gap-6 px-5 md:px-10">
@@ -2063,27 +2065,27 @@ export default function Home() {
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeIn className="text-center mb-16">
-            <Badge className="mb-4 bg-red-50 text-red-500 border-red-200/60 px-4 py-2 rounded-full text-sm font-medium">
-              آیا شما هم این مشکلات را دارید؟
+            <Badge className="mb-4 bg-red-50 dark:bg-red-950 text-red-500 dark:text-red-400 border-red-200/60 dark:border-red-800/40 px-4 py-2 rounded-full text-sm font-medium">
+              {t("problem.badge")}
             </Badge>
-            <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-4">
-              مشکلاتی که کسب‌وکار شما را
-              <span className="text-red-500"> متوقف</span> می‌کند
+            <h2 className="text-3xl md:text-5xl font-black text-gray-900 dark:text-gray-100 mb-4">
+              {t("problem.title_before")}
+              <span className="text-red-500"> {t("problem.title_highlight")}</span> {t("problem.title_after")}
             </h2>
           </FadeIn>
 
           <StaggerContainer className="grid md:grid-cols-2 lg:grid-cols-3 gap-5" stagger={0.08}>
             {[
-              { icon: <FileText />, problem: "حساب و کتاب کاغذی", desc: "دفترچه‌های پراکنده که پیدا کردن یک فاکتور را غیرممکن می‌کند." },
-              { icon: <Globe />, problem: "نرم‌افزارهای انگلیسی", desc: "نرم‌افزار خارجی که زبان و تقویمش با شما فرق دارد." },
-              { icon: <PieChart />, problem: "عدم شفافیت مالی", desc: "نمی‌دانید چقدر سود کرده‌اید و وضعیت مالی‌تان چیست." },
-              { icon: <Clock />, problem: "هدر رفتن وقت", desc: "ساعت‌ها وقت صرف محاسبات دستی می‌کنید." },
-              { icon: <Receipt />, problem: "فاکتورهای غیرحرفه‌ای", desc: "فاکتورهای دستی که اعتبار شما را زیر سوال می‌برند." },
-              { icon: <Shield />, problem: "خطر از دست رفتن اطلاعات", desc: "یک ورقه گم‌شده اطلاعات مهم مالی را نابود می‌کند." },
+              { icon: <FileText />, problem: t("problem.paper"), desc: t("problem.paper_desc") },
+              { icon: <Globe />, problem: t("problem.english_sw"), desc: t("problem.english_sw_desc") },
+              { icon: <PieChart />, problem: t("problem.opacity"), desc: t("problem.opacity_desc") },
+              { icon: <Clock />, problem: t("problem.time_waste"), desc: t("problem.time_waste_desc") },
+              { icon: <Receipt />, problem: t("problem.unprofessional"), desc: t("problem.unprofessional_desc") },
+              { icon: <Shield />, problem: t("problem.data_loss"), desc: t("problem.data_loss_desc") },
             ].map((item, i) => (
               <StaggerItem key={i}>
                 <motion.div
-                  className="bg-white rounded-2xl p-6 border border-gray-100 h-full hover:border-red-200 hover:shadow-xl hover:shadow-red-100/30 transition-all duration-500 group cursor-default"
+                  className="bg-white dark:bg-gray-800/50 rounded-2xl p-6 border border-gray-100 dark:border-gray-700/50 h-full hover:border-red-200 dark:hover:border-red-800/50 hover:shadow-xl hover:shadow-red-100/30 transition-all duration-500 group cursor-default"
                   whileHover={{ y: -4 }}
                 >
                   <div className="w-12 h-12 bg-red-50 rounded-xl flex items-center justify-center text-red-400 mb-4 group-hover:scale-110 transition-transform">
@@ -2092,7 +2094,7 @@ export default function Home() {
                   <h3 className="text-lg font-bold text-gray-900 mb-2">
                     {item.problem}
                   </h3>
-                  <p className="text-gray-400 text-sm leading-relaxed">{item.desc}</p>
+                  <p className="text-gray-400 dark:text-gray-300 text-sm leading-relaxed">{item.desc}</p>
                 </motion.div>
               </StaggerItem>
             ))}
@@ -2115,13 +2117,13 @@ export default function Home() {
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeIn className="text-center mb-16">
-            <Badge className="mb-4 bg-white text-brand-deep border-brand-pale px-4 py-2 rounded-full text-sm font-medium shadow-sm">
+            <Badge className="mb-4 bg-white dark:bg-gray-800 text-brand-deep border-brand-pale dark:border-brand-mid/30 px-4 py-2 rounded-full text-sm font-medium shadow-sm">
               <Award className="w-4 h-4 ml-1" />
-              ویژگی‌های قدرتمند
+              {t("features.badge")}
             </Badge>
-            <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-4">
-              همه چیز آن چیزی است که
-              <span className="text-gradient"> نیاز دارید</span>
+            <h2 className="text-3xl md:text-5xl font-black text-gray-900 dark:text-gray-100 mb-4">
+              {t("features.title_before")}
+              <span className="text-gradient"> {t("features.title_highlight")}</span>
             </h2>
           </FadeIn>
 
@@ -2129,7 +2131,7 @@ export default function Home() {
             {features.map((f, i) => (
               <StaggerItem key={i}>
                 <motion.div
-                  className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 border border-white/50 h-full hover:shadow-2xl hover:shadow-brand-deep/10 transition-all duration-500 group cursor-default"
+                  className="bg-white/80 dark:bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-white/50 dark:border-gray-700/30 h-full hover:shadow-2xl hover:shadow-brand-deep/10 transition-all duration-500 group cursor-default"
                   whileHover={{ y: -6, scale: 1.02 }}
                 >
                   <motion.div
@@ -2139,8 +2141,8 @@ export default function Home() {
                   >
                     {f.icon}
                   </motion.div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">{f.title}</h3>
-                  <p className="text-gray-400 text-sm leading-relaxed">{f.desc}</p>
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">{f.title}</h3>
+                  <p className="text-gray-400 dark:text-gray-300 text-sm leading-relaxed">{f.desc}</p>
                 </motion.div>
               </StaggerItem>
             ))}
@@ -2154,7 +2156,7 @@ export default function Home() {
       <section className="py-20 md:py-28 relative overflow-hidden">
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeIn className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-4">
+            <h2 className="text-3xl md:text-5xl font-black text-gray-900 dark:text-gray-100 mb-4">
               یک نگاه به قدرت{" "}
               <span className="text-gradient">آسان حساب</span>
             </h2>
@@ -2167,7 +2169,7 @@ export default function Home() {
                   className={`rounded-3xl p-8 h-full flex flex-col justify-between relative overflow-hidden group cursor-default transition-all duration-500 ${
                     f.gradient
                       ? "gradient-brand text-white"
-                      : "bg-white border border-gray-100 hover:border-brand-pale hover:shadow-xl hover:shadow-brand-deep/5"
+                      : "bg-white dark:bg-gray-800/50 border border-gray-100 dark:border-gray-700/50 hover:border-brand-pale hover:shadow-xl hover:shadow-brand-deep/5"
                   }`}
                   whileHover={{ y: -4, scale: 1.01 }}
                 >
@@ -2234,10 +2236,10 @@ export default function Home() {
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeIn className="text-center mb-12">
             <h2 className="text-3xl md:text-5xl font-black text-white mb-4">
-              داشبورد ساده و قدرتمند
+              {t("dashboard.title")}
             </h2>
             <p className="text-brand-light/60 text-lg max-w-2xl mx-auto">
-              با یک نگاه، وضعیت کامل مالی کسب‌وکار خود را ببینید
+              {t("dashboard.desc")}
             </p>
           </FadeIn>
 
@@ -2277,10 +2279,10 @@ export default function Home() {
           <FadeIn delay={0.4}>
             <div className="flex flex-wrap justify-center gap-3 mt-10">
               {[
-                "تقویم هجری شمسی",
-                "گزارش لحظه‌ای",
-                "فاکتور خودکار",
-                "نمودارهای تعاملی",
+                t("dashboard.pill1"),
+                t("dashboard.pill2"),
+                t("dashboard.pill3"),
+                t("dashboard.pill4"),
               ].map((tag, i) => (
                 <motion.span
                   key={i}
@@ -2302,10 +2304,10 @@ export default function Home() {
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeIn className="text-center mb-16">
             <Badge className="mb-4 bg-brand-surface text-brand-deep border-brand-pale px-4 py-2 rounded-full text-sm font-medium">
-              شروع آسان
+              {t("how.badge")}
             </Badge>
-            <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-4">
-              در سه قدم شروع کنید
+            <h2 className="text-3xl md:text-5xl font-black text-gray-900 dark:text-gray-100 mb-4">
+              {t("how.title")}
             </h2>
           </FadeIn>
 
@@ -2316,20 +2318,20 @@ export default function Home() {
             {[
               {
                 step: "۱",
-                title: "دانلود و نصب",
-                desc: "نرم‌افزار را دانلود و در کمتر از یک دقیقه نصب کنید. بدون نیاز به اینترنت.",
+                title: t("how.step1_title"),
+                desc: t("how.step1_desc"),
                 icon: <Users />,
               },
               {
                 step: "۲",
-                title: "تنظیم کسب‌وکار",
-                desc: "ویزارد هوشمند به شما کمک می‌کند تا اطلاعات اولیه را وارد کنید.",
+                title: t("how.step2_title"),
+                desc: t("how.step2_desc"),
                 icon: <Building2 />,
               },
               {
                 step: "۳",
-                title: "شروع حسابداری",
-                desc: "فاکتور صادر کنید، گزارش ببینید. همین امروز!",
+                title: t("how.step3_title"),
+                desc: t("how.step3_desc"),
                 icon: <TrendingUp />,
               },
             ].map((item, i) => (
@@ -2343,7 +2345,7 @@ export default function Home() {
               >
                 <div className="md:w-1/2 md:px-8">
                   <motion.div
-                    className={`bg-white rounded-3xl p-8 border border-gray-100 hover:shadow-2xl hover:shadow-brand-deep/5 transition-all duration-500 ${
+                    className={`bg-white dark:bg-gray-800/50 rounded-3xl p-8 border border-gray-100 dark:border-gray-700/50 hover:shadow-2xl hover:shadow-brand-deep/5 transition-all duration-500 ${
                       i % 2 === 0 ? "md:mr-auto" : "md:ml-auto"
                     } max-w-sm`}
                     whileHover={{ y: -4 }}
@@ -2388,29 +2390,29 @@ export default function Home() {
       <section className="py-20 md:py-28 gradient-brand-soft relative overflow-hidden">
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeIn className="text-center mb-12">
-            <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-4">
-              مناسب برای هر نوع کسب‌وکار
+            <h2 className="text-3xl md:text-5xl font-black text-gray-900 dark:text-gray-100 mb-4">
+              {t("biz.title")}
             </h2>
           </FadeIn>
 
           <StaggerContainer className="flex flex-wrap justify-center gap-4" stagger={0.06}>
             {[
-              { icon: <Store />, label: "فروشگاه‌ها" },
-              { icon: <Truck />, label: "حمل‌ونقل" },
-              { icon: <Building2 />, label: "بازرگانی" },
-              { icon: <Receipt />, label: "رستوران‌ها" },
-              { icon: <FileText />, label: "موسسات آموزشی" },
-              { icon: <Users />, label: "کلینیک‌ها" },
+              { icon: <Store />, label: t("biz.stores") },
+              { icon: <Truck />, label: t("biz.transport") },
+              { icon: <Building2 />, label: t("biz.trade") },
+              { icon: <Receipt />, label: t("biz.restaurants") },
+              { icon: <FileText />, label: t("biz.education") },
+              { icon: <Users />, label: t("biz.clinics") },
             ].map((biz, i) => (
               <StaggerItem key={i}>
                 <motion.div
-                  className="bg-white rounded-2xl px-6 py-5 flex items-center gap-4 border border-white/50 cursor-default"
+                  className="bg-white dark:bg-gray-800/50 rounded-2xl px-6 py-5 flex items-center gap-4 border border-white/50 dark:border-gray-700/30 cursor-default"
                   whileHover={{ y: -4, scale: 1.03, shadow: "0 20px 40px rgba(0,71,171,0.1)" }}
                 >
                   <div className="w-10 h-10 gradient-brand rounded-xl flex items-center justify-center text-white shadow-md shadow-brand-mid/20">
                     {biz.icon}
                   </div>
-                  <span className="text-sm font-bold text-gray-700">{biz.label}</span>
+                  <span className="text-sm font-bold text-gray-700 dark:text-gray-200">{biz.label}</span>
                 </motion.div>
               </StaggerItem>
             ))}
@@ -2426,11 +2428,11 @@ export default function Home() {
           <FadeIn className="text-center mb-16">
             <Badge className="mb-4 bg-brand-surface text-brand-deep border-brand-pale px-4 py-2 rounded-full text-sm font-medium">
               <Heart className="w-4 h-4 ml-1" />
-              صدای مشتریان
+              {t("testimonials.badge")}
             </Badge>
-            <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-4">
-              آن‌ها آسان حساب را{" "}
-              <span className="text-gradient">دوست دارند</span>
+            <h2 className="text-3xl md:text-5xl font-black text-gray-900 dark:text-gray-100 mb-4">
+              {t("testimonials.title_before")}{" "}
+              <span className="text-gradient">{t("testimonials.title_highlight")}</span>
             </h2>
           </FadeIn>
 
@@ -2470,7 +2472,7 @@ export default function Home() {
             {testimonials.slice(1).map((t, i) => (
               <FadeIn key={i} delay={i * 0.1}>
                 <motion.div
-                  className="bg-white rounded-2xl p-6 border border-gray-100 h-full hover:shadow-xl hover:shadow-brand-deep/5 transition-all duration-500 group"
+                  className="bg-white dark:bg-gray-800/50 rounded-2xl p-6 border border-gray-100 dark:border-gray-700/50 h-full hover:shadow-xl hover:shadow-brand-deep/5 transition-all duration-500 group"
                   whileHover={{ y: -3 }}
                 >
                   <div className="flex gap-1 mb-3">
@@ -2478,7 +2480,7 @@ export default function Home() {
                       <Star key={j} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
                     ))}
                   </div>
-                  <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-4">
+                  <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-4 line-clamp-4">
                     &ldquo;{t.text}&rdquo;
                   </p>
                   <div className="flex items-center gap-3 border-t border-gray-50 pt-3">
@@ -2486,8 +2488,8 @@ export default function Home() {
                       {t.name.charAt(0)}
                     </div>
                     <div className="min-w-0">
-                      <p className="text-sm font-bold text-gray-900 truncate">{t.name}</p>
-                      <p className="text-xs text-gray-400 truncate">{t.city}</p>
+                      <p className="text-sm font-bold text-gray-900 dark:text-white truncate">{t.name}</p>
+                      <p className="text-xs text-gray-400 dark:text-gray-500 truncate">{t.city}</p>
                     </div>
                   </div>
                 </motion.div>
@@ -2511,14 +2513,14 @@ export default function Home() {
 
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeIn className="text-center mb-16">
-            <Badge className="mb-4 bg-white text-brand-deep border-brand-pale px-4 py-2 rounded-full text-sm font-medium shadow-sm">
-              قیمت‌گذاری منصفانه
+            <Badge className="mb-4 bg-white dark:bg-gray-800 text-brand-deep border-brand-pale dark:border-brand-mid/30 px-4 py-2 rounded-full text-sm font-medium shadow-sm">
+              {t("pricing.badge")}
             </Badge>
-            <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-4">
-              پلنی مناسب هر کسب‌وکار
+            <h2 className="text-3xl md:text-5xl font-black text-gray-900 dark:text-gray-100 mb-4">
+              {t("pricing.title")}
             </h2>
             <p className="text-gray-400 text-lg">
-              نسخه آزمایشی رایگان — بدون نیاز به اینترنت
+              {t("pricing.subtitle")}
             </p>
           </FadeIn>
 
@@ -2533,19 +2535,19 @@ export default function Home() {
                 >
                   {plan.popular && (
                     <div className="gradient-brand text-white text-center py-2 text-sm font-bold">
-                      محبوب‌ترین انتخاب
+                      {t("pricing.popular")}
                     </div>
                   )}
                   <div
-                    className={`bg-white p-8 border ${
+                    className={`bg-white dark:bg-gray-800/60 p-8 border ${
                       plan.popular
                         ? "border-brand-mid/30 shadow-2xl shadow-brand-deep/10"
                         : "border-gray-100"
                     }`}
                   >
                     <div className="text-center mb-6">
-                      <h3 className="text-xl font-black text-gray-900 mb-1">{plan.name}</h3>
-                      <p className="text-xs text-gray-400 mb-5">{plan.desc}</p>
+                      <h3 className="text-xl font-black text-gray-900 dark:text-white mb-1">{plan.name}</h3>
+                      <p className="text-xs text-gray-400 dark:text-gray-500 mb-5">{plan.desc}</p>
                       <div className="flex items-baseline justify-center gap-1">
                         <span className="text-4xl font-black text-gradient">{plan.price}</span>
                         <span className="text-xs text-gray-400">{plan.period}</span>
@@ -2555,7 +2557,7 @@ export default function Home() {
                       {plan.features.map((f, j) => (
                         <li key={j} className="flex items-start gap-3">
                           <CheckCircle2 className="w-4 h-4 text-brand-mid flex-shrink-0 mt-0.5" />
-                          <span className="text-sm text-gray-500">{f}</span>
+                          <span className="text-sm text-gray-500 dark:text-gray-400">{f}</span>
                         </li>
                       ))}
                     </ul>
@@ -2585,8 +2587,8 @@ export default function Home() {
       <section id="faq" className="py-20 md:py-28">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeIn className="text-center mb-16">
-            <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-4">
-              سوالات متداول
+            <h2 className="text-3xl md:text-5xl font-black text-gray-900 dark:text-gray-100 mb-4">
+              {t("faq.title")}
             </h2>
           </FadeIn>
 
@@ -2594,7 +2596,7 @@ export default function Home() {
             {faqs.map((faq, i) => (
               <FadeIn key={i} delay={i * 0.06}>
                 <motion.div
-                  className="bg-white rounded-2xl border border-gray-100 overflow-hidden"
+                  className="bg-white dark:bg-gray-800/50 rounded-2xl border border-gray-100 dark:border-gray-700/50 overflow-hidden"
                   whileHover={{ shadow: "0 4px 20px rgba(0,71,171,0.05)" }}
                 >
                   <button
@@ -2619,7 +2621,7 @@ export default function Home() {
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.3, ease: [0.25, 0.4, 0.25, 1] }}
                       >
-                        <div className="px-5 md:px-6 pb-5 md:pb-6 text-gray-400 text-sm leading-relaxed border-t border-gray-50 pt-4">
+                        <div className="px-5 md:px-6 pb-5 md:pb-6 text-gray-400 dark:text-gray-300 text-sm leading-relaxed border-t border-gray-50 dark:border-gray-700/50 pt-4">
                           {faq.a}
                         </div>
                       </motion.div>
@@ -2666,9 +2668,9 @@ export default function Home() {
               />
             </motion.div>
             <h2 className="text-3xl md:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight">
-              آینده مالی کسب‌وکارتان
+              {t("cta.title_line1")}
               <br />
-              از همین لحظه شروع می‌شود
+              {t("cta.title_line2")}
             </h2>
             <p className="text-white/60 text-lg md:text-xl mb-10 max-w-2xl mx-auto leading-relaxed">
               هزاران کاربر افغان پیش از شما این تصمیم را گرفته‌اند.
@@ -2691,7 +2693,7 @@ export default function Home() {
                   className="bg-white/10 hover:bg-white/20 text-white border border-white/20 px-10 py-7 text-lg rounded-2xl backdrop-blur-sm transition-all"
                 >
                   <Headphones className="w-5 h-5 ml-2" />
-                  تماس با ما
+                  {t("footer.company_contact")}
                 </Button>
               </motion.div>
             </div>
@@ -2719,8 +2721,8 @@ export default function Home() {
             transition={{ duration: 0.6 }}
           >
             <div>
-              <h3 className="text-xl md:text-2xl font-black text-white mb-1">آماده شروع هستید؟</h3>
-              <p className="text-white/70 text-sm">همین حالا آسان حساب را دانلود و شروع کنید.</p>
+              <h3 className="text-xl md:text-2xl font-black text-white mb-1">{t("footer.cta_title")}</h3>
+              <p className="text-white/70 text-sm">{t("footer.cta_desc")}</p>
             </div>
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button className="bg-white text-brand-deep hover:bg-gray-50 border-0 px-8 py-5 rounded-xl text-sm font-bold shadow-lg">
@@ -2750,7 +2752,7 @@ export default function Home() {
                 </div>
               </div>
               <p className="text-sm leading-relaxed text-gray-500 mb-5">
-                اولین نرم‌افزار حسابداری به زبان دری با تقویم هجری شمسی، مخصوص بازار افغانستان.
+                {t("footer.brand_desc")}
               </p>
               {/* Social Links */}
               <div className="flex items-center gap-2">
@@ -2772,7 +2774,7 @@ export default function Home() {
                     key={social.label}
                     href="#"
                     aria-label={social.label}
-                    className="w-9 h-9 rounded-lg flex items-center justify-center text-gray-500 hover:text-white transition-all duration-300 hover:bg-white/10"
+                    className="w-9 h-9 rounded-lg flex items-center justify-center text-gray-500 dark:text-gray-400 hover:text-white transition-all duration-300 hover:bg-white/10"
                     whileHover={{ scale: 1.1, y: -2 }}
                     whileTap={{ scale: 0.95 }}
                   >
@@ -2785,10 +2787,10 @@ export default function Home() {
             <div>
               <h4 className="text-white font-bold mb-4 text-sm flex items-center gap-2">
                 <span className="w-1 h-4 rounded-full gradient-brand inline-block" />
-                محصول
+                {t("footer.product")}
               </h4>
               <ul className="space-y-3 text-sm">
-                {["ویژگی‌ها", "قیمت‌ها", "آپدیت‌ها", "نسخه دسکتاپ"].map((l) => (
+                {[t("footer.product_features"), t("footer.product_pricing"), t("footer.product_updates"), t("footer.product_desktop")].map((l) => (
                   <li key={l}>
                     <a href="#" className="hover:text-brand-light transition-colors inline-flex items-center gap-1 group">
                       <span className="w-0 group-hover:w-2 h-px bg-brand-light transition-all duration-300" />
@@ -2805,7 +2807,7 @@ export default function Home() {
                 شرکت
               </h4>
               <ul className="space-y-3 text-sm">
-                {["درباره ما", "تماس با ما", "بلاگ", "فرصت‌ها"].map((l) => (
+                {[t("footer.company_about"), t("footer.company_contact"), t("footer.company_blog"), t("footer.company_careers")].map((l) => (
                   <li key={l}>
                     <a href="#" className="hover:text-brand-light transition-colors inline-flex items-center gap-1 group">
                       <span className="w-0 group-hover:w-2 h-px bg-brand-light transition-all duration-300" />
@@ -2822,7 +2824,7 @@ export default function Home() {
                 پشتیبانی
               </h4>
               <ul className="space-y-3 text-sm">
-                {["مرکز راهنما", "آموزش ویدیویی", "سوالات متداول", "تماس تلفنی"].map(
+                {[t("footer.support_help"), t("footer.support_tutorials"), t("footer.support_faq"), t("footer.support_phone")].map(
                   (l) => (
                     <li key={l}>
                       <a href="#" className="hover:text-brand-light transition-colors inline-flex items-center gap-1 group">
@@ -2837,7 +2839,7 @@ export default function Home() {
           </div>
           <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-xs text-gray-600">
-              تمام حقوق محفوظ است &copy; آسان حساب ۱۴۰۴
+              {t("footer.copyright")} &copy; آسان حساب ۱۴۰۴
             </p>
             <div className="flex items-center gap-6 text-xs">
               <a href="#" className="hover:text-brand-light transition-colors">
