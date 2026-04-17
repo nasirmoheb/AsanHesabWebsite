@@ -113,6 +113,13 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
+  .text-gradient-glow {
+    background: linear-gradient(135deg, #0047AB, #007FFF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 20px rgba(0, 127, 255, 0.35)) drop-shadow(0 0 40px rgba(0, 127, 255, 0.15));
+  }
   .text-gradient-hero {
     background: linear-gradient(135deg, #003380 0%, #0047AB 25%, #007FFF 50%, #5DADE2 75%, #007FFF 100%);
     background-size: 200% 200%;
@@ -241,6 +248,35 @@
   100% { stroke-dashoffset: 0; }
 }
 
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes noise-drift {
+  0% { transform: translate(0, 0); }
+  10% { transform: translate(-5%, -5%); }
+  20% { transform: translate(-10%, 5%); }
+  30% { transform: translate(5%, -10%); }
+  40% { transform: translate(-5%, 15%); }
+  50% { transform: translate(-10%, 5%); }
+  60% { transform: translate(15%, 0); }
+  70% { transform: translate(0, 10%); }
+  80% { transform: translate(-15%, 0); }
+  90% { transform: translate(10%, 5%); }
+  100% { transform: translate(5%, 0); }
+}
+
+@keyframes gradient-line-flow {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes kpi-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
 .hero-aurora {
   background: linear-gradient(
     -45deg,
@@ -260,6 +296,41 @@
 .glass-card-hover:hover {
   transform: translateY(-4px);
   box-shadow: 0 20px 40px rgba(0, 71, 171, 0.12), 0 0 0 1px rgba(0, 127, 255, 0.08);
+}
+
+.noise-overlay {
+  position: relative;
+}
+.noise-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 180px 180px;
+  animation: noise-drift 8s steps(8) infinite;
+}
+
+.gradient-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, #0047AB 20%, #007FFF 50%, #5DADE2 80%, transparent 100%);
+  background-size: 200% 100%;
+  animation: gradient-line-flow 4s linear infinite;
+  opacity: 0.4;
+}
+
+.hero-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.1em;
+  background: #007FFF;
+  border-radius: 1px;
+  margin-right: 2px;
+  animation: cursor-blink 1s steps(2) infinite;
+  box-shadow: 0 0 6px rgba(0, 127, 255, 0.5), 0 0 12px rgba(0, 127, 255, 0.2);
 }
 
 html {

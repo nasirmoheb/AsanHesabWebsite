@@ -6,6 +6,7 @@ import {
   useInView,
   useScroll,
   useTransform,
+  useMotionValueEvent,
   AnimatePresence,
 } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -44,6 +45,17 @@ import {
   Monitor,
   Cpu,
   Bell,
+  ArrowUp,
+  MessageCircle,
+  Home as HomeIcon,
+  LayoutDashboard,
+  Settings,
+  LogOut,
+  FileSpreadsheet,
+  Search,
+  ClipboardList,
+  Download,
+  FilePlus2,
 } from "lucide-react";
 
 /* ═══════════════════════════════════════════
@@ -223,8 +235,96 @@ function GlowOrb({
 }
 
 /* ═══════════════════════════════════════════
+   ROTATING PHRASE — ANIMATED MARKETING LINE
+   ═══════════════════════════════════════════ */
+
+function RotatingPhrase() {
+  const phrases = [
+    "به زبان دری",
+    "بدون اینترنت",
+    "تقویم شمسی",
+    "ساده و آسان",
+    "کاملاً آفلاین",
+  ];
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setIndex((prev) => (prev + 1) % phrases.length);
+    }, 2800);
+    return () => clearInterval(timer);
+  }, [phrases.length]);
+
+  return (
+    <div className="flex items-center justify-center lg:justify-start gap-2 flex-wrap" dir="rtl">
+      <span className="text-base md:text-lg text-gray-500 leading-relaxed">
+        نرم‌افزار حسابداری
+      </span>
+      {/* Pill container with decorative accents */}
+      <span className="relative inline-flex items-center justify-center min-w-[155px] h-[2.2rem] md:min-w-[195px] md:h-[2.7rem]">
+        {/* Pill background */}
+        <span className="absolute inset-0 rounded-full bg-gradient-to-l from-brand-pale/70 to-brand-surface/80 border border-brand-pale/60" />
+        {/* Decorative side accent dots */}
+        <span className="absolute right-2.5 top-1/2 -translate-y-1/2 w-1 h-1 rounded-full bg-brand-mid/30" />
+        <span className="absolute left-2.5 top-1/2 -translate-y-1/2 w-1 h-1 rounded-full bg-brand-mid/30" />
+        <AnimatePresence mode="wait">
+          <motion.span
+            key={index}
+            initial={{ opacity: 0, scale: 0.7, filter: "blur(8px)" }}
+            animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+            exit={{ opacity: 0, scale: 1.15, filter: "blur(8px)" }}
+            transition={{ duration: 0.45, ease: [0.25, 0.4, 0.25, 1] }}
+            className="relative text-sm md:text-base font-black text-gradient-glow leading-relaxed whitespace-nowrap z-10"
+          >
+            {phrases[index]}
+          </motion.span>
+        </AnimatePresence>
+        {/* Glowing blinking cursor */}
+        <motion.span
+          className="absolute left-3.5 top-1/2 -translate-y-1/2 w-[2px] h-4 bg-brand-mid rounded-full z-10"
+          animate={{ opacity: [1, 0, 1] }}
+          transition={{ duration: 1, repeat: Infinity, ease: "steps(2)" }}
+          style={{ boxShadow: "0 0 6px rgba(0,127,255,0.6), 0 0 12px rgba(0,127,255,0.2)" }}
+        />
+      </span>
+      <span className="text-base md:text-lg text-gray-500 leading-relaxed">
+        مخصوص کسب‌وکار شما
+      </span>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════
    HERO TILT CARD — CODE-ONLY DASHBOARD
    ═══════════════════════════════════════════ */
+
+function KpiCounter({ target, suffix = "" }: { target: number; suffix?: string }) {
+  const [count, setCount] = useState(0);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true });
+  useEffect(() => {
+    if (!isInView) return;
+    let start = 0;
+    const duration = 1800;
+    const increment = target / (duration / 16);
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= target) {
+        setCount(target);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(start));
+      }
+    }, 16);
+    return () => clearInterval(timer);
+  }, [isInView, target]);
+  return (
+    <span ref={ref}>
+      {count.toLocaleString("fa-AF")}
+      {suffix}
+    </span>
+  );
+}
 
 function LiveTransactionFeed() {
   const transactions = [
@@ -448,6 +548,7 @@ function AnimatedDonutChart() {
 function HeroTiltCard() {
   const cardRef = useRef<HTMLDivElement>(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
@@ -461,13 +562,24 @@ function HeroTiltCard() {
 
   const handleMouseLeave = () => {
     setTilt({ x: 0, y: 0 });
+    setIsHovered(false);
   };
+
+  const sidebarIcons = [
+    { Icon: HomeIcon, active: true },
+    { Icon: LayoutDashboard, active: true },
+    { Icon: Receipt, active: false },
+    { Icon: FileSpreadsheet, active: false },
+    { Icon: BarChart3, active: false },
+    { Icon: Users, active: false },
+  ];
 
   return (
     <motion.div
       ref={cardRef}
-      className="relative z-10 mx-auto w-[300px] sm:w-[380px] md:w-[440px]"
+      className="relative z-10 mx-auto w-[280px] sm:w-[360px] md:w-[420px]"
       onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={handleMouseLeave}
       initial={{ opacity: 0, y: 60, scale: 0.9 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -475,139 +587,202 @@ function HeroTiltCard() {
       style={{ perspective: "1200px" }}
     >
       <motion.div
-        className="rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl shadow-brand-deep/20 border border-white/60 bg-white"
+        className="rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl shadow-brand-deep/20 bg-white relative"
         animate={{
           rotateX: tilt.x,
           rotateY: tilt.y,
         }}
         transition={{ type: "spring", stiffness: 150, damping: 20 }}
       >
-        {/* Desktop App Title Bar */}
-        <div className="bg-gradient-to-l from-gray-100 to-gray-200/90 border-b border-gray-300/60 px-3 py-2 flex items-center justify-between">
+        {/* Glowing edge effect on hover */}
+        <motion.div
+          className="absolute inset-0 rounded-2xl md:rounded-3xl z-30 pointer-events-none"
+          style={{
+            boxShadow: isHovered
+              ? "inset 0 0 0 2px rgba(0,127,255,0.4), 0 0 30px rgba(0,127,255,0.15), 0 0 60px rgba(0,71,171,0.08)"
+              : "inset 0 0 0 1px rgba(255,255,255,0.6)",
+            transition: "box-shadow 0.4s ease",
+          }}
+        />
+
+        {/* Desktop App Title Bar — proper traffic light dots */}
+        <div className="bg-gradient-to-l from-gray-100 to-gray-200/90 border-b border-gray-300/60 px-3 py-2 flex items-center justify-between relative z-20">
           <div className="flex items-center gap-2">
-            <div className="w-5 h-5 rounded bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center">
-              <Calculator className="w-3 h-3 text-white" />
+            <div className="flex items-center gap-1.5">
+              <motion.div className="w-2.5 h-2.5 rounded-full bg-[#ff5f57]" whileHover={{ scale: 1.2 }} />
+              <motion.div className="w-2.5 h-2.5 rounded-full bg-[#febc2e]" whileHover={{ scale: 1.2 }} />
+              <motion.div className="w-2.5 h-2.5 rounded-full bg-[#28c840]" whileHover={{ scale: 1.2 }} />
             </div>
-            <span className="text-[9px] text-gray-600 font-medium">آسان حساب — داشبورد مدیریت</span>
+            <div className="w-px h-3 bg-gray-300/60 mx-1" />
+            <span className="text-[9px] text-gray-500 font-medium truncate">آسان حساب — داشبورد</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 rounded-sm border border-gray-400/60 bg-gray-100" />
-            <div className="w-3 h-3 rounded-sm border border-gray-400/60 bg-gray-100" />
-            <div className="w-3 h-3 rounded-sm border border-red-400/60 bg-red-100" />
+            <div className="w-5 h-5 rounded bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center">
+              <Calculator className="w-2.5 h-2.5 text-white" />
+            </div>
           </div>
         </div>
 
-        {/* Dashboard Content — Compact */}
-        <div className="p-2.5 md:p-3 space-y-2">
-          {/* Top Bar: Sidebar indicators + date */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 gradient-brand rounded-lg flex items-center justify-center">
-                <Calculator className="w-3 h-3 text-white" />
-              </div>
-              <div>
-                <p className="text-[10px] font-bold text-gray-800">داشبورد مدیریت</p>
-                <p className="text-[7px] text-gray-400">۱۴۰۴/۰۱/۱۵ - اسد</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <div className="px-2 py-0.5 bg-blue-50 rounded-full text-[7px] text-blue-600 font-bold">آفلاین</div>
-              <div className="w-5 h-5 rounded-full bg-brand-pale flex items-center justify-center">
-                <Bell className="w-2.5 h-2.5 text-brand-deep" />
-              </div>
-            </div>
-          </div>
-
-          {/* Mini KPI Row */}
-          <div className="grid grid-cols-3 gap-1.5">
-            {[
-              { label: "درآمد کل", value: "٨۵٠,٠٠٠", unit: "افغانی", color: "from-brand-deep to-brand-mid", icon: <TrendingUp className="w-2.5 h-2.5" /> },
-              { label: "فاکتورها", value: "١٢٤", unit: "عدد", color: "from-emerald-500 to-emerald-400", icon: <Receipt className="w-2.5 h-2.5" /> },
-              { label: "مشتریان", value: "٨٦", unit: "نفر", color: "from-amber-500 to-amber-400", icon: <Users className="w-2.5 h-2.5" /> },
-            ].map((kpi, i) => (
+        {/* Dashboard Body with Frosted Glass Sidebar */}
+        <div className="flex" style={{ height: "auto" }}>
+          {/* Frosted Glass Sidebar */}
+          <motion.div
+            className="w-9 md:w-10 shrink-0 border-l border-gray-100 flex flex-col items-center py-2.5 gap-2.5 relative"
+            style={{
+              background: "linear-gradient(180deg, rgba(235,245,255,0.95) 0%, rgba(214,238,255,0.9) 100%)",
+              backdropFilter: "blur(10px)",
+            }}
+            animate={{ opacity: [0.85, 1, 0.85] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          >
+            {sidebarIcons.map((item, i) => (
               <motion.div
                 key={i}
-                className="bg-gray-50/80 rounded-xl p-1.5 md:p-2 border border-gray-100/80"
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 + i * 0.15 }}
+                className={`w-6 h-6 md:w-7 md:h-7 rounded-lg flex items-center justify-center cursor-default transition-all duration-300 ${
+                  item.active
+                    ? "gradient-brand text-white shadow-md shadow-brand-mid/20"
+                    : "bg-white/60 text-gray-400 hover:bg-white hover:text-gray-600"
+                }`}
+                whileHover={{ scale: 1.15 }}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.6 + i * 0.08 }}
               >
-                <div className={`w-5 h-5 rounded-md bg-gradient-to-br ${kpi.color} flex items-center justify-center text-white mb-1.5`}>
-                  {kpi.icon}
-                </div>
-                <p className="text-[7px] text-gray-400">{kpi.label}</p>
-                <p className="text-xs md:text-sm font-black text-gray-900">{kpi.value} <span className="text-[7px] text-gray-400 font-normal">{kpi.unit}</span></p>
+                <item.Icon className="w-3 h-3 md:w-3.5 md:h-3.5" />
               </motion.div>
             ))}
-          </div>
-
-          {/* Charts Row: Bar Chart + Donut */}
-          <div className="grid grid-cols-5 gap-1.5">
-            {/* Bar chart */}
+            <div className="flex-1" />
             <motion.div
-              className="col-span-3 bg-gradient-to-b from-brand-surface/50 to-white rounded-xl p-1.5 md:p-2 border border-brand-pale/30"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.7 }}
+              className="w-6 h-6 md:w-7 md:h-7 rounded-lg flex items-center justify-center bg-white/60 text-gray-400 hover:text-red-400 cursor-default"
+              whileHover={{ scale: 1.15 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.2 }}
             >
-              <div className="flex items-center justify-between mb-1">
-                <p className="text-[8px] font-bold text-gray-700">نمودار درآمد ماهانه</p>
-                <span className="text-[7px] text-brand-mid font-bold bg-brand-pale/40 px-1.5 py-0.5 rounded-full">+۴۷٪</span>
-              </div>
-              <div className="h-14 md:h-16">
-                <AnimatedBarChart />
-              </div>
+              <Settings className="w-3 h-3 md:w-3.5 md:h-3.5" />
             </motion.div>
+          </motion.div>
 
-            {/* Donut chart */}
-            <motion.div
-              className="col-span-2 bg-white rounded-xl p-1.5 md:p-2 border border-gray-100/80"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.9 }}
-            >
-              <p className="text-[8px] font-bold text-gray-700 mb-1">ترکیب مالی</p>
-              <AnimatedDonutChart />
-            </motion.div>
-          </div>
-
-          {/* Bottom Row: Live Transactions + Invoice Preview */}
-          <div className="grid grid-cols-5 gap-1.5">
-            {/* Live Transaction Feed */}
-            <motion.div
-              className="col-span-3 bg-gradient-to-b from-[#0d1117] to-[#161b22] rounded-xl p-2 md:p-2.5 border border-gray-800/50 overflow-hidden"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.1 }}
-            >
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-1.5">
-                  <motion.div className="w-1.5 h-1.5 rounded-full bg-emerald-400" animate={{ scale: [1, 1.4, 1], opacity: [1, 0.5, 1] }} transition={{ duration: 2, repeat: Infinity }} />
-                  <p className="text-[8px] font-bold text-gray-300">آخرین تراکنش‌های حسابداری</p>
+          {/* Main Content Area */}
+          <div className="flex-1 p-2 md:p-2.5 space-y-1.5 min-w-0">
+            {/* Top Bar */}
+            <div className="flex items-center justify-between">
+              <div className="min-w-0">
+                <p className="text-[9px] md:text-[10px] font-bold text-gray-800 truncate">داشبورد مدیریت</p>
+                <p className="text-[6px] md:text-[7px] text-gray-400">۱۴۰۴/۰۱/۱۵ - اسد</p>
+              </div>
+              <div className="flex items-center gap-1.5 shrink-0">
+                <div className="px-1.5 py-0.5 bg-blue-50 rounded-full text-[6px] md:text-[7px] text-blue-600 font-bold">آفلاین</div>
+                <div className="relative w-5 h-5 rounded-full bg-brand-pale flex items-center justify-center">
+                  <Bell className="w-2.5 h-2.5 text-brand-deep" />
+                  <motion.span
+                    className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full flex items-center justify-center text-[6px] text-white font-bold border border-white"
+                    animate={{ scale: [1, 1.2, 1] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  >
+                    ۳
+                  </motion.span>
                 </div>
-                <span className="text-[7px] text-gray-500 bg-gray-800 px-1.5 py-0.5 rounded-full">امروز</span>
               </div>
-              <LiveTransactionFeed />
-            </motion.div>
+            </div>
 
-            {/* Invoice Preview */}
-            <motion.div
-              className="col-span-2"
-              initial={{ opacity: 0, x: 15 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 1.3 }}
-            >
-              <LiveInvoicePreview />
-            </motion.div>
+            {/* Compact KPI Row with gradient backgrounds */}
+            <div className="grid grid-cols-3 gap-1">
+              {[
+                { label: "درآمد کل", value: 850000, unit: "Afs", color: "from-brand-deep/[0.08] to-brand-mid/[0.05]", iconColor: "from-brand-deep to-brand-mid", icon: <TrendingUp className="w-2.5 h-2.5" /> },
+                { label: "فاکتورها", value: 124, unit: "عدد", color: "from-emerald-50 to-emerald-100/50", iconColor: "from-emerald-500 to-emerald-400", icon: <Receipt className="w-2.5 h-2.5" /> },
+                { label: "مشتریان", value: 86, unit: "نفر", color: "from-amber-50 to-amber-100/50", iconColor: "from-amber-500 to-amber-400", icon: <Users className="w-2.5 h-2.5" /> },
+              ].map((kpi, i) => (
+                <motion.div
+                  key={i}
+                  className={`bg-gradient-to-br ${kpi.color} rounded-xl p-1.5 border border-gray-100/50`}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 + i * 0.12 }}
+                >
+                  <div className={`w-4 h-4 rounded-md bg-gradient-to-br ${kpi.iconColor} flex items-center justify-center text-white mb-1`}>
+                    {kpi.icon}
+                  </div>
+                  <p className="text-[6px] text-gray-400 leading-none">{kpi.label}</p>
+                  <p className="text-[10px] md:text-xs font-black text-gray-900 mt-0.5 leading-tight">
+                    <KpiCounter target={kpi.value} />{" "}
+                    <span className="text-[6px] text-gray-400 font-normal">{kpi.unit}</span>
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Charts Row — compact */}
+            <div className="grid grid-cols-5 gap-1">
+              <motion.div
+                className="col-span-3 bg-gradient-to-b from-brand-surface/30 to-white rounded-xl p-1.5 border border-brand-pale/20"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.7 }}
+              >
+                <div className="flex items-center justify-between mb-0.5">
+                  <p className="text-[7px] font-bold text-gray-700">نمودار ماهانه</p>
+                  <span className="text-[6px] text-brand-mid font-bold bg-brand-pale/40 px-1 py-0.5 rounded-full">+۴۷٪</span>
+                </div>
+                <div className="h-11 md:h-14">
+                  <AnimatedBarChart />
+                </div>
+              </motion.div>
+              <motion.div
+                className="col-span-2 bg-white rounded-xl p-1.5 border border-gray-100/50"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.9 }}
+              >
+                <p className="text-[7px] font-bold text-gray-700 mb-0.5">ترکیب مالی</p>
+                <AnimatedDonutChart />
+              </motion.div>
+            </div>
+
+            {/* Bottom Row — compact */}
+            <div className="grid grid-cols-5 gap-1">
+              <motion.div
+                className="col-span-3 bg-gradient-to-b from-[#0d1117] to-[#161b22] rounded-xl p-1.5 border border-gray-800/50 overflow-hidden"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.1 }}
+              >
+                <div className="flex items-center justify-between mb-1">
+                  <div className="flex items-center gap-1">
+                    <motion.div className="w-1 h-1 rounded-full bg-emerald-400" animate={{ scale: [1, 1.4, 1], opacity: [1, 0.5, 1] }} transition={{ duration: 2, repeat: Infinity }} />
+                    <p className="text-[7px] font-bold text-gray-300">آخرین تراکنش‌ها</p>
+                  </div>
+                  <span className="text-[6px] text-gray-500 bg-gray-800 px-1 py-0.5 rounded-full">امروز</span>
+                </div>
+                <LiveTransactionFeed />
+              </motion.div>
+              <motion.div
+                className="col-span-2"
+                initial={{ opacity: 0, x: 12 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 1.3 }}
+              >
+                <LiveInvoicePreview />
+              </motion.div>
+            </div>
           </div>
         </div>
 
-        {/* Bottom glow */}
-        <div className="h-1 bg-gradient-to-l from-brand-deep via-brand-mid to-brand-light opacity-60" />
+        {/* Gradient overlay at bottom */}
+        <div className="h-1 bg-gradient-to-l from-brand-deep via-brand-mid to-brand-light opacity-60 relative z-10" />
+        <div className="absolute bottom-0 left-0 right-0 h-6 bg-gradient-to-t from-white/20 to-transparent pointer-events-none z-10" />
       </motion.div>
 
-      {/* Ambient glow behind card */}
-      <div className="absolute -inset-4 rounded-[2rem] blur-2xl bg-gradient-to-br from-brand-mid/15 via-brand-deep/8 to-brand-light/10 -z-10" />
+      {/* Breathing ambient glow behind card */}
+      <motion.div
+        className="absolute -inset-4 rounded-[2rem] blur-2xl -z-10"
+        style={{ background: "linear-gradient(135deg, rgba(0,127,255,0.15) via rgba(0,71,171,0.08) to rgba(93,173,226,0.1))" }}
+        animate={{
+          scale: [1, 1.04, 1],
+          opacity: [0.8, 1, 0.8],
+        }}
+        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+      />
 
       {/* Decorative corner accents */}
       <motion.div
@@ -962,34 +1137,40 @@ export default function Home() {
       </motion.nav>
 
       {/* ══════════ HERO — CODE-ONLY CREATIVE SHOWCASE ══════════ */}
-      <section className="relative pt-24 pb-32 md:pt-28 md:pb-36 overflow-hidden">
+      <section className="relative pt-24 pb-8 md:pt-28 md:pb-10 overflow-hidden">
         {/* Layered animated background */}
         <div className="absolute inset-0">
           {/* Base gradient + Aurora */}
           <div className="absolute inset-0 bg-gradient-to-bl from-[#f0f7ff] via-white to-[#e8f0fe]" />
           <div className="absolute inset-0 hero-aurora" />
-          {/* Animated mesh gradients */}
-          <motion.div
-            className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] rounded-full"
+          {/* Animated mesh gradients with parallax */}
+          <ParallaxSection speed={0.15} className="absolute top-[-20%] right-[-10%]">
+          <div
+            className="w-[800px] h-[800px] rounded-full"
             style={{
               background: "radial-gradient(circle, rgba(0,127,255,0.12) 0%, transparent 70%)",
               animation: "float 14s ease-in-out infinite",
             }}
           />
-          <motion.div
-            className="absolute bottom-[-15%] left-[-10%] w-[700px] h-[700px] rounded-full"
+          </ParallaxSection>
+          <ParallaxSection speed={0.2} className="absolute bottom-[-15%] left-[-10%]">
+          <div
+            className="w-[700px] h-[700px] rounded-full"
             style={{
               background: "radial-gradient(circle, rgba(0,71,171,0.08) 0%, transparent 70%)",
               animation: "float 18s ease-in-out infinite 3s",
             }}
           />
-          <motion.div
-            className="absolute top-[40%] left-[50%] w-[500px] h-[500px] blob"
+          </ParallaxSection>
+          <ParallaxSection speed={0.1} className="absolute top-[40%] left-[50%]">
+          <div
+            className="w-[500px] h-[500px] blob"
             style={{
               background: "radial-gradient(circle, rgba(93,173,226,0.06) 0%, transparent 70%)",
               animationDuration: "12s",
             }}
           />
+          </ParallaxSection>
           {/* Animated grid lines with perspective */}
           <svg className="absolute inset-0 w-full h-full opacity-[0.03]" preserveAspectRatio="none">
             <defs>
@@ -1178,14 +1359,19 @@ export default function Home() {
                 </div>
               </FadeIn>
 
-              {/* Description */}
+              {/* Description — Animated Rotating Phrases */}
               <FadeIn delay={0.2}>
-                <p className="text-base md:text-lg text-gray-500 leading-relaxed mb-8 max-w-lg mx-auto lg:mx-0 lg:mr-0">
-                  اولین نرم‌افزار حسابداری به{" "}
-                  <span className="text-brand-deep font-bold">زبان دری</span> با{" "}
-                  <span className="text-brand-deep font-bold">تقویم هجری شمسی</span>.
-                  بدون نیاز به دانش حسابداری!
-                </p>
+                <div className="mb-8">
+                  <RotatingPhrase />
+                  <motion.p
+                    className="text-sm text-gray-400 mt-2 max-w-lg mx-auto lg:mx-0 lg:mr-0"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 1.5, duration: 1 }}
+                  >
+                    بدون نیاز به دانش حسابداری — همین امروز شروع کنید!
+                  </motion.p>
+                </div>
               </FadeIn>
 
               {/* CTA Buttons */}
@@ -1225,6 +1411,29 @@ export default function Home() {
                   </motion.div>
                 </div>
               </FadeIn>
+
+              {/* Floating user counter badge */}
+              <motion.div
+                className="hidden lg:flex absolute -left-4 top-1/2 -translate-y-1/2 z-10"
+                initial={{ opacity: 0, x: -30, scale: 0.8 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                transition={{ delay: 1.8, type: "spring", stiffness: 150 }}
+              >
+                <div className="glass-card rounded-2xl px-4 py-3 flex items-center gap-3 shadow-lg">
+                  <div className="w-10 h-10 gradient-brand rounded-full flex items-center justify-center text-white shadow-md">
+                    <Users className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-black text-brand-deep">+۵,۰۰۰</p>
+                    <p className="text-[10px] text-gray-400">کاربر فعال</p>
+                  </div>
+                  <motion.div
+                    className="w-2 h-2 rounded-full bg-emerald-400"
+                    animate={{ scale: [1, 1.5, 1], opacity: [1, 0.5, 1] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  />
+                </div>
+              </motion.div>
 
               {/* Trust signals */}
               <FadeIn delay={0.4}>
@@ -1518,7 +1727,7 @@ export default function Home() {
         </div>
 
         {/* Creative Scroll Indicator */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 md:mt-14">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 md:mt-8">
           <motion.div
             className="flex flex-col items-center gap-3"
             initial={{ opacity: 0 }}
@@ -1550,6 +1759,15 @@ export default function Home() {
                 <path d="M1 1L6 6L11 1" stroke="#007FFF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </motion.div>
+            {/* Learn more text */}
+            <motion.span
+              className="text-xs text-brand-mid/60 font-medium mt-1"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: [0.4, 0.8, 0.4] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+            >
+              بیشتر بدانید
+            </motion.span>
           </motion.div>
         </div>
       </section>
@@ -2277,6 +2495,45 @@ export default function Home() {
           </div>
         </div>
       </footer>
+      {/* ══════════ FLOATING BUTTONS ══════════ */}
+      {/* Back to Top Button */}
+      <AnimatePresence>
+        {scrolled && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.5, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.5, y: 20 }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            className="fixed bottom-6 right-6 z-50 w-12 h-12 gradient-brand rounded-full shadow-xl shadow-brand-mid/30 flex items-center justify-center text-white"
+          >
+            <ArrowUp className="w-5 h-5" />
+          </motion.button>
+        )}
+      </AnimatePresence>
+
+      {/* WhatsApp-style Contact Button */}
+      <motion.a
+        href="https://wa.me/93XXXXXXXXX"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-6 left-6 z-50 w-14 h-14 bg-emerald-500 rounded-full shadow-xl shadow-emerald-500/30 flex items-center justify-center text-white"
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+        initial={{ opacity: 0, scale: 0 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 2, type: "spring" }}
+      >
+        <MessageCircle className="w-7 h-7" />
+        <motion.span
+          className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center text-[8px] font-bold border-2 border-white"
+          animate={{ scale: [1, 1.2, 1] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        >
+          ۱
+        </motion.span>
+      </motion.a>
     </div>
   );
 }

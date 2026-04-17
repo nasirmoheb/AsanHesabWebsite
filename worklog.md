@@ -1,87 +1,64 @@
-# Worklog — AsanHesab Landing Page: Online → Offline Desktop App Content Update
+# Work Log — AsanHesab Landing Page Improvements
 
-**Date**: 2025
-**File**: `src/app/page.tsx`
-**Goal**: Convert all content references from online/web/SaaS features to reflect an offline desktop application.
+## Date: 2025
 
----
-
-## Changes Made (21 items)
-
-### 1. Browser Chrome → Desktop App Title Bar (HeroTiltCard)
-- Removed browser dots (red/yellow/green), Lock icon, and URL bar
-- Replaced with Windows-style desktop app title bar showing Calculator icon + "آسان حساب — داشبورد مدیریت" and window control squares (minimize/maximize/close)
-
-### 2. "آنلاین" Status Badge → "آفلاین"
-- Changed green `آنلاین` badge to blue `آفلاین` badge in the dashboard header
-
-### 3. Transaction "سفارش آنلاین #۲۳۱" → "سفارش #۲۳۱"
-- Removed "آنلاین" from transaction name, changed Globe icon to Store icon
-
-### 4. "واردات زنده حسابداری" → "آخرین تراکنش‌های حسابداری"
-- Changed dark panel header text in live transaction section
-
-### 5. "واردات زنده" → "ثبت خودکار"
-- Changed bottom text in transaction feed animation
-
-### 6. Hero CTA Button
-- Changed "۱۴ روز رایگان شروع کنید" → "دانلود رایگان نسخه آزمایشی"
-
-### 7. Feature "هر جا، هر وقت" → "نصب آسان"
-- Changed icon from Smartphone to Monitor
-- Changed title to "نصب آسان"
-- Changed description to emphasize desktop installation and offline usage
-
-### 8. All "شروع رایگان" Buttons → "دانلود رایگان"
-- Navbar button (desktop)
-- Mobile menu button
-- Two pricing plan CTA buttons
-
-### 9. How It Works Step 1: Registration → Download
-- Changed title from "ثبت‌نام ۳۰ ثانیه‌ای" → "دانلود و نصب"
-- Changed description to emphasize download and offline installation
-
-### 10. FAQ: Mobile → Offline
-- Changed question from "آیا می‌توانم از موبایل استفاده کنم؟" → "آیا برای استفاده نیاز به اینترنت دارم؟"
-- Changed answer to explain fully offline functionality
-
-### 11. FAQ: Security — Removed Server References
-- Updated to emphasize local encryption, local backup, no internet data transmission
-
-### 12. Fixed Chinese Text in FAQ
-- Changed "۱۴ روز رایگان试用" (mixed Persian/Chinese) → "نسخه آزمایشی رایگان با تمام امکانات. بدون نیاز به اینترنت و بدون تعهد."
-
-### 13. Dashboard Showcase URL
-- Changed "app.asanhesab.af/dashboard" → "آسان حساب — داشبورد مدیریت"
-
-### 14. Pricing Plan Features
-- "پشتیبانی آنلاین" → "پشتیبانی تلفنی"
-- "دسترسی موبایل و دسکتاپ" → "نصب روی چند کامپیوتر"
-
-### 15. Pricing Section Subtitle
-- Changed to "نسخه آزمایشی رایگان — بدون نیاز به اینترنت"
-
-### 16. Trust Signals
-- "بدون کارت بانکی" → "بدون نیاز به اینترنت"
-- "بدون تعهد" → "کاملاً آفلاین"
-
-### 17. Final CTA Button
-- Changed "شروع رایگان ۱۴ روزه" → "دانلود رایگان"
-
-### 18. Footer: "API" → "نسخه دسکتاپ"
-- Updated product links in footer
-
-### 19. Bento Features: Auto-Backup Description
-- Changed to emphasize local computer backup
-
-### 20. Pricing Header (same as #15)
-- Ensured pricing subtitle reads "نسخه آزمایشی رایگان — بدون نیاز به اینترنت"
-
-### 21. Final CTA Footer Text
-- Changed to "بدون نیاز به اینترنت • کاملاً آفلاین • هر وقت بخواهید"
+## Summary
+Made comprehensive improvements to the AsanHesab landing page at `/home/z/my-project/src/app/page.tsx`. All changes compiled successfully with `npx next build` and passed ESLint checks.
 
 ---
 
-## Build Verification
-- ✅ `npm run build` completed successfully with no errors
-- All changes are text-only; no styling, CSS, animations, or layout modifications were made
+## Changes Made
+
+### 1. Fixed Empty Space Between Hero and Next Section
+- **Reduced hero section padding** from `pb-32 md:pb-36` to `pb-8 md:pb-10`
+- **Reduced scroll indicator margin** from `mt-10 md:mt-14` to `mt-6 md:mt-8`
+- The marquee trust bar now transitions smoothly from the hero section
+
+### 2. Creative Typography & Marketing Line
+- **Added `RotatingPhrase` component** that cycles through benefit phrases with smooth crossfade animation:
+  - "به زبان دری" (In Dari)
+  - "بدون اینترنت" (Without Internet)
+  - "تقویم شمسی" (Solar Calendar)
+  - "ساده و آسان" (Simple & Easy)
+  - "کاملاً آفلاین" (Completely Offline)
+- Phrases rotate every 2.8 seconds with blur+translate animation
+- Uses gradient text (`text-gradient`) for the rotating phrases
+- Added a secondary subtitle with delayed fade-in: "بدون نیاز به دانش حسابداری — همین امروز شروع کنید!"
+- The overall marketing line reads: "نرم‌افزار حسابداری [rotating phrase] مخصوص کسب‌وکار شما"
+
+### 3. Rewrote HeroTiltCard (Dashboard Mockup)
+- **More compact** — reduced card width from `300-440px` to `280-420px` (~10%)
+- **Glowing edge effect on hover** — dynamic boxShadow that transitions between default and hover states with blue glow
+- **Frosted glass sidebar** — added a left sidebar with gradient background and blur effect, containing 6 navigation icons (Home, Dashboard, Receipt, Spreadsheet, Chart, Users) with active state styling
+- **Proper traffic light dots** — macOS-style red/yellow/green dots with hover scale animation
+- **KPI cards with gradient backgrounds** — subtle gradient fills instead of flat gray backgrounds
+- **Animated number counters** (`KpiCounter` component) inside KPI values that count up when visible
+- **Breathing/pulse animation** on the ambient glow behind the card (scale oscillation)
+- **Floating notification badge** — red "۳" badge on the bell icon with pulsing animation
+- **Realistic desktop app title bar** — with traffic light dots, separator, and window title
+- **Subtle gradient overlay** at the bottom of the card for depth
+- **Kept all existing features**: 3D tilt on mouse move, live transaction feed, charts, invoice preview
+
+### 4. Additional Improvements
+- **Back-to-top floating button** — fixed at bottom-right, appears on scroll with scale animation, smooth scrolls to top
+- **WhatsApp-style contact button** — fixed at bottom-left, green with pulsing notification badge, scales on hover
+- **"بیشتر بدانید" text** below scroll indicator chevrons with breathing opacity animation
+- **Parallax effect on hero blobs** — wrapped three background gradient blobs with `ParallaxSection` component at different speeds (0.15, 0.2, 0.1)
+- **Floating user counter badge** — "+۵,۰۰۰ کاربر فعال" badge positioned near CTA button area on desktop with spring animation and live pulse indicator
+
+### New Imports Added
+- `useMotionValueEvent` from framer-motion
+- `ArrowUp`, `MessageCircle`, `Home as HomeIcon`, `LayoutDashboard`, `Settings`, `LogOut`, `FileSpreadsheet` from lucide-react
+
+### New Components Added
+- `RotatingPhrase` — Animated rotating benefit phrases with crossfade
+- `KpiCounter` — Animated number counter for KPI cards in the HeroTiltCard
+
+### Build Results
+- ✅ `npx next build` — Compiled successfully
+- ✅ `bun run lint` — 0 errors, 1 pre-existing warning (unrelated to changes)
+
+---
+
+## Files Modified
+- `/home/z/my-project/src/app/page.tsx` — All changes in this single file
