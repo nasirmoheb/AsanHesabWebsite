@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 
 export default function FinalCTA() {
-  const { t } = useI18n();
+  const { t, dir } = useI18n();
 
   return (
     <>
@@ -42,17 +42,17 @@ export default function FinalCTA() {
               transition={{ duration: 4, repeat: Infinity }}
             >
               <img
-                src="/logo-asanhesab.png"
+                src="/logo.svg"
                 alt="آسان حساب"
                 className="w-full h-full rounded-2xl object-contain"
               />
             </motion.div>
-            <h2 className="text-3xl md:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight">
+            <h2 className="text-3xl md:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight" style={{ direction: dir }}>
               {t("cta.title_line1")}
               <br />
               {t("cta.title_line2")}
             </h2>
-            <p className="text-white/60 text-lg md:text-xl mb-10 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-white/60 text-lg md:text-xl mb-10 max-w-2xl mx-auto leading-relaxed" style={{ direction: dir }}>
               {t("cta.social_proof")}{" "}
               {t("cta.social_proof_cta")}
             </p>
@@ -62,9 +62,9 @@ export default function FinalCTA() {
                   size="lg"
                   className="bg-white text-brand-deep hover:bg-gray-50 border-0 px-10 py-7 text-lg rounded-2xl shadow-2xl font-bold transition-all"
                 >
-                  <Zap className="w-5 h-5 ml-2" />
+                  <Zap className="w-5 h-5 me-2" />
                   {t("cta.download_free")}
-                  <ArrowLeft className="w-5 h-5 mr-2" />
+                  <ArrowLeft className="w-5 h-5 ms-2 rtl:rotate-180" />
                 </Button>
               </motion.div>
               <motion.div whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.97 }}>
@@ -72,7 +72,7 @@ export default function FinalCTA() {
                   size="lg"
                   className="bg-white/10 hover:bg-white/20 text-white border border-white/20 px-10 py-7 text-lg rounded-2xl backdrop-blur-sm transition-all"
                 >
-                  <Headphones className="w-5 h-5 ml-2" />
+                  <Headphones className="w-5 h-5 me-2" />
                   {t("footer.company_contact")}
                 </Button>
               </motion.div>
@@ -94,19 +94,19 @@ export default function FinalCTA() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Top CTA strip */}
           <motion.div
-            className="gradient-brand rounded-2xl p-6 md:p-8 mb-14 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-right"
+            className="gradient-brand rounded-2xl p-6 md:p-8 mb-14 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-start"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
             <div>
-              <h3 className="text-xl md:text-2xl font-black text-white mb-1">{t("footer.cta_title")}</h3>
-              <p className="text-white/70 text-sm">{t("footer.cta_desc")}</p>
+              <h3 className="text-xl md:text-2xl font-black text-white mb-1" style={{ direction: dir }}>{t("footer.cta_title")}</h3>
+              <p className="text-white/70 text-sm" style={{ direction: dir }}>{t("footer.cta_desc")}</p>
             </div>
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Button className="bg-white text-brand-deep hover:bg-gray-50 border-0 px-8 py-5 rounded-xl text-sm font-bold shadow-lg">
-                <Zap className="w-4 h-4 ml-2" />
+                <Zap className="w-4 h-4 me-2" />
                 {t("cta.download_free")}
               </Button>
             </motion.div>
@@ -118,7 +118,7 @@ export default function FinalCTA() {
               <div className="flex items-center gap-3 mb-4">
                 <div className="relative">
                   <img
-                    src="/logo-asanhesab.png"
+                    src="/logo.svg"
                     alt="آسان حساب"
                     className="w-10 h-10 rounded-xl shadow-lg"
                   />
@@ -131,7 +131,7 @@ export default function FinalCTA() {
                   </span>
                 </div>
               </div>
-              <p className="text-sm leading-relaxed text-gray-500 mb-5">
+              <p className="text-sm leading-relaxed text-gray-500 mb-5" style={{ direction: dir }}>
                 {t("footer.brand_desc")}
               </p>
               {/* Social Links */}
@@ -173,7 +173,7 @@ export default function FinalCTA() {
                 {[t("footer.product_features"), t("footer.product_pricing"), t("footer.product_updates"), t("footer.product_desktop")].map((l) => (
                   <li key={l}>
                     <a href="#" className="hover:text-brand-light transition-colors inline-flex items-center gap-1 group">
-                      <span className="w-0 group-hover:w-2 h-px bg-brand-light transition-all duration-300" />
+                      <span className="w-0 group-hover:w-2 h-px bg-brand-light transition-all duration-300 rtl:order-last" />
                       {l}
                     </a>
                   </li>
@@ -190,7 +190,7 @@ export default function FinalCTA() {
                 {[t("footer.company_about"), t("footer.company_contact"), t("footer.company_blog"), t("footer.company_careers")].map((l) => (
                   <li key={l}>
                     <a href="#" className="hover:text-brand-light transition-colors inline-flex items-center gap-1 group">
-                      <span className="w-0 group-hover:w-2 h-px bg-brand-light transition-all duration-300" />
+                      <span className="w-0 group-hover:w-2 h-px bg-brand-light transition-all duration-300 rtl:order-last" />
                       {l}
                     </a>
                   </li>
@@ -208,7 +208,7 @@ export default function FinalCTA() {
                   (l) => (
                     <li key={l}>
                       <a href="#" className="hover:text-brand-light transition-colors inline-flex items-center gap-1 group">
-                        <span className="w-0 group-hover:w-2 h-px bg-brand-light transition-all duration-300" />
+                        <span className="w-0 group-hover:w-2 h-px bg-brand-light transition-all duration-300 rtl:order-last" />
                         {l}
                       </a>
                     </li>

@@ -56,7 +56,6 @@ import {
 } from "lucide-react";
 
 /* ─── Dynamic imports for below-fold sections ─── */
-const MarqueeSection = dynamic(() => import("@/components/sections/MarqueeSection"), { ssr: false });
 const ProblemSection = dynamic(() => import("@/components/sections/ProblemSection"), { ssr: false });
 const FeaturesSection = dynamic(() => import("@/components/sections/FeaturesSection"), { ssr: false });
 const DashboardShowcase = dynamic(() => import("@/components/sections/DashboardShowcase"), { ssr: false });
@@ -77,7 +76,7 @@ const FinalCTA = dynamic(() => import("@/components/sections/FinalCTA"), { ssr: 
    ═══════════════════════════════════════════ */
 
 function RotatingPhrase() {
-  const { t } = useI18n();
+  const { t, dir } = useI18n();
   const phrases = useMemo(() => [
     t("phrase.in_dari"),
     t("phrase.no_internet"),
@@ -119,7 +118,7 @@ function RotatingPhrase() {
   }, [displayed, isDeleting, phraseIndex, started, phrases]);
 
   return (
-    <div className="flex items-center justify-center lg:justify-start gap-2 flex-wrap" dir="rtl">
+    <div className="flex items-center justify-center lg:justify-start gap-2 flex-wrap" dir={dir}>
       <span className="text-base md:text-lg text-gray-500 dark:text-gray-400 leading-relaxed">
         {t("hero.accounting_sw")}
       </span>
@@ -128,8 +127,8 @@ function RotatingPhrase() {
         {/* Pill background */}
         <span className="absolute inset-0 rounded-full bg-gradient-to-l from-brand-pale/70 to-brand-surface/80 border border-brand-pale/60" />
         {/* Decorative side accent dots */}
-        <span className="absolute right-2.5 top-1/2 -translate-y-1/2 w-1 h-1 rounded-full bg-brand-mid/30" />
-        <span className="absolute left-2.5 top-1/2 -translate-y-1/2 w-1 h-1 rounded-full bg-brand-mid/30" />
+        <span className="absolute end-2.5 top-1/2 -translate-y-1/2 w-1 h-1 rounded-full bg-brand-mid/30" />
+        <span className="absolute start-2.5 top-1/2 -translate-y-1/2 w-1 h-1 rounded-full bg-brand-mid/30" />
         <AnimatePresence mode="wait">
           <motion.span
             key={phraseIndex + (isDeleting ? 'del' : 'ins')}
@@ -144,7 +143,7 @@ function RotatingPhrase() {
         </AnimatePresence>
         {/* Glowing blinking cursor */}
         <motion.span
-          className="absolute left-3.5 top-1/2 -translate-y-1/2 w-[2px] h-4 bg-brand-mid rounded-full z-10"
+          className="absolute start-3.5 top-1/2 -translate-y-1/2 w-[2px] h-4 bg-brand-mid rounded-full z-10"
           animate={{ opacity: [1, 0, 1] }}
           transition={{ duration: 1, repeat: Infinity, ease: "steps(2)" }}
           style={{ boxShadow: "0 0 6px rgba(0,127,255,0.6), 0 0 12px rgba(0,127,255,0.2)" }}
@@ -586,6 +585,8 @@ function AnimatedDonutChart() {
 }
 
 function HeroTiltCard() {
+  const { dir } = useI18n();
+  const isRtl = dir === "rtl";
   const cardRef = useRef<HTMLDivElement>(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
@@ -687,14 +688,15 @@ function HeroTiltCard() {
         </div>
 
         {/* Dashboard Body */}
-        <div className="flex" style={{ height: "auto" }}>
+        <div className="flex" style={{ height: "auto", direction: dir }}>
           {/* Frosted Glass Sidebar with wave animation */}
           <motion.div
-            className="w-9 md:w-10 shrink-0 flex flex-col items-center py-2 gap-2 relative"
+            className={`w-9 md:w-10 shrink-0 flex flex-col items-center py-2 gap-2 relative ${isRtl ? "order-2" : "order-1"}`}
             style={{
               background: "linear-gradient(180deg, rgba(235,245,255,0.6) 0%, rgba(214,238,255,0.4) 100%)",
               backdropFilter: "blur(12px)",
-              borderLeft: "1px solid rgba(0,127,255,0.06)",
+              borderInlineEnd: isRtl ? "none" : "1px solid rgba(0,127,255,0.06)",
+              borderInlineStart: isRtl ? "1px solid rgba(0,127,255,0.06)" : "none",
             }}
           >
             {sidebarIcons.map((item, i) => (
@@ -734,7 +736,7 @@ function HeroTiltCard() {
           </motion.div>
 
           {/* Main Content Area — tighter padding */}
-          <div className="flex-1 p-1.5 md:p-2 space-y-1 min-w-0">
+          <div className={`flex-1 p-1.5 md:p-2 space-y-1 min-w-0 ${isRtl ? "order-1" : "order-2"}`}>
             {/* Top Bar */}
             <div className="flex items-center justify-between">
               <div className="min-w-0">
@@ -1129,9 +1131,9 @@ export default function Home() {
               whileHover={{ scale: 1.02 }}
             >
               <motion.img
-                src="/logo-asanhesab.png"
+                src="/logo.svg"
                 alt="آسان حساب"
-                className="w-11 h-11 rounded-xl shadow-lg shadow-brand-mid/25"
+                className="w-11 h-11 rounded-full shadow-lg shadow-brand-mid/25"
                 whileHover={{ rotate: [0, -10, 10, 0] }}
                 transition={{ duration: 0.5 }}
               />
@@ -1160,7 +1162,7 @@ export default function Home() {
               <LanguageSwitcher />
               <ThemeToggle />
               <Button className="gradient-brand hover:opacity-90 text-white border-0 px-6 rounded-full shadow-lg shadow-brand-mid/25 hover:shadow-brand-mid/40 transition-all duration-300 hover:scale-105">
-                <Zap className="w-4 h-4 ml-2" />
+                <Zap className="w-4 h-4 me-2" />
                 {t("nav.download")}
               </Button>
             </div>
@@ -1196,7 +1198,7 @@ export default function Home() {
                   <motion.a
                     key={link.href}
                     href={link.href}
-                    initial={{ opacity: 0, x: 20 }}
+                    initial={{ opacity: 0, x: dir === "rtl" ? -20 : 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.05 }}
                     className="block text-gray-600 dark:text-gray-300 hover:text-brand-deep dark:hover:text-brand-light hover:bg-brand-surface dark:hover:bg-white/5 py-3 px-4 rounded-xl text-sm font-medium transition-all"
@@ -1207,7 +1209,7 @@ export default function Home() {
                 ))}
                 <div className="pt-4 mt-4 border-t border-gray-100 dark:border-gray-800">
                   <Button className="w-full gradient-brand text-white border-0 rounded-xl">
-                    <Zap className="w-4 h-4 ml-2" />
+                    <Zap className="w-4 h-4 me-2" />
                     {t("nav.download")}
                   </Button>
                 </div>
@@ -1333,10 +1335,10 @@ export default function Home() {
         </div>
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-          <div className="grid lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+          <div className="grid lg:grid-cols-12 gap-8 lg:gap-10 items-center" dir="ltr">
 
             {/* Left content — span 7 on desktop for wider text */}
-            <div className="lg:col-span-7 text-center lg:text-right order-1 lg:order-2" style={{ direction: 'rtl' }}>
+            <div className={`lg:col-span-7 text-center order-1 ${isRtl ? "lg:order-2 lg:text-right" : "lg:order-1 lg:text-left"}`} style={{ direction: dir }}>
               {/* Badge */}
               <FadeIn>
                 <motion.div
@@ -1357,7 +1359,7 @@ export default function Home() {
 
               {/* Heading — Cinematic Circle-Reveal with Brand Blue Highlight */}
               <FadeIn delay={0.1}>
-                <div className="relative mb-6" style={{ direction: 'rtl' }}>
+                <div className="relative mb-6" style={{ direction: dir }}>
                   {/* Soft ambient glow behind heading */}
                   <motion.div
                     className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[130%] h-[140%] rounded-full pointer-events-none"
@@ -1393,7 +1395,7 @@ export default function Home() {
                         className="block font-bold text-gray-600 dark:text-gray-300"
                         style={{ fontSize: "clamp(1.5rem, 3.8vw, 2.6rem)", letterSpacing: "-0.01em" }}
                       >
-                        {t("hero.line1")},
+                        {t("hero.line1")}
                       </span>
 
                       {/* Line 2 — bold with brand-blue highlighted "آسان‌تر" */}
@@ -1426,7 +1428,7 @@ export default function Home() {
                               backgroundClip: "text",
                             }}
                           >
-                            آسان‌تر
+                            {t("hero.line2_highlight")}
                           </span>
                         </span>
                         {" "}{t("hero.line2_after")}
@@ -1469,7 +1471,7 @@ export default function Home() {
                 <div className="mb-8">
                   <RotatingPhrase />
                   <motion.p
-                    className="text-sm text-gray-400 dark:text-gray-500 mt-2 max-w-lg mx-auto lg:mx-0 lg:mr-0"
+                    className="text-sm text-gray-400 dark:text-gray-500 mt-2 max-w-lg mx-auto lg:mx-0"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 1.5, duration: 1 }}
@@ -1481,16 +1483,16 @@ export default function Home() {
 
               {/* CTA Buttons */}
               <FadeIn delay={0.3}>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-end rtl:lg:justify-start">
                   <motion.div whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.97 }}>
                     <Button
                       size="lg"
                       className="gradient-brand text-white border-0 px-8 py-6 text-base rounded-2xl shadow-xl shadow-brand-mid/30 relative overflow-hidden group"
                     >
                       <span className="relative z-10 flex items-center">
-                        <Zap className="w-5 h-5 ml-2" />
+                        <Zap className="w-5 h-5 me-2" />
                         {t("hero.cta_primary")}
-                        <ArrowLeft className="w-5 h-5 mr-2" />
+                        <ArrowLeft className="w-5 h-5 ms-2 rtl:rotate-180" />
                       </span>
                       <motion.div
                         className="absolute inset-0 shimmer"
@@ -1510,35 +1512,12 @@ export default function Home() {
                       variant="outline"
                       className="px-8 py-6 text-base rounded-2xl border-brand-pale dark:border-brand-mid/30 bg-white/60 dark:bg-white/10 backdrop-blur-md hover:border-brand-mid hover:bg-brand-surface transition-all shadow-sm"
                     >
-                      <PlayCircle className="w-5 h-5 ml-2 text-brand-mid" />
+                      <PlayCircle className="w-5 h-5 me-2 text-brand-mid" />
                       {t("hero.cta_secondary")}
                     </Button>
                   </motion.div>
                 </div>
               </FadeIn>
-
-              {/* Floating user counter badge */}
-              <motion.div
-                className="hidden lg:flex absolute -left-4 top-1/2 -translate-y-1/2 z-10"
-                initial={{ opacity: 0, x: -30, scale: 0.8 }}
-                animate={{ opacity: 1, x: 0, scale: 1 }}
-                transition={{ delay: 1.8, type: "spring", stiffness: 150 }}
-              >
-                <div className="glass-card rounded-2xl px-4 py-3 flex items-center gap-3 shadow-lg">
-                  <div className="w-10 h-10 gradient-brand rounded-full flex items-center justify-center text-white shadow-md">
-                    <Users className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-black text-brand-deep">+۵,۰۰۰</p>
-                    <p className="text-[10px] text-gray-400">کاربر فعال</p>
-                  </div>
-                  <motion.div
-                    className="w-2 h-2 rounded-full bg-emerald-400"
-                    animate={{ scale: [1, 1.5, 1], opacity: [1, 0.5, 1] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  />
-                </div>
-              </motion.div>
 
               {/* Trust signals with icons */}
               <FadeIn delay={0.4}>
@@ -1600,7 +1579,29 @@ export default function Home() {
             </div>
 
             {/* Right content — CODE-ONLY CREATIVE HERO VISUAL span 5 */}
-            <div className="lg:col-span-5 relative order-2 lg:order-1">
+            <div className={`lg:col-span-5 relative order-2 ${isRtl ? "lg:order-1" : "lg:order-2"}`}>
+              {/* Floating user counter badge */}
+              <motion.div
+                className={`hidden lg:flex absolute top-1/2 -translate-y-1/2 z-50 ${isRtl ? "-end-4" : "-start-4"}`}
+                initial={{ opacity: 0, x: -30, scale: 0.8 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                transition={{ delay: 1.8, type: "spring", stiffness: 150 }}
+              >
+                <div className="glass-card rounded-2xl px-4 py-3 flex items-center gap-3 shadow-lg">
+                  <div className="w-10 h-10 gradient-brand rounded-full flex items-center justify-center text-white shadow-md">
+                    <Users className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-black text-brand-deep">+۵,۰۰۰</p>
+                    <p className="text-[10px] text-gray-400">کاربر فعال</p>
+                  </div>
+                  <motion.div
+                    className="w-2 h-2 rounded-full bg-emerald-400"
+                    animate={{ scale: [1, 1.5, 1], opacity: [1, 0.5, 1] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  />
+                </div>
+              </motion.div>
               <div className="relative">
 
                 {/* ── Floating 3D Aura Rings ── */}
@@ -1816,38 +1817,134 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Inline stats bar — inside max-w-7xl for proper padding */}
+          {/* ══════════ CREATIVE INLINE STATS BAR ══════════ */}
           <FadeIn delay={0.8}>
             <motion.div
-              className="mt-10 md:mt-14 grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4"
+              className="mt-10 md:mt-14 relative"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.2 }}
             >
-              {stats.map((s, i) => (
+              {/* Stats container with creative layout */}
+              <div className="relative">
+                {/* Background decorative elements */}
+                <div className="absolute inset-0 -z-10">
+                  <div className="absolute top-1/2 left-1/4 w-40 h-40 bg-brand-mid/5 rounded-full blur-3xl" />
+                  <div className="absolute top-1/3 right-1/3 w-32 h-32 bg-brand-pale/10 rounded-full blur-2xl" />
+                </div>
+
+                {/* Stats grid with creative cards */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5">
+                  {stats.map((s, i) => (
+                    <motion.div
+                      key={i}
+                      className="group relative"
+                      initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      transition={{ delay: 1.4 + i * 0.1, duration: 0.5 }}
+                      whileHover={{ y: -5 }}
+                    >
+                      {/* Card with glassmorphism */}
+                      <div className="relative rounded-2xl md:rounded-3xl p-4 md:p-5 overflow-hidden transition-all duration-500 group-hover:shadow-xl"
+                        style={{
+                          background: "rgba(255, 255, 255, 0.7)",
+                          backdropFilter: "blur(12px)",
+                          border: "1px solid rgba(0, 127, 255, 0.1)",
+                          boxShadow: "0 4px 24px rgba(0, 71, 171, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.8)",
+                        }}
+                      >
+                        {/* Animated gradient border on hover */}
+                        <motion.div
+                          className="absolute inset-0 rounded-2xl md:rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                          style={{
+                            background: "linear-gradient(135deg, rgba(0, 127, 255, 0.15) 0%, rgba(0, 71, 171, 0.05) 100%)",
+                          }}
+                        />
+
+                        {/* Top accent line */}
+                        <div className="absolute top-0 left-4 right-4 h-1 rounded-full bg-gradient-to-r from-brand-deep via-brand-mid to-brand-pale opacity-60 group-hover:opacity-100 transition-opacity" />
+
+                        {/* Icon badge */}
+                        <motion.div
+                          className="absolute -top-2 -right-2 w-8 h-8 md:w-10 md:h-10 rounded-xl flex items-center justify-center shadow-lg"
+                          style={{
+                            background: "linear-gradient(135deg, #0047AB 0%, #007FFF 100%)",
+                          }}
+                          whileHover={{ rotate: [0, -10, 10, 0], scale: 1.1 }}
+                          transition={{ duration: 0.4 }}
+                        >
+                          {i === 0 && <Users className="w-4 h-4 md:w-5 md:h-5 text-white" />}
+                          {i === 1 && <Receipt className="w-4 h-4 md:w-5 md:h-5 text-white" />}
+                          {i === 2 && <CheckCircle2 className="w-4 h-4 md:w-5 md:h-5 text-white" />}
+                          {i === 3 && <Star className="w-4 h-4 md:w-5 md:h-5 text-white" />}
+                        </motion.div>
+
+                        {/* Content */}
+                        <div className="relative z-10 text-center pt-2">
+                          {/* Animated counter */}
+                          <motion.p
+                            className="text-2xl md:text-4xl font-black tabular-nums"
+                            style={{
+                              background: "linear-gradient(135deg, #0047AB 0%, #007FFF 50%, #5DADE2 100%)",
+                              WebkitBackgroundClip: "text",
+                              WebkitTextFillColor: "transparent",
+                            }}
+                            whileHover={{ scale: 1.05 }}
+                          >
+                            {s.value.toLocaleString("fa-AF")}{s.suffix}
+                          </motion.p>
+
+                          {/* Label with icon */}
+                          <div className="flex items-center justify-center gap-1.5 mt-2">
+                            <motion.div
+                              className="w-1.5 h-1.5 rounded-full bg-brand-mid"
+                              animate={{ scale: [1, 1.3, 1] }}
+                              transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 }}
+                            />
+                            <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400 font-medium">{s.label}</p>
+                          </div>
+                        </div>
+
+                        {/* Bottom sparkle decoration */}
+                        <motion.div
+                          className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1"
+                          initial={{ opacity: 0 }}
+                          whileHover={{ opacity: 1 }}
+                        >
+                          {[0, 1, 2].map((dot) => (
+                            <motion.div
+                              key={dot}
+                              className="w-1 h-1 rounded-full bg-brand-mid/40"
+                              animate={{ y: [0, -3, 0] }}
+                              transition={{ duration: 1, repeat: Infinity, delay: dot * 0.2 }}
+                            />
+                          ))}
+                        </motion.div>
+                      </div>
+
+                      {/* Hover glow effect */}
+                      <motion.div
+                        className="absolute inset-0 rounded-2xl md:rounded-3xl bg-brand-mid/10 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10"
+                      />
+                    </motion.div>
+                  ))}
+                </div>
+
+                {/* Bottom connecting line */}
                 <motion.div
-                  key={i}
-                  className="rounded-2xl p-3 md:p-4 text-center bg-white/80 dark:bg-gray-800/50 border border-brand-pale/40 dark:border-brand-mid/20 shadow-sm md:shadow-md"
-                  whileHover={{ scale: 1.05, boxShadow: "0 10px 30px rgba(0,71,171,0.1)" }}
-                >
-                  <p className="text-xl md:text-2xl font-black text-brand-deep tabular-nums">
-                    {s.value.toLocaleString("fa-AF")}{s.suffix}
-                  </p>
-                  <p className="text-[11px] md:text-xs text-gray-400 mt-1">{s.label}</p>
-                </motion.div>
-              ))}
+                  className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-3/4 h-px bg-gradient-to-r from-transparent via-brand-mid/30 to-transparent"
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: 1 }}
+                  transition={{ delay: 2, duration: 0.8 }}
+                />
+              </div>
             </motion.div>
           </FadeIn>
         </div>
 
       </section>
 
-      {/* Gradient divider — hero to marquee */}
-      <div className="gradient-divider-section" />
-
-      {/* ══════════ ENHANCED MARQUEE TRUST BAR ══════════ */}
-      <MarqueeSection stats={stats} />
-
+      {/* Gradient divider — hero to problem section */}
       <div className="gradient-divider-section" />
 
       {/* ══════════ PROBLEM / PAIN SECTION ══════════ */}

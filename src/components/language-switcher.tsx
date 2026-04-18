@@ -46,7 +46,7 @@ export function LanguageSwitcher() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8, scale: 0.95 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className={`absolute ${dir === "rtl" ? "left-0" : "right-0"} top-full mt-2 bg-white dark:bg-gray-900 rounded-xl shadow-xl shadow-brand-deep/10 dark:shadow-black/30 border border-gray-100 dark:border-white/10 py-1.5 min-w-[160px] z-50 overflow-hidden`}
+            className={`absolute ${dir === "rtl" ? "start-0" : "end-0"} top-full mt-2 bg-white dark:bg-gray-900 rounded-xl shadow-xl shadow-brand-deep/10 dark:shadow-black/30 border border-gray-100 dark:border-white/10 py-1.5 min-w-[160px] z-50 overflow-hidden`}
           >
             {languages.map((lang) => (
               <motion.button

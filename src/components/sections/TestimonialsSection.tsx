@@ -18,14 +18,14 @@ interface TestimonialsSectionProps {
 }
 
 export default function TestimonialsSection({ testimonials }: TestimonialsSectionProps) {
-  const { t } = useI18n();
+  const { t, dir } = useI18n();
 
   return (
     <section id="testimonials" className="py-20 md:py-28 relative overflow-hidden">
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <FadeIn className="text-center mb-16">
           <Badge className="mb-4 bg-brand-surface dark:bg-gray-800 text-brand-deep dark:text-brand-light border-brand-pale dark:border-brand-mid/30 px-4 py-2 rounded-full text-sm font-medium">
-            <Heart className="w-4 h-4 ml-1" />
+            <Heart className="w-4 h-4 me-1" />
             {t("testimonials.badge")}
           </Badge>
           <h2 className="text-3xl md:text-5xl font-black text-gray-900 dark:text-gray-100 mb-4">
@@ -42,18 +42,18 @@ export default function TestimonialsSection({ testimonials }: TestimonialsSectio
               className="gradient-brand rounded-3xl p-8 md:p-10 h-full text-white relative overflow-hidden"
               whileHover={{ scale: 1.01 }}
             >
-              <div className="absolute top-0 right-0 w-60 h-60 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2" />
-              <div className="absolute bottom-0 left-0 w-40 h-40 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/2" />
+              <div className="absolute top-0 end-0 w-60 h-60 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2" />
+              <div className="absolute bottom-0 start-0 w-40 h-40 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/2" />
               <div className="relative">
                 <div className="flex gap-1 mb-6">
                   {Array.from({ length: 5 }).map((_, j) => (
                     <Star key={j} className="w-5 h-5 fill-amber-300 text-amber-300" />
                   ))}
                 </div>
-                <p className="text-2xl md:text-3xl font-bold leading-relaxed mb-8 text-white/95">
+                <p className="text-2xl md:text-3xl font-bold leading-relaxed mb-8 text-white/95" style={{ direction: dir }}>
                   &ldquo;{testimonials[0].text}&rdquo;
                 </p>
-                <div className="flex items-center gap-4 border-t border-white/10 pt-6">
+                <div className="flex items-center gap-4 border-t border-white/10 pt-6" style={{ direction: dir }}>
                   <div className="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center text-xl font-black backdrop-blur-sm">
                     {testimonials[0].name.charAt(0)}
                   </div>
@@ -78,10 +78,10 @@ export default function TestimonialsSection({ testimonials }: TestimonialsSectio
                     <Star key={j} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
                   ))}
                 </div>
-                <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-4 line-clamp-4">
+                <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-4 line-clamp-4" style={{ direction: dir }}>
                   &ldquo;{t.text}&rdquo;
                 </p>
-                <div className="flex items-center gap-3 border-t border-gray-50 dark:border-gray-700/50 pt-3">
+                <div className="flex items-center gap-3 border-t border-gray-50 dark:border-gray-700/50 pt-3" style={{ direction: dir }}>
                   <div className="w-9 h-9 gradient-brand rounded-lg flex items-center justify-center text-white text-sm font-bold">
                     {t.name.charAt(0)}
                   </div>

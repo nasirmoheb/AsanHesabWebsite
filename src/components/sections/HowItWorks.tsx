@@ -12,7 +12,8 @@ import {
 } from "lucide-react";
 
 export default function HowItWorks() {
-  const { t } = useI18n();
+  const { t, dir } = useI18n();
+  const isRtl = dir === "rtl";
 
   return (
     <section className="py-20 md:py-28 relative overflow-hidden">
@@ -49,29 +50,33 @@ export default function HowItWorks() {
               desc: t("how.step3_desc"),
               icon: <TrendingUp />,
             },
-          ].map((item, i) => (
+          ].map((item, i) => {
+            // In RTL, flip the alternating direction so even rows go left, odd go right
+            const isEven = i % 2 === 0;
+            const flipRow = isRtl ? !isEven : isEven;
+            return (
             <FadeIn
               key={i}
               delay={i * 0.2}
-              direction={i % 2 === 0 ? "right" : "left"}
+              direction={flipRow ? "right" : "left"}
               className={`mb-12 last:mb-0 md:flex items-center ${
-                i % 2 === 0 ? "md:flex-row-reverse" : ""
+                flipRow ? "md:flex-row-reverse" : ""
               }`}
             >
               <div className="md:w-1/2 md:px-8">
                 <motion.div
                   className={`bg-white dark:bg-gray-800/50 rounded-3xl p-8 border border-gray-100 dark:border-gray-700/50 hover:shadow-2xl hover:shadow-brand-deep/5 transition-all duration-500 ${
-                    i % 2 === 0 ? "md:mr-auto" : "md:ml-auto"
+                    flipRow ? "md:ms-auto" : "md:me-auto"
                   } max-w-sm`}
                   whileHover={{ y: -4 }}
                 >
                   <div className="w-14 h-14 gradient-brand rounded-2xl flex items-center justify-center text-white mb-5 shadow-lg shadow-brand-mid/20">
                     {item.icon}
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3" style={{ direction: dir }}>
                     {item.title}
                   </h3>
-                  <p className="text-gray-400 dark:text-gray-300 text-sm leading-relaxed">
+                  <p className="text-gray-400 dark:text-gray-300 text-sm leading-relaxed" style={{ direction: dir }}>
                     {item.desc}
                   </p>
                 </motion.div>
@@ -94,7 +99,8 @@ export default function HowItWorks() {
               </div>
               <div className="md:w-1/2" />
             </FadeIn>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

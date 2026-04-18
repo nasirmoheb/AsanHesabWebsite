@@ -13,7 +13,7 @@ interface FeaturesSectionProps {
 }
 
 export default function FeaturesSection({ features, bentoFeatures }: FeaturesSectionProps) {
-  const { t } = useI18n();
+  const { t, dir } = useI18n();
 
   return (
     <>
@@ -31,7 +31,7 @@ export default function FeaturesSection({ features, bentoFeatures }: FeaturesSec
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <FadeIn className="text-center mb-16">
             <Badge className="mb-4 bg-white dark:bg-gray-800 text-brand-deep dark:text-brand-light border-brand-pale dark:border-brand-mid/30 px-4 py-2 rounded-full text-sm font-medium shadow-sm">
-              <Award className="w-4 h-4 ml-1" />
+              <Award className="w-4 h-4 me-1" />
               {t("features.badge")}
             </Badge>
             <h2 className="text-3xl md:text-5xl font-black text-gray-900 dark:text-gray-100 mb-4">
@@ -54,8 +54,8 @@ export default function FeaturesSection({ features, bentoFeatures }: FeaturesSec
                   >
                     {f.icon}
                   </motion.div>
-                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">{f.title}</h3>
-                  <p className="text-gray-400 dark:text-gray-300 text-sm leading-relaxed">{f.desc}</p>
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2" style={{ direction: dir }}>{f.title}</h3>
+                  <p className="text-gray-400 dark:text-gray-300 text-sm leading-relaxed" style={{ direction: dir }}>{f.desc}</p>
                 </motion.div>
               </StaggerItem>
             ))}
@@ -109,6 +109,7 @@ export default function FeaturesSection({ features, bentoFeatures }: FeaturesSec
                       className={`text-xl font-bold mb-3 ${
                         f.gradient ? "text-white" : "text-gray-900 dark:text-white"
                       }`}
+                      style={{ direction: dir }}
                     >
                       {f.title}
                     </h3>
@@ -116,6 +117,7 @@ export default function FeaturesSection({ features, bentoFeatures }: FeaturesSec
                       className={`text-sm leading-relaxed ${
                         f.gradient ? "text-white/80" : "text-gray-400 dark:text-gray-300"
                       }`}
+                      style={{ direction: dir }}
                     >
                       {f.desc}
                     </p>

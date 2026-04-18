@@ -16,7 +16,7 @@ interface FAQSectionProps {
 }
 
 export default function FAQSection({ faqs }: FAQSectionProps) {
-  const { t } = useI18n();
+  const { t, dir } = useI18n();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   return (
@@ -36,8 +36,9 @@ export default function FAQSection({ faqs }: FAQSectionProps) {
                 whileHover={{ shadow: "0 4px 20px rgba(0,71,171,0.05)" }}
               >
                 <button
-                  className="w-full flex items-center justify-between p-5 md:p-6 text-right"
+                  className="w-full flex items-center justify-between p-5 md:p-6 text-start"
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                  style={{ direction: dir }}
                 >
                   <span className="font-bold text-gray-900 dark:text-white text-sm md:text-base">
                     {faq.q}
@@ -45,8 +46,9 @@ export default function FAQSection({ faqs }: FAQSectionProps) {
                   <motion.div
                     animate={{ rotate: openFaq === i ? 180 : 0 }}
                     transition={{ duration: 0.3 }}
+                    className="shrink-0 ms-3"
                   >
-                    <ChevronDown className="w-5 h-5 text-brand-mid flex-shrink-0" />
+                    <ChevronDown className="w-5 h-5 text-brand-mid" />
                   </motion.div>
                 </button>
                 <AnimatePresence>
@@ -57,7 +59,7 @@ export default function FAQSection({ faqs }: FAQSectionProps) {
                       exit={{ height: 0, opacity: 0 }}
                       transition={{ duration: 0.3, ease: [0.25, 0.4, 0.25, 1] }}
                     >
-                      <div className="px-5 md:px-6 pb-5 md:pb-6 text-gray-400 dark:text-gray-300 text-sm leading-relaxed border-t border-gray-50 dark:border-gray-700/50 pt-4">
+                      <div className="px-5 md:px-6 pb-5 md:pb-6 text-gray-400 dark:text-gray-300 text-sm leading-relaxed border-t border-gray-50 dark:border-gray-700/50 pt-4" style={{ direction: dir }}>
                         {faq.a}
                       </div>
                     </motion.div>

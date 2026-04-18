@@ -23,7 +23,7 @@ interface PricingSectionProps {
 }
 
 export default function PricingSection({ pricingPlans }: PricingSectionProps) {
-  const { t } = useI18n();
+  const { t, dir } = useI18n();
 
   return (
     <section id="pricing" className="py-20 md:py-28 gradient-brand-soft relative overflow-hidden">
@@ -70,17 +70,17 @@ export default function PricingSection({ pricingPlans }: PricingSectionProps) {
                   }`}
                 >
                   <div className="text-center mb-6">
-                    <h3 className="text-xl font-black text-gray-900 dark:text-white mb-1">{plan.name}</h3>
-                    <p className="text-xs text-gray-400 dark:text-gray-500 mb-5">{plan.desc}</p>
+                    <h3 className="text-xl font-black text-gray-900 dark:text-white mb-1" style={{ direction: dir }}>{plan.name}</h3>
+                    <p className="text-xs text-gray-400 dark:text-gray-500 mb-5" style={{ direction: dir }}>{plan.desc}</p>
                     <div className="flex items-baseline justify-center gap-1">
                       <span className="text-4xl font-black text-gradient">{plan.price}</span>
                       <span className="text-xs text-gray-400 dark:text-gray-500">{plan.period}</span>
                     </div>
                   </div>
-                  <ul className="space-y-3 mb-8">
+                  <ul className="space-y-3 mb-8" style={{ direction: dir }}>
                     {plan.features.map((f, j) => (
                       <li key={j} className="flex items-start gap-3">
-                        <CheckCircle2 className="w-4 h-4 text-brand-mid flex-shrink-0 mt-0.5" />
+                        <CheckCircle2 className="w-4 h-4 text-brand-mid shrink-0 mt-0.5 rtl:order-last" />
                         <span className="text-sm text-gray-500 dark:text-gray-400">{f}</span>
                       </li>
                     ))}

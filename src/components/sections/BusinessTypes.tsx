@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 
 export default function BusinessTypes() {
-  const { t } = useI18n();
+  const { t, dir } = useI18n();
 
   return (
     <section className="py-20 md:py-28 gradient-brand-soft relative overflow-hidden">
@@ -38,6 +38,7 @@ export default function BusinessTypes() {
               <motion.div
                 className="bg-white dark:bg-gray-800/50 rounded-2xl px-6 py-5 flex items-center gap-4 border border-white/50 dark:border-gray-700/30 cursor-default"
                 whileHover={{ y: -4, scale: 1.03, shadow: "0 20px 40px rgba(0,71,171,0.1)" }}
+                style={{ direction: dir }}
               >
                 <div className="w-10 h-10 gradient-brand rounded-xl flex items-center justify-center text-white shadow-md shadow-brand-mid/20">
                   {biz.icon}

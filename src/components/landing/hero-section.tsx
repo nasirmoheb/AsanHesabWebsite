@@ -22,7 +22,7 @@ import { FadeIn, StaggerContainer, StaggerItem, AnimatedCounter, ParallaxSection
    ═══════════════════════════════════════════ */
 
 const RotatingPhrase = React.memo(function RotatingPhrase() {
-  const { t } = useI18n();
+  const { t, dir } = useI18n();
   const phrases = useMemo(() => [
     t("phrase.in_dari"),
     t("phrase.no_internet"),
@@ -58,14 +58,14 @@ const RotatingPhrase = React.memo(function RotatingPhrase() {
   }, [displayed, isDeleting, phraseIndex, started, phrases]);
 
   return (
-    <div className="flex items-center justify-center lg:justify-start gap-2 flex-wrap" dir="rtl">
+    <div className="flex items-center justify-center lg:justify-start gap-2 flex-wrap" dir={dir}>
       <span className="text-base md:text-lg text-gray-500 dark:text-gray-400 leading-relaxed">
         {t("hero.accounting_sw")}
       </span>
       <span className="relative inline-flex items-center justify-center min-w-[155px] h-[2.2rem] md:min-w-[195px] md:h-[2.7rem]">
         <span className="absolute inset-0 rounded-full bg-gradient-to-l from-brand-pale/70 to-brand-surface/80 border border-brand-pale/60" />
-        <span className="absolute right-2.5 top-1/2 -translate-y-1/2 w-1 h-1 rounded-full bg-brand-mid/30" />
-        <span className="absolute left-2.5 top-1/2 -translate-y-1/2 w-1 h-1 rounded-full bg-brand-mid/30" />
+        <span className="absolute end-2.5 top-1/2 -translate-y-1/2 w-1 h-1 rounded-full bg-brand-mid/30" />
+        <span className="absolute start-2.5 top-1/2 -translate-y-1/2 w-1 h-1 rounded-full bg-brand-mid/30" />
         <AnimatePresence mode="wait">
           <motion.span
             key={phraseIndex + (isDeleting ? "del" : "ins")}
@@ -79,7 +79,7 @@ const RotatingPhrase = React.memo(function RotatingPhrase() {
           </motion.span>
         </AnimatePresence>
         <motion.span
-          className="absolute left-3.5 top-1/2 -translate-y-1/2 w-[2px] h-4 bg-brand-mid rounded-full z-10"
+          className="absolute start-3.5 top-1/2 -translate-y-1/2 w-[2px] h-4 bg-brand-mid rounded-full z-10"
           animate={{ opacity: [1, 0, 1] }}
           transition={{ duration: 1, repeat: Infinity, ease: "steps(2)" }}
           style={{ boxShadow: "0 0 6px rgba(0,127,255,0.6), 0 0 12px rgba(0,127,255,0.2)" }}
@@ -139,7 +139,7 @@ function LiveTransactionFeed() {
               <div className="flex-1 min-w-0">
                 <p className="text-[8px] text-gray-300 font-medium truncate leading-tight">{tx.name}</p>
               </div>
-              <div className="text-left shrink-0">
+              <div className="text-end shrink-0">
                 <p className={`text-[9px] font-bold leading-tight ${tx.type === "income" ? "text-emerald-400" : "text-red-400"}`}>
                   {tx.amount} <span className="text-[6px] text-gray-500 font-normal">Afs</span>
                 </p>
@@ -236,6 +236,8 @@ function AnimatedSparkline() {
 }
 
 const HeroTiltCard = React.memo(function HeroTiltCard() {
+  const { dir } = useI18n();
+  const isRtl = dir === "rtl";
   const cardRef = useRef<HTMLDivElement>(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
@@ -270,20 +272,20 @@ const HeroTiltCard = React.memo(function HeroTiltCard() {
           </div>
           <div className="flex items-center gap-1.5"><LiveClock /><div className="w-5 h-5 rounded bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center shadow-sm"><Calculator className="w-2.5 h-2.5 text-white" /></div></div>
         </div>
-        <div className="flex" style={{ height: "auto" }}>
-          <motion.div className="w-9 md:w-10 shrink-0 flex flex-col items-center py-2 gap-2 relative" style={{ background: "linear-gradient(180deg, rgba(235,245,255,0.6) 0%, rgba(214,238,255,0.4) 100%)", backdropFilter: "blur(12px)", borderLeft: "1px solid rgba(0,127,255,0.06)" }}>
+        <div className="flex" style={{ height: "auto", direction: dir }}>
+          <motion.div className={`w-9 md:w-10 shrink-0 flex flex-col items-center py-2 gap-2 relative ${isRtl ? "order-2" : "order-1"}`} style={{ background: "linear-gradient(180deg, rgba(235,245,255,0.6) 0%, rgba(214,238,255,0.4) 100%)", backdropFilter: "blur(12px)", borderInlineEnd: isRtl ? "none" : "1px solid rgba(0,127,255,0.06)", borderInlineStart: isRtl ? "1px solid rgba(0,127,255,0.06)" : "none" }}>
             {sidebarIcons.map((item, i) => (
               <motion.div key={i} className={`w-6 h-6 md:w-7 md:h-7 rounded-lg flex items-center justify-center cursor-default transition-all duration-300 ${item.active ? "gradient-brand text-white shadow-md shadow-brand-mid/20" : "bg-white/60 text-gray-400 hover:bg-white hover:text-gray-600"}`} whileHover={{ scale: 1.15 }} animate={isHovered ? { y: [0, -3, 0] } : {}} transition={{ duration: 0.4, delay: isHovered ? i * 0.08 : 0, ease: "easeInOut" }} initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}><item.Icon className="w-3 h-3 md:w-3.5 md:h-3.5" /></motion.div>
             ))}
             <div className="flex-1" />
             <motion.div className="w-6 h-6 md:w-7 md:h-7 rounded-lg flex items-center justify-center bg-white/60 text-gray-400 hover:text-red-400 cursor-default" whileHover={{ scale: 1.15 }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2 }}><Settings className="w-3 h-3 md:w-3.5 md:h-3.5" /></motion.div>
           </motion.div>
-          <div className="flex-1 p-1.5 md:p-2 space-y-1 min-w-0">
+          <div className={`flex-1 p-1.5 md:p-2 space-y-1 min-w-0 ${isRtl ? "order-1" : "order-2"}`}>
             <div className="flex items-center justify-between">
               <div className="min-w-0"><p className="text-[9px] md:text-[10px] font-bold text-gray-800 dark:text-gray-200 truncate">داشبورد مدیریت</p><p className="text-[6px] md:text-[7px] text-gray-400">۱۴۰۴/۰۱/۱۵ - اسد</p></div>
               <div className="flex items-center gap-1.5 shrink-0">
                 <div className="px-1.5 py-0.5 bg-blue-50/80 dark:bg-blue-900/30 rounded-full text-[6px] md:text-[7px] text-blue-600 dark:text-blue-400 font-bold" style={{ backdropFilter: "blur(4px)" }}>آفلاین</div>
-                <div className="relative w-5 h-5 rounded-full bg-brand-pale/80 flex items-center justify-center"><Bell className="w-2.5 h-2.5 text-brand-deep" /><motion.span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full flex items-center justify-center text-[6px] text-white font-bold border border-white" animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 2, repeat: Infinity }}>۳</motion.span></div>
+                <div className="relative w-5 h-5 rounded-full bg-brand-pale/80 flex items-center justify-center"><Bell className="w-2.5 h-2.5 text-brand-deep" /><motion.span className="absolute -top-1 -end-1 w-3 h-3 bg-red-500 rounded-full flex items-center justify-center text-[6px] text-white font-bold border border-white" animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 2, repeat: Infinity }}>۳</motion.span></div>
               </div>
             </div>
             <div className="grid grid-cols-3 gap-1">
@@ -321,8 +323,8 @@ const HeroTiltCard = React.memo(function HeroTiltCard() {
         <div className="h-1 bg-gradient-to-l from-brand-deep via-brand-mid to-brand-light opacity-50 relative z-10" />
       </motion.div>
       <motion.div className="absolute -inset-4 rounded-[2rem] blur-2xl -z-10" style={{ background: "linear-gradient(135deg, rgba(0,127,255,0.12) via rgba(0,71,171,0.06) to rgba(93,173,226,0.08)" }} animate={{ scale: [1, 1.04, 1], opacity: [0.8, 1, 0.8] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }} />
-      <motion.div className="absolute -top-3 -right-3 w-6 h-6 border-t-2 border-r-2 border-brand-mid/30 rounded-tr-lg" animate={{ opacity: [0.3, 0.7, 0.3] }} transition={{ duration: 3, repeat: Infinity }} />
-      <motion.div className="absolute -bottom-3 -left-3 w-6 h-6 border-b-2 border-l-2 border-brand-mid/30 rounded-bl-lg" animate={{ opacity: [0.5, 0.3, 0.5] }} transition={{ duration: 3, repeat: Infinity }} />
+      <motion.div className="absolute -top-3 -end-3 w-6 h-6 border-t-2 border-e-2 border-brand-mid/30 rounded-tr-lg rtl:rounded-tr-none rtl:rounded-tl-lg" animate={{ opacity: [0.3, 0.7, 0.3] }} transition={{ duration: 3, repeat: Infinity }} />
+      <motion.div className="absolute -bottom-3 -start-3 w-6 h-6 border-b-2 border-s-2 border-brand-mid/30 rounded-bl-lg rtl:rounded-bl-none rtl:rounded-br-lg" animate={{ opacity: [0.5, 0.3, 0.5] }} transition={{ duration: 3, repeat: Infinity }} />
     </motion.div>
   );
 });
@@ -373,9 +375,9 @@ export default function HeroSection() {
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        <div className="grid lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+        <div className="grid lg:grid-cols-12 gap-8 lg:gap-10 items-center" dir="ltr">
           {/* Left content */}
-          <div className="lg:col-span-7 text-center lg:text-right order-1 lg:order-2" style={{ direction: "rtl" }}>
+          <div className={`lg:col-span-7 text-center order-1 ${isRtl ? "lg:order-2 lg:text-right" : "lg:order-1 lg:text-left"}`} style={{ direction: dir }}>
             <FadeIn>
               <motion.div className="inline-flex items-center gap-2 bg-white/70 dark:bg-gray-800/70 backdrop-blur-md border border-brand-pale/50 rounded-full px-5 py-2.5 mb-8 shadow-sm" whileHover={{ scale: 1.04, boxShadow: "0 8px 30px rgba(0,71,171,0.12)" }}>
                 <motion.span animate={{ rotate: [0, 20, -20, 0] }} transition={{ duration: 2.5, repeat: Infinity }}><Sparkles className="w-4 h-4 text-brand-mid" /></motion.span>
@@ -383,7 +385,7 @@ export default function HeroSection() {
               </motion.div>
             </FadeIn>
             <FadeIn delay={0.1}>
-              <div className="relative mb-6" style={{ direction: "rtl" }}>
+              <div className="relative mb-6" style={{ direction: dir }}>
                 <motion.div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[130%] h-[140%] rounded-full pointer-events-none" style={{ background: "radial-gradient(ellipse at 65% 45%, rgba(0,127,255,0.06) 0%, rgba(0,71,171,0.04) 40%, transparent 70%)" }} animate={{ scale: [1, 1.08, 1], opacity: [0.5, 0.9, 0.5] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }} />
                 <motion.div className="absolute -top-3 -right-1 md:-top-4 md:-right-4 w-8 h-8 md:w-10 md:h-10 rounded-xl border border-brand-mid/15 bg-brand-surface/40 hidden sm:flex items-center justify-center pointer-events-none" animate={{ y: [0, -6, 0], rotate: [0, 8, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}><Sparkles className="w-3.5 h-3.5 text-brand-mid/40" /></motion.div>
                 <h1 className="relative" style={{ lineHeight: 1.25 }}>
@@ -394,7 +396,7 @@ export default function HeroSection() {
                       <span className="relative inline-block">
                         <motion.span className="absolute inset-0 blur-2xl opacity-40 pointer-events-none" style={{ background: "linear-gradient(135deg, #0047AB, #007FFF, #5DADE2, #D6EEFF)" }} animate={{ opacity: [0.2, 0.4, 0.2], scale: [1, 1.06, 1] }} transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }} />
                         <span className="relative" style={{ background: "linear-gradient(135deg, #0047AB 0%, #007FFF 25%, #5DADE2 55%, #89CFF0 80%, #D6EEFF 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
-                          آسان‌تر
+                          {t("hero.line2_highlight")}
                         </span>
                       </span>{" "}{t("hero.line2_after")}
                     </span>
@@ -411,28 +413,21 @@ export default function HeroSection() {
               <div className="mb-8"><RotatingPhrase /><motion.p className="text-sm text-gray-400 mt-2 max-w-lg mx-auto lg:mx-0 lg:mr-0" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5, duration: 1 }}>{t("hero.sub_desc")}</motion.p></div>
             </FadeIn>
             <FadeIn delay={0.3}>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-end rtl:lg:justify-start">
                 <motion.div whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.97 }}>
                   <Button size="lg" className="gradient-brand text-white border-0 px-8 py-6 text-base rounded-2xl shadow-xl shadow-brand-mid/30 relative overflow-hidden group">
-                    <span className="relative z-10 flex items-center"><Zap className="w-5 h-5 ml-2" />{t("hero.cta_primary")}<ArrowLeft className="w-5 h-5 mr-2" /></span>
+                    <span className="relative z-10 flex items-center"><Zap className="w-5 h-5 me-2" />{t("hero.cta_primary")}<ArrowLeft className="w-5 h-5 ms-2 rtl:rotate-180" /></span>
                     <motion.div className="absolute inset-0 shimmer" repeatCount={Infinity} />
                     <motion.div className="absolute inset-0 rounded-2xl border-2 border-white/20" animate={{ scale: [1, 1.15], opacity: [0.5, 0] }} transition={{ duration: 2, repeat: Infinity }} />
                   </Button>
                 </motion.div>
                 <motion.div whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.97 }}>
                   <Button size="lg" variant="outline" className="px-8 py-6 text-base rounded-2xl border-brand-pale bg-white/60 dark:bg-gray-800/60 backdrop-blur-md hover:border-brand-mid hover:bg-brand-surface dark:hover:bg-gray-700/60 transition-all shadow-sm">
-                    <PlayCircle className="w-5 h-5 ml-2 text-brand-mid" />{t("hero.cta_secondary")}
+                    <PlayCircle className="w-5 h-5 me-2 text-brand-mid" />{t("hero.cta_secondary")}
                   </Button>
                 </motion.div>
               </div>
             </FadeIn>
-            <motion.div className="hidden lg:flex absolute -left-4 top-1/2 -translate-y-1/2 z-10" initial={{ opacity: 0, x: -30, scale: 0.8 }} animate={{ opacity: 1, x: 0, scale: 1 }} transition={{ delay: 1.8, type: "spring", stiffness: 150 }}>
-              <div className="glass-card rounded-2xl px-4 py-3 flex items-center gap-3 shadow-lg">
-                <div className="w-10 h-10 gradient-brand rounded-full flex items-center justify-center text-white shadow-md"><Users className="w-5 h-5" /></div>
-                <div><p className="text-sm font-black text-brand-deep">+۵,۰۰۰</p><p className="text-[10px] text-gray-400">{t("trust.users_label")}</p></div>
-                <motion.div className="w-2 h-2 rounded-full bg-emerald-400" animate={{ scale: [1, 1.5, 1], opacity: [1, 0.5, 1] }} transition={{ duration: 2, repeat: Infinity }} />
-              </div>
-            </motion.div>
             <FadeIn delay={0.4}>
               <div className="flex flex-wrap items-center gap-3 md:gap-4 mt-8 justify-center lg:justify-start">
                 {[
@@ -462,7 +457,15 @@ export default function HeroSection() {
           </div>
 
           {/* Right content — Hero Card */}
-          <div className="lg:col-span-5 relative order-2 lg:order-1">
+          <div className={`lg:col-span-5 relative order-2 ${isRtl ? "lg:order-1" : "lg:order-2"}`}>
+            {/* Floating user counter badge */}
+            <motion.div className={`hidden lg:flex absolute top-1/2 -translate-y-1/2 z-50 ${isRtl ? "-end-4" : "-start-4"}`} initial={{ opacity: 0, x: -30, scale: 0.8 }} animate={{ opacity: 1, x: 0, scale: 1 }} transition={{ delay: 1.8, type: "spring", stiffness: 150 }}>
+              <div className="glass-card rounded-2xl px-4 py-3 flex items-center gap-3 shadow-lg">
+                <div className="w-10 h-10 gradient-brand rounded-full flex items-center justify-center text-white shadow-md"><Users className="w-5 h-5" /></div>
+                <div><p className="text-sm font-black text-brand-deep">+۵,۰۰۰</p><p className="text-[10px] text-gray-400">{t("trust.users_label")}</p></div>
+                <motion.div className="w-2 h-2 rounded-full bg-emerald-400" animate={{ scale: [1, 1.5, 1], opacity: [1, 0.5, 1] }} transition={{ duration: 2, repeat: Infinity }} />
+              </div>
+            </motion.div>
             <div className="relative">
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
                 <motion.div className="w-[420px] h-[420px] md:w-[520px] md:h-[520px] rounded-full border border-brand-pale/30" animate={{ rotate: 360, scale: [1, 1.03, 1] }} transition={{ duration: 40, repeat: Infinity, ease: "linear" }} />
@@ -472,24 +475,24 @@ export default function HeroSection() {
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85%] h-[85%] rounded-[2.5rem] blur-[80px] bg-gradient-to-br from-brand-mid/20 via-brand-deep/10 to-brand-light/15 pointer-events-none" />
               <HeroTiltCard />
               {/* Floating stat cards */}
-              <motion.div className="absolute -top-2 right-0 md:top-2 md:-right-2 z-20" initial={{ opacity: 0, scale: 0, rotate: 12 }} animate={{ opacity: 1, scale: 1, rotate: 0 }} transition={{ delay: 1, type: "spring", stiffness: 180 }}>
+              <motion.div className="absolute -top-2 end-0 md:top-2 md:-end-2 z-20" initial={{ opacity: 0, scale: 0, rotate: 12 }} animate={{ opacity: 1, scale: 1, rotate: 0 }} transition={{ delay: 1, type: "spring", stiffness: 180 }}>
                 <motion.div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-2xl shadow-xl shadow-brand-deep/10 p-4 border border-brand-pale/40 dark:border-gray-700/40" style={{ animation: "float 6s ease-in-out infinite" }} whileHover={{ scale: 1.1 }}>
                   <div className="flex items-center gap-3"><div className="w-11 h-11 gradient-brand rounded-xl flex items-center justify-center shadow-md shadow-brand-mid/20"><TrendingUp className="w-5 h-5 text-white" /></div><div><p className="text-[10px] text-gray-400 font-medium">{t("float.revenue_growth")}</p><p className="text-xl font-black text-brand-deep">+۴۷٪</p></div></div>
                   <svg viewBox="0 0 80 24" className="w-full h-5 mt-2"><motion.path d="M0 20 L12 16 L24 18 L36 10 L48 12 L60 4 L72 6 L80 2" fill="none" stroke="#007FFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 2, delay: 1.5, ease: "easeOut" }} /><motion.path d="M0 20 L12 16 L24 18 L36 10 L48 12 L60 4 L72 6 L80 2 L80 24 L0 24Z" fill="url(#sparkFill)" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1, delay: 2.5 }} /><defs><linearGradient id="sparkFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#007FFF" stopOpacity="0.2" /><stop offset="100%" stopColor="#007FFF" stopOpacity="0" /></linearGradient></defs></svg>
                 </motion.div>
               </motion.div>
-              <motion.div className="absolute -bottom-2 left-0 md:bottom-4 md:-left-6 z-20" initial={{ opacity: 0, scale: 0, rotate: -8 }} animate={{ opacity: 1, scale: 1, rotate: 0 }} transition={{ delay: 1.3, type: "spring", stiffness: 180 }}>
+              <motion.div className="absolute -bottom-2 start-0 md:bottom-4 md:-start-6 z-20" initial={{ opacity: 0, scale: 0, rotate: -8 }} animate={{ opacity: 1, scale: 1, rotate: 0 }} transition={{ delay: 1.3, type: "spring", stiffness: 180 }}>
                 <motion.div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-2xl shadow-xl shadow-brand-deep/10 p-4 border border-brand-pale/40 dark:border-gray-700/40" style={{ animation: "float 7s ease-in-out infinite 1.5s" }} whileHover={{ scale: 1.1 }}>
                   <div className="flex items-center gap-3"><div className="w-11 h-11 bg-amber-50 dark:bg-amber-900/30 rounded-xl flex items-center justify-center"><Star className="w-5 h-5 text-amber-400 fill-amber-400" /></div><div><p className="text-[10px] text-gray-400 font-medium">{t("float.customer_satisfaction")}</p><p className="text-xl font-black text-gray-900 dark:text-white">۴.۹/۵</p></div></div>
                   <div className="flex gap-0.5 mt-2">{[100, 100, 100, 100, 80].map((w, i) => (<motion.div key={i} className="h-1.5 rounded-full bg-amber-400" initial={{ width: 0 }} animate={{ width: `${w}%` }} transition={{ duration: 0.8, delay: 1.8 + i * 0.1, ease: "easeOut" }} />))}</div>
                 </motion.div>
               </motion.div>
-              <motion.div className="absolute top-4 -left-2 md:top-8 md:-left-8 z-20 hidden sm:block" initial={{ opacity: 0, x: -30, scale: 0.8 }} animate={{ opacity: 1, x: 0, scale: 1 }} transition={{ delay: 1.5, type: "spring" }}>
+              <motion.div className="absolute top-4 -start-2 md:top-8 md:-start-8 z-20 hidden sm:block" initial={{ opacity: 0, x: -30, scale: 0.8 }} animate={{ opacity: 1, x: 0, scale: 1 }} transition={{ delay: 1.5, type: "spring" }}>
                 <motion.div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-2xl shadow-xl shadow-brand-deep/10 p-3.5 border border-brand-pale/40 dark:border-gray-700/40" style={{ animation: "float 8s ease-in-out infinite 2s" }} whileHover={{ scale: 1.1 }}>
                   <div className="flex items-center gap-2.5"><div className="w-10 h-10 gradient-brand rounded-xl flex items-center justify-center shadow-md shadow-brand-mid/20"><Receipt className="w-4 h-4 text-white" /></div><div><p className="text-[10px] text-gray-400 font-medium">{t("float.today_invoices")}</p><p className="text-lg font-black text-brand-deep">{t("float.invoice_count")}</p></div></div>
                 </motion.div>
               </motion.div>
-              <motion.div className="absolute -bottom-4 right-4 md:bottom-0 md:right-0 z-20 hidden md:block" initial={{ opacity: 0, y: 20, scale: 0.8 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ delay: 1.7, type: "spring" }}>
+              <motion.div className="absolute -bottom-4 end-4 md:bottom-0 md:end-0 z-20 hidden md:block" initial={{ opacity: 0, y: 20, scale: 0.8 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ delay: 1.7, type: "spring" }}>
                 <motion.div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-2xl shadow-xl shadow-brand-deep/10 p-3 border border-brand-pale/40 dark:border-gray-700/40" style={{ animation: "float 9s ease-in-out infinite 2.5s" }} whileHover={{ scale: 1.1 }}>
                   <div className="flex items-center gap-2"><div className="w-8 h-8 bg-emerald-50 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center"><Shield className="w-3.5 h-3.5 text-emerald-500" /></div><div><p className="text-[9px] text-gray-400">{t("float.ssl")}</p><p className="text-xs font-bold text-emerald-600">{t("float.protected")}</p></div></div>
                 </motion.div>
