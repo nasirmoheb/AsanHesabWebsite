@@ -24,6 +24,7 @@ interface PricingSectionProps {
 
 export default function PricingSection({ pricingPlans }: PricingSectionProps) {
   const { t, dir } = useI18n();
+  const isRtl = dir === "rtl";
 
   return (
     <section id="pricing" className="py-20 md:py-28 gradient-brand-soft relative overflow-hidden">
@@ -79,9 +80,9 @@ export default function PricingSection({ pricingPlans }: PricingSectionProps) {
                   </div>
                   <ul className="space-y-3 mb-8" style={{ direction: dir }}>
                     {plan.features.map((f, j) => (
-                      <li key={j} className="flex items-start gap-3">
-                        <CheckCircle2 className="w-4 h-4 text-brand-mid shrink-0 mt-0.5 rtl:order-last" />
-                        <span className="text-sm text-gray-500 dark:text-gray-400">{f}</span>
+                      <li key={j} className={`flex items-start gap-3 ${isRtl ? "flex-row-reverse" : ""}`}>
+                        <CheckCircle2 className={`w-4 h-4 text-brand-mid shrink-0 mt-0.5 ${isRtl ? "ms-0 me-3" : ""}`} />
+                        <span className="text-sm text-gray-500 dark:text-gray-400 text-start">{f}</span>
                       </li>
                     ))}
                   </ul>
