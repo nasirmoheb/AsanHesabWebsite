@@ -30,7 +30,7 @@ import {
   Globe,
   CheckCircle2,
   Star,
-  ArrowLeft,
+  ArrowRight,
   Menu,
   X,
   TrendingUp,
@@ -1492,7 +1492,7 @@ export default function Home() {
                       <span className="relative z-10 flex items-center">
                         <Zap className="w-5 h-5 me-2" />
                         {t("hero.cta_primary")}
-                        <ArrowLeft className="w-5 h-5 ms-2 rtl:rotate-180" />
+                        <ArrowRight className="w-5 h-5 ms-2 rtl:rotate-180" />
                       </span>
                       <motion.div
                         className="absolute inset-0 shimmer"

@@ -7,7 +7,7 @@ import { useI18n } from "@/lib/i18n";
 import { FadeIn } from "@/components/ui/animation-components";
 import {
   Zap,
-  ArrowLeft,
+  ArrowRight,
   Headphones,
 } from "lucide-react";
 
@@ -64,7 +64,7 @@ export default function FinalCTA() {
                 >
                   <Zap className="w-5 h-5 me-2" />
                   {t("cta.download_free")}
-                  <ArrowLeft className="w-5 h-5 ms-2 rtl:rotate-180" />
+                  <ArrowRight className="w-5 h-5 ms-2 rtl:rotate-180" />
                 </Button>
               </motion.div>
               <motion.div whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.97 }}>

@@ -9,7 +9,7 @@ import { LanguageSwitcher } from "@/components/language-switcher";
 import { useI18n } from "@/lib/i18n";
 import {
   Calculator, CalendarDays, FileText, BarChart3, Shield, Users, Globe,
-  CheckCircle2, Star, ArrowLeft, Menu, X, TrendingUp, Wallet, Receipt,
+  CheckCircle2, Star, ArrowRight, Menu, X, TrendingUp, Wallet, Receipt,
   PieChart, Clock, Headphones, Award, Zap, Heart, ChevronDown, Building2,
   Truck, Store, Sparkles, Layers, Lock, Database, Monitor, WifiOff, Bell,
   ArrowUp, Home as HomeIcon, LayoutDashboard, Settings, FileSpreadsheet,
@@ -416,7 +416,7 @@ export default function HeroSection() {
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-end rtl:lg:justify-start">
                 <motion.div whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.97 }}>
                   <Button size="lg" className="gradient-brand text-white border-0 px-8 py-6 text-base rounded-2xl shadow-xl shadow-brand-mid/30 relative overflow-hidden group">
-                    <span className="relative z-10 flex items-center"><Zap className="w-5 h-5 me-2" />{t("hero.cta_primary")}<ArrowLeft className="w-5 h-5 ms-2 rtl:rotate-180" /></span>
+                    <span className="relative z-10 flex items-center"><Zap className="w-5 h-5 me-2" />{t("hero.cta_primary")}<ArrowRight className="w-5 h-5 ms-2 rtl:rotate-180" /></span>
                     <motion.div className="absolute inset-0 shimmer" repeatCount={Infinity} />
                     <motion.div className="absolute inset-0 rounded-2xl border-2 border-white/20" animate={{ scale: [1, 1.15], opacity: [0.5, 0] }} transition={{ duration: 2, repeat: Infinity }} />
                   </Button>
