@@ -223,9 +223,9 @@ function ShopkeeperMockup() {
       </div>
       <ul className="space-y-1.5 mb-3">
         {[
-          { n: t.comparison.row6, q: formatNumber("×2"), a: formatNumber("1,700") + " ؋" },
-          { n: t.comparison.row7, q: formatNumber("×3"), a: formatNumber("240") + " ؋" },
-          { n: t.audiences.tab1,  q: formatNumber("×1"), a: formatNumber("320") + " ؋" },
+          { n: t.testimonials.t1Role.split(" · ")[0], q: formatNumber("×2"), a: formatNumber("1,700") + " ؋" },
+          { n: t.testimonials.t2Role.split(" · ")[0], q: formatNumber("×3"), a: formatNumber("240") + " ؋" },
+          { n: t.testimonials.t3Role.split(" · ")[0], q: formatNumber("×1"), a: formatNumber("320") + " ؋" },
         ].map((i, idx) => (
           <li
             key={idx}

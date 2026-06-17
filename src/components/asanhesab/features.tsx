@@ -160,9 +160,9 @@ export function Features() {
               </p>
               <div className="mt-4 rounded-xl border border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/30 p-3 space-y-2">
                 {[
-                  { name: t.audiences.tab1, pct: 78, tone: "bg-emerald-500" },
-                  { name: t.audiences.tab2, pct: 22, tone: "bg-amber-500" },
-                  { name: t.comparison.row8, pct: 56, tone: "bg-blue-500" },
+                  { name: t.testimonials.t1Role.split(" · ")[0], pct: 78, tone: "bg-emerald-500" },
+                  { name: t.testimonials.t2Role.split(" · ")[0], pct: 22, tone: "bg-amber-500" },
+                  { name: t.testimonials.t3Role.split(" · ")[0], pct: 56, tone: "bg-blue-500" },
                 ].map((s, i) => (
                   <div key={i}>
                     <div className="flex justify-between text-[10px] mb-1">
