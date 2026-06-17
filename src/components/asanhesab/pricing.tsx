@@ -180,15 +180,22 @@ function PricingCard({
     <article
       className={`relative rounded-3xl p-6 sm:p-8 flex flex-col h-full transition-all duration-300 ${
         highlighted
-          ? "bg-white dark:bg-slate-900 border-2 border-blue-600 dark:border-blue-500 shadow-premium-lg lg:-translate-y-2 hover:-translate-y-3"
-          : "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-premium hover:shadow-premium-lg"
+          ? `bg-white dark:bg-slate-900 border-2 border-blue-600 dark:border-blue-500 shadow-premium-lg lg:-translate-y-3 hover:-translate-y-4 glow-blue`
+          : "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 shadow-premium hover:shadow-premium-lg hover-lift"
       }`}
     >
+      {/* Glow halo behind highlighted card */}
+      {highlighted && (
+        <div aria-hidden className="absolute -inset-1 -z-10 rounded-3xl bg-gradient-to-br from-blue-400/30 via-emerald-400/20 to-violet-400/20 blur-xl opacity-70" />
+      )}
+
       {popularBadge && (
-        <div className="absolute -top-3 right-6 sm:right-8">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 px-3 py-1 text-xs font-bold text-white shadow-premium">
-            <Star className="h-3.5 w-3.5 fill-white" />
-            {t.pricing.stdPopular}
+        <div className="absolute -top-3.5 right-6 sm:right-8 z-10">
+          <span className="relative inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 px-3.5 py-1.5 text-xs font-bold text-white shadow-premium-lg">
+            {/* Shimmer overlay */}
+            <span aria-hidden className="absolute inset-0 rounded-full shimmer" />
+            <Star className="h-3.5 w-3.5 fill-white relative" />
+            <span className="relative">{t.pricing.stdPopular}</span>
           </span>
         </div>
       )}

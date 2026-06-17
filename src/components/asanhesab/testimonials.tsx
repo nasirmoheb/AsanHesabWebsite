@@ -1,6 +1,6 @@
 "use client";
 
-import { Star, Quote } from "lucide-react";
+import { Star, Quote, CheckCircle2 } from "lucide-react";
 import { SectionHeading } from "./section-heading";
 import { Reveal } from "./reveal";
 import { useLanguage, useT } from "./i18n/language-context";
@@ -101,6 +101,7 @@ function TestimonialCard({
   stars: number;
   quote: string;
 }) {
+  const { formatNumber } = useLanguage();
   const tones = {
     blue:    "from-blue-600 to-blue-700",
     emerald: "from-emerald-600 to-emerald-700",
@@ -108,10 +109,16 @@ function TestimonialCard({
   } as const;
 
   return (
-    <article className="relative h-full rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6 sm:p-7 shadow-premium hover:shadow-premium-lg transition-all duration-300 flex flex-col">
-      <Quote className="absolute top-5 left-5 h-10 w-10 text-slate-100 dark:text-slate-800" aria-hidden />
+    <article className="group relative h-full rounded-3xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6 sm:p-8 shadow-premium hover:shadow-premium-lg hover-lift transition-all duration-300 flex flex-col overflow-hidden">
+      {/* Decorative gradient corner */}
+      <div
+        aria-hidden
+        className={`absolute -top-12 -right-12 h-32 w-32 rounded-full bg-gradient-to-br ${tones[tone]} opacity-10 blur-2xl group-hover:opacity-20 transition-opacity`}
+      />
+      {/* Large quote watermark */}
+      <Quote className="absolute top-4 left-4 h-14 w-14 text-slate-100 dark:text-slate-800 group-hover:scale-110 transition-transform" aria-hidden />
 
-      <div className="relative flex items-center gap-0.5 mb-4">
+      <div className="relative flex items-center gap-1 mb-4">
         {Array.from({ length: 5 }).map((_, i) => (
           <Star
             key={i}
@@ -122,6 +129,7 @@ function TestimonialCard({
             }`}
           />
         ))}
+        <span className="ms-2 text-xs font-bold text-slate-500 dark:text-slate-400 num-fa">{formatNumber("5.0")}</span>
       </div>
 
       <p className="relative text-sm sm:text-base text-slate-700 dark:text-slate-200 leading-relaxed flex-1">
@@ -129,15 +137,24 @@ function TestimonialCard({
       </p>
 
       <div className="relative mt-6 pt-5 border-t border-slate-100 dark:border-slate-700 flex items-center gap-3">
-        <span
-          className={`inline-flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br ${tones[tone]} text-white font-bold text-sm shadow-premium`}
-        >
-          {initials}
+        <span className="relative">
+          {/* Ring around avatar */}
+          <span className={`absolute -inset-0.5 rounded-full bg-gradient-to-br ${tones[tone]} opacity-30 blur-sm`} aria-hidden />
+          <span
+            className={`relative inline-flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br ${tones[tone]} text-white font-bold text-sm shadow-premium`}
+          >
+            {initials}
+          </span>
         </span>
         <div>
           <p className="text-sm font-bold text-slate-900 dark:text-white">{name}</p>
           <p className="text-xs text-slate-500 dark:text-slate-400">{role}</p>
         </div>
+        {/* Verified badge */}
+        <span className="ms-auto inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-1 rounded-full">
+          <CheckCircle2 className="h-3 w-3" />
+          ✓
+        </span>
       </div>
     </article>
   );

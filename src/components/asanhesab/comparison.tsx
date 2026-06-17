@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, X, Minus, FileSpreadsheet, Sparkles } from "lucide-react";
+import { Check, X, Minus, FileSpreadsheet, Sparkles, Trophy } from "lucide-react";
 import { SectionHeading } from "./section-heading";
 import { Reveal } from "./reveal";
 import { useT } from "./i18n/language-context";
@@ -48,13 +48,16 @@ export function Comparison() {
                   <th scope="col" className="text-right p-3 font-bold text-slate-700 dark:text-slate-200 w-[40%]">
                     {/* Empty top-left cell */}
                   </th>
-                  <th scope="col" className="p-3">
-                    <div className="flex flex-col items-center gap-0.5">
-                      <span className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-br from-blue-600 to-blue-700 text-white px-3 py-1 text-xs font-bold shadow-premium">
+                  <th scope="col" className="p-3 relative">
+                    <div className="flex flex-col items-center gap-1">
+                      <span className="relative inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-br from-blue-600 to-blue-700 text-white px-3 py-1 text-xs font-bold shadow-premium glow-blue">
                         <Sparkles className="h-3.5 w-3.5" />
                         {t.comparison.colAsan}
                       </span>
-                      <span className="text-[10px] text-blue-700 dark:text-blue-300 font-semibold">{t.comparison.colAsanTag}</span>
+                      <span className="inline-flex items-center gap-1 text-[10px] text-amber-700 dark:text-amber-300 font-semibold">
+                        <Trophy className="h-3 w-3 fill-amber-400 text-amber-500" />
+                        {t.comparison.colAsanTag}
+                      </span>
                     </div>
                   </th>
                   <th scope="col" className="p-3">

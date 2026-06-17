@@ -75,3 +75,19 @@ export function Reveal({
     </Tag>
   );
 }
+
+/**
+ * useSpotlight — tracks mouse position over an element for spotlight hover effect.
+ * Returns a ref to attach + onMouseMove handler.
+ */
+export function useSpotlight<T extends HTMLElement = HTMLDivElement>() {
+  const ref = useRef<T | null>(null);
+  const handleMouseMove = (e: React.MouseEvent<T>) => {
+    const el = ref.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    el.style.setProperty("--x", `${e.clientX - rect.left}px`);
+    el.style.setProperty("--y", `${e.clientY - rect.top}px`);
+  };
+  return { ref, handleMouseMove };
+}

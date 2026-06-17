@@ -1,12 +1,17 @@
 "use client";
 
-import { Zap, ShieldCheck, Clock, Check } from "lucide-react";
+import { Zap, ShieldCheck, Clock, Check, ArrowLeft } from "lucide-react";
 import { WhatsAppIcon } from "./whatsapp-icon";
 import { Reveal } from "./reveal";
 import { useT } from "./i18n/language-context";
 
 /**
  * FinalCTA — closing argument with urgency.
+ * Enhanced with:
+ *  - Animated gradient mesh background
+ *  - Floating confetti particles
+ *  - Glow ring around primary CTA
+ *  - Pulse halo behind badge
  */
 export function FinalCTA() {
   const t = useT();
@@ -14,17 +19,19 @@ export function FinalCTA() {
   return (
     <section
       id="download"
-      className="relative overflow-hidden bg-gradient-to-br from-blue-700 via-blue-800 to-slate-900 dark:from-blue-800 dark:via-blue-900 dark:to-slate-950 py-20 sm:py-28"
+      className="relative overflow-hidden bg-gradient-to-br from-blue-700 via-blue-800 to-slate-900 dark:from-blue-800 dark:via-blue-900 dark:to-slate-950 py-24 sm:py-32"
       aria-labelledby="final-cta-headline"
     >
+      {/* Animated gradient mesh */}
       <div
         aria-hidden
-        className="absolute inset-0 opacity-30"
+        className="absolute inset-0 opacity-40"
         style={{
           backgroundImage:
-            "radial-gradient(circle at 20% 30%, rgba(255,255,255,0.3) 0, transparent 35%), radial-gradient(circle at 80% 70%, rgba(16, 185, 129, 0.25) 0, transparent 40%)",
+            "radial-gradient(circle at 20% 30%, rgba(255,255,255,0.3) 0, transparent 35%), radial-gradient(circle at 80% 70%, rgba(16, 185, 129, 0.3) 0, transparent 40%), radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.2) 0, transparent 45%)",
         }}
       />
+      {/* Grid overlay */}
       <div
         aria-hidden
         className="absolute inset-0 opacity-10"
@@ -37,21 +44,45 @@ export function FinalCTA() {
         }}
       />
 
+      {/* Floating confetti particles */}
+      <div aria-hidden className="absolute inset-0 pointer-events-none overflow-hidden">
+        {[
+          { left: "10%", top: "20%", delay: "0s",   size: "h-2 w-2",  color: "bg-amber-300",   shape: "rounded-full" },
+          { left: "85%", top: "15%", delay: "0.5s", size: "h-3 w-3",  color: "bg-emerald-300", shape: "rounded-sm" },
+          { left: "15%", top: "70%", delay: "1s",   size: "h-2 w-2",  color: "bg-violet-300",  shape: "rounded-full" },
+          { left: "75%", top: "75%", delay: "1.5s", size: "h-2.5 w-2.5", color: "bg-blue-300",  shape: "rounded-sm" },
+          { left: "50%", top: "10%", delay: "2s",   size: "h-1.5 w-1.5", color: "bg-rose-300", shape: "rounded-full" },
+          { left: "30%", top: "85%", delay: "2.5s", size: "h-2 w-2",  color: "bg-amber-300",   shape: "rounded-sm" },
+          { left: "90%", top: "50%", delay: "3s",   size: "h-2 w-2",  color: "bg-emerald-300", shape: "rounded-full" },
+        ].map((p, i) => (
+          <span
+            key={i}
+            className={`absolute ${p.size} ${p.color} ${p.shape} opacity-60 animate-float-slow`}
+            style={{ left: p.left, top: p.top, animationDelay: p.delay }}
+          />
+        ))}
+      </div>
+
       <div className="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 text-center">
         <Reveal>
-          <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 backdrop-blur-sm px-4 py-1.5 text-xs sm:text-sm font-semibold text-white">
-            <Zap className="h-3.5 w-3.5 fill-amber-300 text-amber-300" />
-            <span>{t.finalCta.badge}</span>
-          </span>
+          <div className="relative inline-flex">
+            {/* Pulse halo */}
+            <span aria-hidden className="absolute inset-0 rounded-full bg-amber-400/30 blur-md animate-pulse-ring" />
+            <span className="relative inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 backdrop-blur-xl px-4 py-1.5 text-xs sm:text-sm font-semibold text-white">
+              <Zap className="h-3.5 w-3.5 fill-amber-300 text-amber-300" />
+              <span>{t.finalCta.badge}</span>
+            </span>
+          </div>
         </Reveal>
 
         <Reveal delay={60}>
           <h2
             id="final-cta-headline"
-            className="mt-6 text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.2]"
+            className="mt-6 text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.1]"
+            style={{ textWrap: "balance" } as React.CSSProperties}
           >
             {t.finalCta.titleLead}{" "}
-            <span className="bg-gradient-to-l from-amber-300 to-emerald-300 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-l from-amber-300 via-emerald-300 to-amber-300 bg-clip-text text-transparent">
               {t.finalCta.titleHighlight}
             </span>
             {t.finalCta.titleTail}
@@ -59,43 +90,45 @@ export function FinalCTA() {
         </Reveal>
 
         <Reveal delay={120}>
-          <p className="mt-5 text-base sm:text-lg text-blue-100 max-w-2xl mx-auto leading-relaxed">
+          <p className="mt-6 text-base sm:text-lg lg:text-xl text-blue-100 max-w-2xl mx-auto leading-relaxed">
             {t.finalCta.body}
           </p>
         </Reveal>
 
         <Reveal delay={180}>
-          <div className="mt-9 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4">
+          <div className="mt-10 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4">
             <a
               href="https://wa.me/937000000000"
-              className="group inline-flex items-center justify-center gap-2.5 rounded-xl bg-white px-7 py-4 text-base sm:text-lg font-bold text-blue-700 shadow-premium-lg hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-300"
+              className="group relative inline-flex items-center justify-center gap-2.5 rounded-xl bg-white px-7 py-4 text-base sm:text-lg font-bold text-blue-700 shadow-premium-lg hover:-translate-y-1 transition-all duration-300 overflow-hidden"
             >
-              <WhatsAppIcon className="h-5 w-5 text-emerald-600" />
-              <span>{t.finalCta.primaryCta}</span>
+              {/* Shimmer */}
+              <span className="absolute inset-0 shimmer opacity-0 group-hover:opacity-100 transition-opacity" aria-hidden />
+              <WhatsAppIcon className="h-5 w-5 text-emerald-600 relative" />
+              <span className="relative">{t.finalCta.primaryCta}</span>
             </a>
             <a
               href="#features"
-              className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-white/30 bg-white/10 backdrop-blur-sm px-7 py-4 text-base sm:text-lg font-bold text-white hover:bg-white/20 transition-all duration-300"
+              className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-white/30 bg-white/10 backdrop-blur-sm px-7 py-4 text-base sm:text-lg font-bold text-white hover:bg-white/20 hover:border-white/50 transition-all duration-300"
             >
               {t.finalCta.secondaryCta}
+              <ArrowLeft className="h-4 w-4" style={{ transform: "scaleX(-1)" }} />
             </a>
           </div>
         </Reveal>
 
+        {/* Reassurance row with refined styling */}
         <Reveal delay={240}>
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs sm:text-sm text-blue-100">
-            <span className="inline-flex items-center gap-1.5">
-              <Check className="h-4 w-4 text-emerald-300" strokeWidth={3} />
-              {t.finalCta.reassurance1}
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <ShieldCheck className="h-4 w-4 text-emerald-300" />
-              {t.finalCta.reassurance2}
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <Clock className="h-4 w-4 text-emerald-300" />
-              {t.finalCta.reassurance3}
-            </span>
+          <div className="mt-12 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-xs sm:text-sm text-blue-100">
+            {[
+              { icon: <Check className="h-4 w-4 text-emerald-300" strokeWidth={3} />, label: t.finalCta.reassurance1 },
+              { icon: <ShieldCheck className="h-4 w-4 text-emerald-300" />,           label: t.finalCta.reassurance2 },
+              { icon: <Clock className="h-4 w-4 text-emerald-300" />,                 label: t.finalCta.reassurance3 },
+            ].map((item, i) => (
+              <span key={i} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
+                {item.icon}
+                {item.label}
+              </span>
+            ))}
           </div>
         </Reveal>
       </div>
