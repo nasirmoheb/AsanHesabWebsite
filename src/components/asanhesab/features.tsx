@@ -12,6 +12,7 @@ import {
   Boxes,
   CircleDollarSign,
 } from "lucide-react";
+import { Reveal } from "./reveal";
 
 /**
  * Bento Grid Features — "همه چیز برای مدیریت دقیق دکان و شرکت"
@@ -59,7 +60,7 @@ export function Features() {
         {/* Bento grid */}
         <div className="mt-12 sm:mt-16 grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
           {/* Card 1 — Large POS card (spans 1 col × 2 rows on lg) */}
-          <article className="lg:row-span-2 group relative overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-premium p-6 sm:p-8 hover:shadow-premium-lg transition-all duration-300">
+          <Reveal as="article" className="lg:row-span-2 group relative overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-premium p-6 sm:p-8 hover:shadow-premium-lg transition-all duration-300 h-full">
             {/* Decorative gradient corner */}
             <div
               aria-hidden
@@ -133,10 +134,10 @@ export function Features() {
                 ))}
               </ul>
             </div>
-          </article>
+          </Reveal>
 
           {/* Card 2 — Medium: Debt notebook */}
-          <article className="group relative overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-premium p-6 sm:p-7 hover:shadow-premium-lg transition-all duration-300">
+          <Reveal as="article" delay={80} className="group relative overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-premium p-6 sm:p-7 hover:shadow-premium-lg transition-all duration-300 h-full">
             <div
               aria-hidden
               className="absolute -top-12 -left-12 h-32 w-32 bg-gradient-to-br from-amber-100 to-amber-50 rounded-full blur-2xl opacity-70 group-hover:opacity-100 transition-opacity"
@@ -173,10 +174,10 @@ export function Features() {
                 ))}
               </div>
             </div>
-          </article>
+          </Reveal>
 
           {/* Card 3 — Medium: Smart warehouse */}
-          <article className="group relative overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-premium p-6 sm:p-7 hover:shadow-premium-lg transition-all duration-300">
+          <Reveal as="article" delay={160} className="group relative overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-premium p-6 sm:p-7 hover:shadow-premium-lg transition-all duration-300 h-full">
             <div
               aria-hidden
               className="absolute -top-12 -left-12 h-32 w-32 bg-gradient-to-br from-emerald-100 to-emerald-50 rounded-full blur-2xl opacity-70 group-hover:opacity-100 transition-opacity"
@@ -214,10 +215,10 @@ export function Features() {
                 ))}
               </div>
             </div>
-          </article>
+          </Reveal>
 
           {/* Card 4 — Wide: P&L reports (spans 3 cols on lg) */}
-          <article className="lg:col-span-3 group relative overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-premium p-6 sm:p-8 hover:shadow-premium-lg transition-all duration-300">
+          <Reveal as="article" delay={240} className="lg:col-span-3 group relative overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-premium p-6 sm:p-8 hover:shadow-premium-lg transition-all duration-300">
             <div
               aria-hidden
               className="absolute -top-16 -right-16 h-56 w-56 bg-gradient-to-br from-blue-100 to-emerald-50 rounded-full blur-3xl opacity-70 group-hover:opacity-90 transition-opacity"
@@ -324,7 +325,7 @@ export function Features() {
                 </div>
               </div>
             </div>
-          </article>
+          </Reveal>
         </div>
       </div>
     </section>
