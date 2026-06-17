@@ -15,7 +15,7 @@ import { Footer } from "@/components/asanhesab/footer";
 
 export default function Home() {
   return (
-    <div className="relative min-h-screen flex flex-col bg-white">
+    <div className="relative min-h-screen flex flex-col bg-background">
       <Navbar />
       <main className="flex-1">
         {/* Hook — attention + interest */}

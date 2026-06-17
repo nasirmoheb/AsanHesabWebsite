@@ -3,63 +3,50 @@
 import { useState } from "react";
 import { Store, Boxes, Pill, Check, ArrowLeft } from "lucide-react";
 import { Reveal } from "./reveal";
+import { useLanguage, useT } from "./i18n/language-context";
 
 /**
- * Audiences — tabs for different user types.
- * دکاندار / عمده‌فروش / داروساز
- *
- * Each tab shows: hero copy + 4 feature bullets + visual mockup.
- * RTL aware — the active tab indicator animates between tabs.
+ * Audiences — interactive tabs for different user types.
  */
 export function Audiences() {
   const [active, setActive] = useState<0 | 1 | 2>(0);
+  const t = useT();
+  const { formatNumber } = useLanguage();
 
   const tabs = [
     {
       id: 0,
       key: "shopkeeper",
-      label: "دکاندار",
+      label: t.audiences.tab1,
       icon: <Store className="h-4 w-4" />,
-      title: "برای دکاندار که می‌خواهد سریع‌تر بفروشد",
-      body: "اگر یک دکان خواربار، لوازم خانگی، یا الکترونیک دارید — آسان حساب سرعت فروش شما را چند برابر می‌کند. با بارکدخوان، در ۳ ثانیه فروش را ثبت کنید، بل چاپ کنید، و سر دومین مشتری را نگه دارید.",
-      features: [
-        "فروش با بارکد در کمتر از ۳ ثانیه",
-        "چاپ بل استاندارد با لوگوی دکان شما",
-        "مدیریت قرض مشتریان دایمی با یادآوری خودکار",
-        "راپور روزانه فروش و فایده در یک نگاه",
-      ],
+      title: t.audiences.panel1Title,
+      body: t.audiences.panel1Body,
+      features: [t.audiences.panel1Feature1, t.audiences.panel1Feature2, t.audiences.panel1Feature3, t.audiences.panel1Feature4],
+      cta: t.audiences.panel1Cta,
       visual: <ShopkeeperMockup />,
       tone: "blue" as const,
     },
     {
       id: 1,
       key: "wholesaler",
-      label: "عمده‌فروش",
+      label: t.audiences.tab2,
       icon: <Boxes className="h-4 w-4" />,
-      title: "برای عمده‌فروش که با چندین شعبه کار می‌کند",
-      body: "اگر تجارت عمده فروشی دارید — چه از کاپیسا، چه مزار، چه هرات — آسان حساب موجودی چندین گدام را در یک‌جا مدیریت می‌کند. انتقال جنس بین شعبه‌ها، قیمت‌گذاری مختلف برای هر مشتری، و راپور فایده به تفکیک شعبه.",
-      features: [
-        "مدیریت چندین گدام و شعبه در یک سیستم",
-        "قیمت‌گذاری مختلف برای عمده‌فروشان، خرده‌فروشان، و دکانداران",
-        "انتقال موجودی بین شعبه‌ها با راپور کامل",
-        "راپور فایده و تاوان به تفکیک هر شعبه",
-      ],
+      title: t.audiences.panel2Title,
+      body: t.audiences.panel2Body,
+      features: [t.audiences.panel2Feature1, t.audiences.panel2Feature2, t.audiences.panel2Feature3, t.audiences.panel2Feature4],
+      cta: t.audiences.panel2Cta,
       visual: <WholesalerMockup />,
       tone: "emerald" as const,
     },
     {
       id: 2,
       key: "pharmacist",
-      label: "داروساز",
+      label: t.audiences.tab3,
       icon: <Pill className="h-4 w-4" />,
-      title: "برای داروساز که دقت و امنیت می‌خواهد",
-      body: "داروخانه شما نیاز به دقت بیشتر دارد — تاریخ انقضا، دستور نسخه، و ردیابی هر دارو. آسان حساب با هشدار خودکار تاریخ انقضا و مدیریت دسته‌بندی داروها، خطا را به حداقل می‌رساند و اعتماد بیماران را حفظ می‌کند.",
-      features: [
-        "هشدار خودکار تاریخ انقضای داروها",
-        "گدام به تفکیک دسته‌بندی دارویی (OTC, نسخه‌ای, سرد)",
-        "ثبت نسخه و بیمار با تاریخچه کامل خرید",
-        "راپور فروش داروهای پر مصرف برای سفارش مجدد",
-      ],
+      title: t.audiences.panel3Title,
+      body: t.audiences.panel3Body,
+      features: [t.audiences.panel3Feature1, t.audiences.panel3Feature2, t.audiences.panel3Feature3, t.audiences.panel3Feature4],
+      cta: t.audiences.panel3Cta,
       visual: <PharmacistMockup />,
       tone: "violet" as const,
     },
@@ -67,47 +54,44 @@ export function Audiences() {
 
   const activeTab = tabs[active];
   const toneClasses = {
-    blue:    { active: "bg-blue-600 text-white",            soft: "bg-blue-50 text-blue-700",            ring: "ring-blue-200" },
-    emerald: { active: "bg-emerald-600 text-white",         soft: "bg-emerald-50 text-emerald-700",      ring: "ring-emerald-200" },
-    violet:  { active: "bg-violet-600 text-white",          soft: "bg-violet-50 text-violet-700",        ring: "ring-violet-200" },
+    blue:    { active: "bg-blue-600 text-white",            soft: "bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300",            icon: "" },
+    emerald: { active: "bg-emerald-600 text-white",         soft: "bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300",icon: "" },
+    violet:  { active: "bg-violet-600 text-white",          soft: "bg-violet-50 dark:bg-violet-950/50 text-violet-700 dark:text-violet-300",  icon: "" },
   } as const;
-  const t = toneClasses[activeTab.tone];
+  const tCls = toneClasses[activeTab.tone];
 
   return (
     <section
       id="audiences"
-      dir="rtl"
-      className="relative bg-gradient-to-b from-white to-slate-50/50 py-20 sm:py-28"
+      className="relative bg-gradient-to-b from-white to-slate-50/50 dark:from-slate-950 dark:to-slate-900/50 py-20 sm:py-28"
       aria-labelledby="audiences-headline"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <Reveal>
           <div className="text-center max-w-3xl mx-auto">
-            <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold ${t.soft} border-current/10`}>
+            <span className={`inline-flex items-center gap-1.5 rounded-full border border-current/10 ${tCls.soft} px-3 py-1 text-xs font-semibold`}>
               {activeTab.icon}
-              ساخته شده برای شما
+              {t.audiences.eyebrow}
             </span>
             <h2
               id="audiences-headline"
-              className="mt-4 text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 leading-[1.2]"
+              className="mt-4 text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.2]"
             >
-              هر تجارتی، یک راه‌حل{" "}
-              <span className="text-gradient-blue">ویژه</span>
+              {t.audiences.title}{" "}
+              <span className="text-gradient-blue">{t.audiences.highlight}</span>
             </h2>
-            <p className="mt-4 text-base sm:text-lg text-slate-600 leading-relaxed">
-              چه دکان خواربار باشید، چه عمده‌فروش چندشعبه‌ای، چه داروخانه — آسان حساب
-              خود را با نیاز شما تنظیم می‌کند. نوع تجارت خود را انتخاب کنید.
+            <p className="mt-4 text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
+              {t.audiences.subtitle}
             </p>
           </div>
         </Reveal>
 
-        {/* Tabs */}
         <Reveal delay={120}>
           <div className="mt-10 sm:mt-12 flex justify-center">
             <div
               role="tablist"
-              aria-label="انتخاب نوع تجارت"
-              className="inline-flex items-center gap-1.5 rounded-2xl bg-white border border-slate-200 p-1.5 shadow-premium"
+              aria-label={t.audiences.eyebrow}
+              className="inline-flex items-center gap-1.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-1.5 shadow-premium"
             >
               {tabs.map((tab) => {
                 const isActive = active === tab.id;
@@ -121,8 +105,8 @@ export function Audiences() {
                     onClick={() => setActive(tab.id as 0 | 1 | 2)}
                     className={`inline-flex items-center gap-2 rounded-xl px-4 sm:px-5 py-2.5 text-sm font-bold transition-all duration-300 ${
                       isActive
-                        ? `${t.active} shadow-premium`
-                        : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                        ? `${tCls.active} shadow-premium`
+                        : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800"
                     }`}
                   >
                     {tab.icon}
@@ -134,37 +118,31 @@ export function Audiences() {
           </div>
         </Reveal>
 
-        {/* Active panel */}
         <div
           role="tabpanel"
           id={`panel-${activeTab.key}`}
           aria-labelledby={`tab-${activeTab.key}`}
           className="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center"
         >
-          {/* Copy side */}
           <Reveal key={`copy-${active}`} delay={100}>
             <div>
-              <span
-                className={`inline-flex items-center gap-1.5 rounded-full ${t.soft} px-3 py-1 text-xs font-bold`}
-              >
+              <span className={`inline-flex items-center gap-1.5 rounded-full ${tCls.soft} px-3 py-1 text-xs font-bold`}>
                 {activeTab.icon}
                 {activeTab.label}
               </span>
-              <h3 className="mt-4 text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 leading-tight">
+              <h3 className="mt-4 text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 dark:text-white leading-tight">
                 {activeTab.title}
               </h3>
-              <p className="mt-4 text-base text-slate-600 leading-relaxed">
+              <p className="mt-4 text-base text-slate-600 dark:text-slate-300 leading-relaxed">
                 {activeTab.body}
               </p>
               <ul className="mt-6 space-y-3">
                 {activeTab.features.map((f) => (
                   <li key={f} className="flex items-start gap-2.5">
-                    <span
-                      className={`mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${t.soft}`}
-                    >
+                    <span className={`mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${tCls.soft}`}>
                       <Check className="h-3 w-3" strokeWidth={3} />
                     </span>
-                    <span className="text-sm sm:text-base text-slate-700 font-medium">
+                    <span className="text-sm sm:text-base text-slate-700 dark:text-slate-200 font-medium">
                       {f}
                     </span>
                   </li>
@@ -174,18 +152,17 @@ export function Audiences() {
                 href="#download"
                 className="mt-8 inline-flex items-center gap-2 rounded-xl bg-gradient-to-br from-blue-600 to-blue-700 px-6 py-3.5 text-base font-bold text-white shadow-premium hover:shadow-blue-600/30 hover:-translate-y-0.5 transition-all duration-300"
               >
-                شروع کنید — مخصوص {activeTab.label}
-                <ArrowLeft className="h-4 w-4" />
+                {activeTab.cta}
+                <ArrowLeft className="h-4 w-4" style={{ transform: "scaleX(-1)" }} />
               </a>
             </div>
           </Reveal>
 
-          {/* Visual side */}
           <Reveal key={`visual-${active}`} delay={180}>
             <div className="relative">
               <div
                 aria-hidden
-                className={`absolute -inset-6 -z-10 rounded-3xl ${t.soft} opacity-50 blur-2xl`}
+                className={`absolute -inset-6 -z-10 rounded-3xl ${tCls.soft} opacity-50 blur-2xl`}
               />
               {activeTab.visual}
             </div>
@@ -199,13 +176,17 @@ export function Audiences() {
 /* ----- Mini visual mockups per audience ----- */
 
 function MockShell({ children }: { children: React.ReactNode }) {
+  const t = useT();
+  const { formatNumber } = useLanguage();
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white shadow-premium-lg overflow-hidden">
-      <div className="flex items-center gap-1.5 px-4 py-2.5 bg-slate-50 border-b border-slate-100">
+    <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-premium-lg overflow-hidden">
+      <div className="flex items-center gap-1.5 px-4 py-2.5 bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-700">
         <span className="h-2.5 w-2.5 rounded-full bg-rose-300" />
         <span className="h-2.5 w-2.5 rounded-full bg-amber-300" />
         <span className="h-2.5 w-2.5 rounded-full bg-emerald-300" />
-        <span className="mr-auto text-[10px] text-slate-400">آسان حساب · ۱۴۰۵/۰۳/۲۷</span>
+        <span className="mr-auto text-[10px] text-slate-400 dark:text-slate-500">
+          {t.brand.name} · {formatNumber("1405/03/27")}
+        </span>
       </div>
       <div className="p-4 sm:p-5">{children}</div>
     </div>
@@ -213,85 +194,87 @@ function MockShell({ children }: { children: React.ReactNode }) {
 }
 
 function ShopkeeperMockup() {
+  const t = useT();
+  const { formatNumber } = useLanguage();
   return (
     <MockShell>
       <div className="flex items-center justify-between mb-3">
         <div>
-          <p className="text-[10px] text-slate-500">فروش جدید</p>
-          <p className="text-sm font-bold text-slate-800 num-fa">#۱۲۴۰ · ۱۴:۳۲</p>
+          <p className="text-[10px] text-slate-500 dark:text-slate-400">{t.features.card1SessionLabel}</p>
+          <p className="text-sm font-bold text-slate-800 dark:text-slate-100">{formatNumber("#1240")} · {formatNumber("14:32")}</p>
         </div>
-        <span className="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">
-          ✓ ثبت شد
+        <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-900/40 px-2 py-0.5 rounded-full">
+          ✓
         </span>
       </div>
-      {/* Barcode scan line */}
-      <div className="rounded-lg bg-slate-50 border border-slate-100 p-3 mb-3">
+      <div className="rounded-lg bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700 p-3 mb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-blue-100 text-blue-700 text-xs font-bold">
+            <span className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 text-xs font-bold">
               A
             </span>
             <div>
-              <p className="text-xs font-bold text-slate-800">برنج کابل ۵kg</p>
-              <p className="text-[10px] text-slate-500 num-fa">بارکد: ۸۴۲۱۰۹۹۰</p>
+              <p className="text-xs font-bold text-slate-800 dark:text-slate-100">{t.audiences.tab1}</p>
+              <p className="text-[10px] text-slate-500 dark:text-slate-400">{formatNumber("84210990")}</p>
             </div>
           </div>
-          <p className="text-xs font-bold text-blue-700 num-fa">۵۵۰ ؋</p>
+          <p className="text-xs font-bold text-blue-700 dark:text-blue-300">{formatNumber("550")} ؋</p>
         </div>
       </div>
-      {/* Item list */}
       <ul className="space-y-1.5 mb-3">
         {[
-          { n: "روغن غاز ۵L", q: "×۲", a: "۱٬۷۰۰ ؋" },
-          { n: "شکر سفید ۱kg", q: "×۳", a: "۲۴۰ ؋" },
-          { n: "چای علی‌قلی ۵۰۰g", q: "×۱", a: "۳۲۰ ؋" },
+          { n: t.comparison.row6, q: formatNumber("×2"), a: formatNumber("1,700") + " ؋" },
+          { n: t.comparison.row7, q: formatNumber("×3"), a: formatNumber("240") + " ؋" },
+          { n: t.audiences.tab1,  q: formatNumber("×1"), a: formatNumber("320") + " ؋" },
         ].map((i, idx) => (
           <li
             key={idx}
-            className="flex items-center justify-between text-[11px] bg-white rounded-md px-2 py-1.5 border border-slate-100"
+            className="flex items-center justify-between text-[11px] bg-white dark:bg-slate-900 rounded-md px-2 py-1.5 border border-slate-100 dark:border-slate-700"
           >
-            <span className="font-medium text-slate-700">{i.n}</span>
-            <span className="text-slate-400 num-fa">{i.q}</span>
-            <span className="font-bold text-slate-800 num-fa">{i.a}</span>
+            <span className="font-medium text-slate-700 dark:text-slate-200">{i.n}</span>
+            <span className="text-slate-400 dark:text-slate-500">{i.q}</span>
+            <span className="font-bold text-slate-800 dark:text-slate-100">{i.a}</span>
           </li>
         ))}
       </ul>
-      <div className="flex items-center justify-between pt-3 border-t border-slate-200">
-        <span className="text-xs font-bold text-slate-700">مجموع</span>
-        <span className="text-lg font-extrabold text-gradient-blue num-fa">۸٬۴۵۰ ؋</span>
+      <div className="flex items-center justify-between pt-3 border-t border-slate-200 dark:border-slate-700">
+        <span className="text-xs font-bold text-slate-700 dark:text-slate-200">{t.features.card1Total}</span>
+        <span className="text-lg font-extrabold text-gradient-blue">{formatNumber("8,450")} ؋</span>
       </div>
       <button className="mt-3 w-full rounded-lg bg-gradient-to-br from-blue-600 to-blue-700 text-white text-xs font-bold py-2.5">
-        چاپ بل و تکمیل فروش
+        {t.features.card1Feature1}
       </button>
     </MockShell>
   );
 }
 
 function WholesalerMockup() {
+  const t = useT();
+  const { formatNumber } = useLanguage();
   const branches = [
-    { name: "گدام اصلی کابل", items: "۱٬۲۴۰", val: "۸۹۰٬۰۰۰ ؋", pct: 78 },
-    { name: "شعبه مزارشریف", items: "۶۸۰",   val: "۴۲۰٬۰۰۰ ؋", pct: 52 },
-    { name: "شعبه هرات",     items: "۳۲۰",   val: "۲۱۰٬۰۰۰ ؋", pct: 28 },
+    { name: t.footer.contactLocation,                       items: formatNumber("1,240"), val: formatNumber("890,000") + " ؋", pct: 78 },
+    { name: t.testimonials.t2Role.split(" · ")[1] || "B",   items: formatNumber("680"),   val: formatNumber("420,000") + " ؋", pct: 52 },
+    { name: t.testimonials.t3Role.split(" · ")[1] || "C",   items: formatNumber("320"),   val: formatNumber("210,000") + " ؋", pct: 28 },
   ];
   return (
     <MockShell>
-      <p className="text-xs font-bold text-slate-800 mb-3">مدیریت چند شعبه</p>
+      <p className="text-xs font-bold text-slate-800 dark:text-slate-100 mb-3">{t.audiences.panel2Feature1}</p>
       <ul className="space-y-2.5">
         {branches.map((b, i) => (
-          <li key={i} className="rounded-lg bg-slate-50 border border-slate-100 p-3">
+          <li key={i} className="rounded-lg bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700 p-3">
             <div className="flex items-center justify-between mb-1.5">
               <div className="flex items-center gap-2">
-                <span className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-emerald-100 text-emerald-700 text-xs font-bold">
+                <span className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 text-xs font-bold">
                   {i + 1}
                 </span>
                 <div>
-                  <p className="text-xs font-bold text-slate-800">{b.name}</p>
-                  <p className="text-[10px] text-slate-500 num-fa">{b.items} جنس</p>
+                  <p className="text-xs font-bold text-slate-800 dark:text-slate-100">{b.name}</p>
+                  <p className="text-[10px] text-slate-500 dark:text-slate-400">{b.items}</p>
                 </div>
               </div>
-              <span className="text-xs font-bold text-emerald-700 num-fa">{b.val}</span>
+              <span className="text-xs font-bold text-emerald-700 dark:text-emerald-300">{b.val}</span>
             </div>
-            <div className="h-1.5 rounded-full bg-slate-200 overflow-hidden">
+            <div className="h-1.5 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
               <div
                 className="h-full rounded-full bg-gradient-to-l from-emerald-500 to-emerald-400"
                 style={{ width: `${b.pct}%` }}
@@ -301,13 +284,13 @@ function WholesalerMockup() {
         ))}
       </ul>
       <div className="mt-3 grid grid-cols-2 gap-2">
-        <div className="rounded-lg bg-blue-50 p-2.5 text-center">
-          <p className="text-[10px] text-slate-500">فایده کل ماه</p>
-          <p className="text-sm font-extrabold text-gradient-blue num-fa">۲۳٬۱۲۰ ؋</p>
+        <div className="rounded-lg bg-blue-50 dark:bg-blue-950/40 p-2.5 text-center">
+          <p className="text-[10px] text-slate-500 dark:text-slate-400">{t.solution.afterTitle}</p>
+          <p className="text-sm font-extrabold text-gradient-blue">{formatNumber("23,120")} ؋</p>
         </div>
-        <div className="rounded-lg bg-emerald-50 p-2.5 text-center">
-          <p className="text-[10px] text-slate-500">رشد فایده</p>
-          <p className="text-sm font-extrabold text-emerald-700 num-fa">+۴۷٪</p>
+        <div className="rounded-lg bg-emerald-50 dark:bg-emerald-950/40 p-2.5 text-center">
+          <p className="text-[10px] text-slate-500 dark:text-slate-400">{t.stats.stat3Label}</p>
+          <p className="text-sm font-extrabold text-emerald-700 dark:text-emerald-300">{formatNumber("+47")}٪</p>
         </div>
       </div>
     </MockShell>
@@ -315,48 +298,47 @@ function WholesalerMockup() {
 }
 
 function PharmacistMockup() {
+  const t = useT();
+  const { formatNumber } = useLanguage();
   return (
     <MockShell>
-      <p className="text-xs font-bold text-slate-800 mb-3">مدیریت داروخانه</p>
-      {/* Expiry alert */}
-      <div className="rounded-lg bg-amber-50 border border-amber-200 p-3 mb-3 flex items-start gap-2">
-        <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-amber-100 text-amber-700 text-xs">
+      <p className="text-xs font-bold text-slate-800 dark:text-slate-100 mb-3">{t.audiences.panel3Title}</p>
+      <div className="rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/50 p-3 mb-3 flex items-start gap-2">
+        <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300 text-xs">
           ⚠
         </span>
         <div>
-          <p className="text-[11px] font-bold text-amber-800">۳ دارو در ۳۰ روز آینده منقضی می‌شوند</p>
-          <p className="text-[10px] text-amber-700 mt-0.5">آموکسی‌سیلین ۵۰۰mg · پاراسیتامول · اسید فولیک</p>
+          <p className="text-[11px] font-bold text-amber-800 dark:text-amber-200">{t.audiences.panel3Feature1}</p>
+          <p className="text-[10px] text-amber-700 dark:text-amber-300 mt-0.5">{t.audiences.panel3Feature2}</p>
         </div>
       </div>
-      {/* Categories */}
       <div className="grid grid-cols-3 gap-2 mb-3">
         {[
-          { c: "OTC", count: "۱۲۰", tone: "bg-violet-50 text-violet-700" },
-          { c: "نسخه‌ای", count: "۸۵", tone: "bg-blue-50 text-blue-700" },
-          { c: "سرد", count: "۱۲", tone: "bg-cyan-50 text-cyan-700" },
+          { c: "OTC", count: formatNumber("120"), tone: "bg-violet-50 dark:bg-violet-950/40 text-violet-700 dark:text-violet-300" },
+          { c: "Rx",  count: formatNumber("85"),  tone: "bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300" },
+          { c: "Cold",count: formatNumber("12"),  tone: "bg-cyan-50 dark:bg-cyan-950/40 text-cyan-700 dark:text-cyan-300" },
         ].map((cat, i) => (
           <div key={i} className={`rounded-lg ${cat.tone} p-2.5 text-center`}>
             <p className="text-[10px] font-medium opacity-80">{cat.c}</p>
-            <p className="text-base font-extrabold num-fa">{cat.count}</p>
+            <p className="text-base font-extrabold">{cat.count}</p>
           </div>
         ))}
       </div>
-      {/* Top medicines */}
-      <p className="text-[10px] font-bold text-slate-600 mb-1.5">داروهای پر مصرف</p>
+      <p className="text-[10px] font-bold text-slate-600 dark:text-slate-300 mb-1.5">{t.audiences.panel3Feature4}</p>
       <ul className="space-y-1">
         {[
-          { n: "آموکسی‌سیلین ۵۰۰mg", sold: "۴۸", stock: "۱۲", low: false },
-          { n: "پاراسیتامول ۵۰۰mg", sold: "۳۶", stock: "۲۴", low: false },
-          { n: "لوزنگ سرفه", sold: "۲۸", stock: "۸",  low: true  },
+          { n: t.audiences.panel3Title, sold: formatNumber("48"), stock: formatNumber("12"), low: false },
+          { n: t.audiences.tab3,        sold: formatNumber("36"), stock: formatNumber("24"), low: false },
+          { n: t.audiences.panel3Cta,   sold: formatNumber("28"), stock: formatNumber("8"),  low: true  },
         ].map((m, i) => (
           <li
             key={i}
-            className="flex items-center justify-between text-[11px] bg-white rounded-md px-2 py-1.5 border border-slate-100"
+            className="flex items-center justify-between text-[11px] bg-white dark:bg-slate-900 rounded-md px-2 py-1.5 border border-slate-100 dark:border-slate-700"
           >
-            <span className="font-medium text-slate-700">{m.n}</span>
-            <span className="text-slate-400 num-fa">فروخته: {m.sold}</span>
-            <span className={`font-bold num-fa ${m.low ? "text-amber-600" : "text-slate-800"}`}>
-              موجود: {m.stock}
+            <span className="font-medium text-slate-700 dark:text-slate-200 truncate max-w-[40%]">{m.n}</span>
+            <span className="text-slate-400 dark:text-slate-500">{m.sold}</span>
+            <span className={`font-bold ${m.low ? "text-amber-600 dark:text-amber-400" : "text-slate-800 dark:text-slate-100"}`}>
+              {m.stock}
             </span>
           </li>
         ))}

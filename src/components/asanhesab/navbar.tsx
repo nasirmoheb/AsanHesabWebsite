@@ -1,27 +1,41 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTheme } from "next-themes";
 import { Sun, Moon, Globe, ChevronDown, Menu, X, Download } from "lucide-react";
 import { WhatsAppIcon } from "./whatsapp-icon";
+import { AsanHesabLogo } from "./logo";
+import { useLanguage, useT } from "./i18n/language-context";
+import { LOCALES, type Locale } from "./i18n/dictionary";
 
 /**
  * Navbar — sticky, glassy, RTL-aware.
- * Adds a scroll-triggered compact CTA ("دانلود رایگان") on the left,
- * visible only after the user has scrolled past the hero CTAs.
+ * - Real theme toggle (light/dark via next-themes)
+ * - Language switcher wired to LanguageProvider
+ * - Custom uploaded logo
+ * - Scroll-triggered compact CTA ("دانلود رایگان")
  */
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [showCta, setShowCta] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
-  const [lang, setLang] = useState<"دری" | "پشتو" | "English">("دری");
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [isDark, setIsDark] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  const { theme, setTheme } = useTheme();
+  const { locale, setLocale } = useLanguage();
+  const t = useT();
+
+  useEffect(() => {
+    // Use rAF to avoid synchronous setState in effect body
+    const id = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
 
   useEffect(() => {
     const onScroll = () => {
       const y = window.scrollY;
       setScrolled(y > 12);
-      // Show compact CTA after ~1 viewport of scrolling (past hero CTAs)
       setShowCta(y > window.innerHeight * 0.6);
     };
     onScroll();
@@ -29,52 +43,50 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  const isDark = mounted && theme === "dark";
+
   return (
     <header
       className={`sticky top-0 z-50 w-full transition-all duration-300 ${
         scrolled
-          ? "bg-white/85 backdrop-blur-xl border-b border-slate-200/70 shadow-premium"
+          ? "bg-white/85 dark:bg-slate-950/80 backdrop-blur-xl border-b border-slate-200/70 dark:border-slate-800/70 shadow-premium"
           : "bg-transparent border-b border-transparent"
       }`}
     >
       <nav
-        dir="rtl"
         className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"
-        aria-label="ناوبری اصلی"
+        aria-label={t.nav.navLabel}
       >
         <div className="flex h-16 sm:h-20 items-center justify-between gap-4">
-          {/* Logo — appears on the RIGHT in RTL */}
+          {/* Logo */}
           <a
             href="#"
             className="flex items-center gap-2.5 group shrink-0"
-            aria-label="آسان حساب — خانه"
+            aria-label={`${t.brand.name} — خانه`}
           >
-            <span className="relative inline-flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-600 to-blue-700 text-white font-extrabold text-lg shadow-premium transition-transform duration-300 group-hover:scale-105">
-              A
-              <span className="absolute -bottom-0.5 -left-0.5 h-3 w-3 rounded-full bg-emerald-400 ring-2 ring-white" />
-            </span>
+            <AsanHesabLogo size={44} className="transition-transform duration-300 group-hover:scale-105" />
             <span className="flex flex-col leading-tight">
-              <span className="text-lg sm:text-xl font-extrabold text-slate-900 tracking-tight">
-                آسان حساب
+              <span className="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+                {t.brand.name}
               </span>
-              <span className="hidden sm:block text-[10px] font-medium text-slate-500 -mt-0.5">
-                AsanHesab · سیستم حسابداری
+              <span className="hidden sm:block text-[10px] font-medium text-slate-500 dark:text-slate-400 -mt-0.5">
+                {t.brand.tagline}
               </span>
             </span>
           </a>
 
-          {/* Desktop: nav links (center) */}
-          <div className="hidden lg:flex items-center gap-8 text-sm font-medium text-slate-600">
-            <a href="#features" className="hover:text-blue-700 transition-colors">امکانات</a>
-            <a href="#how" className="hover:text-blue-700 transition-colors">چگونه کار می‌کند</a>
-            <a href="#audiences" className="hover:text-blue-700 transition-colors">برای چه کسی</a>
-            <a href="#pricing" className="hover:text-blue-700 transition-colors">قیمت‌گذاری</a>
-            <a href="#faq" className="hover:text-blue-700 transition-colors">سوالات</a>
+          {/* Desktop nav links */}
+          <div className="hidden lg:flex items-center gap-8 text-sm font-medium text-slate-600 dark:text-slate-300">
+            <a href="#features" className="hover:text-blue-700 dark:hover:text-blue-400 transition-colors">{t.nav.features}</a>
+            <a href="#how" className="hover:text-blue-700 dark:hover:text-blue-400 transition-colors">{t.nav.how}</a>
+            <a href="#audiences" className="hover:text-blue-700 dark:hover:text-blue-400 transition-colors">{t.nav.audiences}</a>
+            <a href="#pricing" className="hover:text-blue-700 dark:hover:text-blue-400 transition-colors">{t.nav.pricing}</a>
+            <a href="#faq" className="hover:text-blue-700 dark:hover:text-blue-400 transition-colors">{t.nav.faq}</a>
           </div>
 
-          {/* Actions — appear on the LEFT in RTL */}
+          {/* Actions */}
           <div className="flex items-center gap-2 sm:gap-3">
-            {/* Scroll-triggered compact CTA (desktop only) */}
+            {/* Scroll-triggered compact CTA (desktop) */}
             <a
               href="#download"
               className={`hidden lg:inline-flex items-center gap-2 rounded-xl bg-gradient-to-br from-blue-600 to-blue-700 px-4 py-2.5 text-sm font-bold text-white shadow-premium hover:shadow-blue-600/30 hover:-translate-y-0.5 transition-all duration-300 ${
@@ -84,21 +96,27 @@ export function Navbar() {
               }`}
             >
               <Download className="h-4 w-4" />
-              دانلود رایگان
+              {t.nav.download}
             </a>
 
             {/* Theme toggle */}
             <button
               type="button"
-              onClick={() => setIsDark((v) => !v)}
-              aria-label="تغییر حالت روشن/تاریک"
-              className="relative inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white/80 text-slate-600 hover:text-blue-700 hover:border-blue-200 transition-all"
+              onClick={() => setTheme(isDark ? "light" : "dark")}
+              aria-label={isDark ? t.nav.themeLight : t.nav.themeDark}
+              className="relative inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-900/80 text-slate-600 dark:text-slate-300 hover:text-blue-700 dark:hover:text-blue-400 hover:border-blue-200 dark:hover:border-blue-700 transition-all"
             >
-              {isDark ? (
-                <Sun className="h-[18px] w-[18px]" />
-              ) : (
-                <Moon className="h-[18px] w-[18px]" />
-              )}
+              {/* Render both icons but hide one based on theme to avoid hydration mismatch */}
+              <Sun
+                className={`h-[18px] w-[18px] absolute transition-all ${
+                  mounted && isDark ? "opacity-0 scale-50" : "opacity-100 scale-100"
+                }`}
+              />
+              <Moon
+                className={`h-[18px] w-[18px] absolute transition-all ${
+                  mounted && isDark ? "opacity-100 scale-100" : "opacity-0 scale-50"
+                }`}
+              />
             </button>
 
             {/* Language dropdown */}
@@ -108,33 +126,38 @@ export function Navbar() {
                 onClick={() => setLangOpen((v) => !v)}
                 aria-haspopup="listbox"
                 aria-expanded={langOpen}
-                aria-label="انتخاب زبان"
-                className="inline-flex h-10 items-center gap-1.5 rounded-xl border border-slate-200 bg-white/80 px-3 text-sm font-medium text-slate-700 hover:border-blue-200 hover:text-blue-700 transition-all"
+                aria-label={t.nav.language}
+                className="inline-flex h-10 items-center gap-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-900/80 px-3 text-sm font-medium text-slate-700 dark:text-slate-200 hover:border-blue-200 dark:hover:border-blue-700 hover:text-blue-700 dark:hover:text-blue-400 transition-all"
               >
                 <Globe className="h-[18px] w-[18px]" />
-                <span className="hidden sm:inline">{lang}</span>
-                <ChevronDown className={`h-4 w-4 transition-transform ${langOpen ? "rotate-180" : ""}`} />
+                <span className="hidden sm:inline">
+                  {LOCALES.find((l) => l.code === locale)?.label}
+                </span>
+                <ChevronDown
+                  className={`h-4 w-4 transition-transform ${langOpen ? "rotate-180" : ""}`}
+                />
               </button>
               {langOpen && (
                 <ul
                   role="listbox"
-                  className="absolute left-0 sm:left-auto sm:right-0 mt-2 w-40 rounded-xl border border-slate-200 bg-white p-1.5 shadow-premium-lg z-50 animate-soft-fade-up"
+                  className="absolute left-0 sm:left-auto sm:right-0 mt-2 w-44 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-1.5 shadow-premium-lg z-50 animate-soft-fade-up"
                 >
-                  {(["دری", "پشتو", "English"] as const).map((l) => (
-                    <li key={l}>
+                  {LOCALES.map((l) => (
+                    <li key={l.code}>
                       <button
                         type="button"
                         onClick={() => {
-                          setLang(l);
+                          setLocale(l.code as Locale);
                           setLangOpen(false);
                         }}
-                        className={`w-full text-right px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                          lang === l
-                            ? "bg-blue-50 text-blue-700"
-                            : "text-slate-700 hover:bg-slate-50"
+                        className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                          locale === l.code
+                            ? "bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300"
+                            : "text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800"
                         }`}
                       >
-                        {l}
+                        <span>{l.label}</span>
+                        <span className="text-[10px] uppercase opacity-60">{l.code}</span>
                       </button>
                     </li>
                   ))}
@@ -146,8 +169,8 @@ export function Navbar() {
             <button
               type="button"
               onClick={() => setMobileOpen((v) => !v)}
-              className="lg:hidden inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white/80 text-slate-700"
-              aria-label="منوی موبایل"
+              className="lg:hidden inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-900/80 text-slate-700 dark:text-slate-200"
+              aria-label={t.nav.menu}
               aria-expanded={mobileOpen}
             >
               {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -158,19 +181,19 @@ export function Navbar() {
         {/* Mobile drawer */}
         {mobileOpen && (
           <div className="lg:hidden pb-4 animate-soft-fade-up">
-            <div className="flex flex-col gap-1 rounded-xl border border-slate-200 bg-white p-2 shadow-premium">
+            <div className="flex flex-col gap-1 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-2 shadow-premium">
               {[
-                { href: "#features", label: "امکانات" },
-                { href: "#how", label: "چگونه کار می‌کند" },
-                { href: "#audiences", label: "برای چه کسی" },
-                { href: "#pricing", label: "قیمت‌گذاری" },
-                { href: "#faq", label: "سوالات" },
+                { href: "#features", label: t.nav.features },
+                { href: "#how", label: t.nav.how },
+                { href: "#audiences", label: t.nav.audiences },
+                { href: "#pricing", label: t.nav.pricing },
+                { href: "#faq", label: t.nav.faq },
               ].map((item) => (
                 <a
                   key={item.href}
                   href={item.href}
                   onClick={() => setMobileOpen(false)}
-                  className="px-3 py-2.5 rounded-lg text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-700"
+                  className="px-3 py-2.5 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-blue-50 dark:hover:bg-blue-950/50 hover:text-blue-700 dark:hover:text-blue-300"
                 >
                   {item.label}
                 </a>
@@ -181,7 +204,7 @@ export function Navbar() {
                 className="mt-1 inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-br from-blue-600 to-blue-700 px-3 py-2.5 text-sm font-bold text-white"
               >
                 <WhatsAppIcon className="h-4 w-4" />
-                دانلود رایگان
+                {t.nav.downloadMobile}
               </a>
             </div>
           </div>

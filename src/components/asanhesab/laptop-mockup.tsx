@@ -23,25 +23,25 @@ export function LaptopMockup() {
       {/* Soft glow behind the laptop */}
       <div
         aria-hidden
-        className="absolute -inset-x-10 -top-10 bottom-0 -z-10 bg-gradient-to-b from-blue-100/60 via-blue-50/40 to-transparent blur-3xl rounded-full"
+        className="absolute -inset-x-10 -top-10 bottom-0 -z-10 bg-gradient-to-b from-blue-100/60 via-blue-50/40 dark:from-blue-500/20 dark:to-transparent blur-3xl rounded-full"
       />
 
       {/* Laptop frame */}
-      <div className="relative rounded-t-2xl bg-slate-800 p-2.5 sm:p-3 shadow-premium-lg">
+      <div className="relative rounded-t-2xl bg-slate-800 dark:bg-slate-950 p-2.5 sm:p-3 shadow-premium-lg ring-1 ring-slate-900/10 dark:ring-white/5">
         {/* Camera dot */}
         <div
           aria-hidden
-          className="absolute left-1/2 top-1 h-1 w-1 -translate-x-1/2 rounded-full bg-slate-600"
+          className="absolute left-1/2 top-1 h-1 w-1 -translate-x-1/2 rounded-full bg-slate-600 dark:bg-slate-700"
         />
-        {/* Screen */}
-        <div className="overflow-hidden rounded-lg border border-slate-700 bg-white">
+        {/* Screen — intentionally kept light to show the app UI */}
+        <div className="overflow-hidden rounded-lg border border-slate-700 dark:border-slate-800 bg-white">
           <DashboardScreen />
         </div>
       </div>
 
       {/* Laptop base / hinge */}
-      <div className="relative h-2 bg-slate-700 rounded-b-xl" />
-      <div className="mx-auto h-1.5 w-28 sm:w-36 rounded-b-xl bg-slate-600" />
+      <div className="relative h-2 bg-slate-700 dark:bg-slate-950 rounded-b-xl" />
+      <div className="mx-auto h-1.5 w-28 sm:w-36 rounded-b-xl bg-slate-600 dark:bg-slate-800" />
 
       {/* Floating glassmorphism card — bottom-left overlap */}
       <div

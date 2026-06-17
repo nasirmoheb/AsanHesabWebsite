@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Vazirmatn } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import { ThemeProvider } from "@/components/asanhesab/theme-provider";
+import { LanguageProvider } from "@/components/asanhesab/i18n/language-context";
 
 const vazirmatn = Vazirmatn({
   subsets: ["arabic", "latin"],
@@ -9,6 +11,7 @@ const vazirmatn = Vazirmatn({
   display: "swap",
 });
 
+// Default metadata — runtime is overridden by LanguageProvider on the client.
 export const metadata: Metadata = {
   title: "آسان حساب — سیستم حسابداری و فروشگاهی مدرن برای دکانداران افغانستان",
   description:
@@ -24,7 +27,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "دانا سیستم" }],
   icons: {
-    icon: "https://z-cdn.chatglm.cn/z-ai/static/logo.svg",
+    icon: "/asanhesab-logo.png",
   },
   openGraph: {
     title: "آسان حساب — حسابداری آسان شده برای دکانداران افغانستان",
@@ -42,10 +45,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fa" dir="rtl" suppressHydrationWarning>
+      <head>
+        {/* Pre-set theme class before hydration to prevent flash of wrong theme */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('asanhesab-theme');if(!t){t='light';}document.documentElement.classList.toggle('dark',t==='dark');}catch(e){document.documentElement.classList.remove('dark');}})();`,
+          }}
+        />
+      </head>
       <body
-        className={`${vazirmatn.variable} font-sans antialiased bg-white text-slate-900`}
+        className={`${vazirmatn.variable} font-sans antialiased bg-background text-foreground`}
       >
-        {children}
+        <ThemeProvider>
+          <LanguageProvider>{children}</LanguageProvider>
+        </ThemeProvider>
         <Toaster />
       </body>
     </html>
