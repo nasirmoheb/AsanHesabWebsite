@@ -4,6 +4,7 @@ import { Check, Star, Sparkles, Download, ShieldCheck, Zap, Lock, Gift } from "l
 import { WhatsAppIcon } from "./whatsapp-icon";
 import { SectionHeading } from "./section-heading";
 import { Reveal } from "./reveal";
+import { CountdownTimer } from "./countdown-timer";
 import { useLanguage, useT } from "./i18n/language-context";
 
 /**
@@ -33,6 +34,11 @@ export function Pricing() {
           subtitle={t.pricing.subtitle}
           tone="blue"
         />
+
+        {/* Countdown timer — limited offer urgency */}
+        <div className="mt-8 flex justify-center">
+          <CountdownTimer />
+        </div>
 
         <div className="mt-12 sm:mt-16 grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6 items-stretch">
           <Reveal>
