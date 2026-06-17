@@ -1,46 +1,53 @@
 "use client";
 
 import {
-  Home,
-  DollarSign,
+  LayoutGrid,
   ShoppingCart,
   Package,
-  Users,
+  Boxes,
+  Truck,
+  Wallet,
   BarChart3,
-  FileText,
-  CreditCard,
-  PieChart,
-  Settings,
+  HelpCircle,
+  Keyboard,
+  Flag,
+  Database,
   Bell,
   Shield,
   RefreshCw,
   Search,
-  ChevronDown,
+  Sun,
   TrendingUp,
   TrendingDown,
-  AlertCircle,
+  DollarSign,
+  AlertTriangle,
   CheckCircle2,
-  Sun,
-  PenLine,
+  Plus,
+  FileText,
+  Lock,
+  ChevronDown,
 } from "lucide-react";
-import { useLanguage, useT } from "./i18n/language-context";
+import { useT } from "./i18n/language-context";
 
 /**
- * LaptopMockup — pure CSS/SVG dashboard inside a stylized laptop frame.
- * Recreated to faithfully match the real AsanHesab desktop app screenshots:
- *  - Right sidebar with menu items (Profile/Accounts/Sales/.../Settings)
- *  - Top bar: logo + bell + shield + refresh on the right, date/time in center, search + user on the left
- *  - 4 KPI cards (Account Balance, Sales, Purchases, Net P&L)
- *  - Financial chart with income/expense lines + 4 summary bars above
- *  - 2 bottom cards (Failed Receipts, Success Rate)
- *  - Quick-access toolbar with action icons
+ * LaptopMockup — recreates the real AsanHesab desktop app dashboard,
+ * faithfully matching the uploaded screenshot (Screenshot 2026-05-31 173349.png).
  *
- * Floating glassmorphism card on the bottom-left corner shows:
- * "رشد فایده خالص +۴۷٪" with a small green trend line.
+ * Layout (LTR app shell, RTL text within):
+ *   ┌─────────────────────────────────────────────────────────────┐
+ *   │ TOP BAR (blue #007ADF): logo + icons | search + user        │
+ *   ├─────────────────────────────────────────────────────────┬───┤
+ *   │ MAIN CONTENT (white)                                     │ S │
+ *   │  greeting row + 4 KPI cards + 7 action buttons          │ I │
+ *   │  + 4 summary cards + line chart + 2 bottom cards        │ D │
+ *   └─────────────────────────────────────────────────────────┴───┤
+ *   │ LAPTOP BASE / HINGE                                          │
+ *   └──────────────────────────────────────────────────────────────┘
+ *
+ * Floating glass card "+47%" preserved on bottom-left corner.
  */
 export function LaptopMockup() {
   const t = useT();
-  const { formatNumber } = useLanguage();
 
   return (
     <div className="relative mx-auto w-full max-w-5xl">
@@ -51,14 +58,14 @@ export function LaptopMockup() {
       />
 
       {/* Laptop frame */}
-      <div className="relative rounded-t-2xl bg-slate-800 dark:bg-slate-950 p-2.5 sm:p-3 shadow-premium-lg ring-1 ring-slate-900/10 dark:ring-white/5">
+      <div className="relative rounded-t-2xl bg-slate-800 dark:bg-slate-950 p-2 sm:p-3 shadow-premium-lg ring-1 ring-slate-900/10 dark:ring-white/5">
         {/* Camera dot */}
         <div
           aria-hidden
           className="absolute left-1/2 top-1 h-1 w-1 -translate-x-1/2 rounded-full bg-slate-600 dark:bg-slate-700"
         />
         {/* Screen — intentionally kept light to show the actual app UI */}
-        <div className="overflow-hidden rounded-lg border border-slate-700 dark:border-slate-800 bg-slate-100">
+        <div className="overflow-hidden rounded-lg border border-slate-700 dark:border-slate-800 bg-white">
           <DashboardScreen />
         </div>
       </div>
@@ -79,7 +86,7 @@ export function LaptopMockup() {
                 {t.solution.afterTitle}
               </p>
               <p className="mt-1 text-2xl sm:text-3xl font-extrabold text-slate-900">
-                {formatNumber("+47")}<span className="text-lg sm:text-xl text-emerald-600">٪</span>
+                +۴۷<span className="text-lg sm:text-xl text-emerald-600">٪</span>
               </p>
             </div>
             <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
@@ -118,7 +125,7 @@ export function LaptopMockup() {
         </div>
       </div>
 
-      {/* Secondary floating badge — top-right corner (WhatsApp availability) */}
+      {/* Secondary floating badge — top-right corner */}
       <div
         dir="rtl"
         className="absolute -top-4 left-2 sm:-left-6 z-20 hidden sm:block animate-float-slow"
@@ -139,118 +146,18 @@ export function LaptopMockup() {
   );
 }
 
-/** Inner dashboard screen — recreates the actual AsanHesab desktop UI */
+/* ============================================================
+   DASHBOARD SCREEN — matches the real AsanHesab app screenshot
+   ============================================================ */
 function DashboardScreen() {
   const t = useT();
-  const { formatNumber } = useLanguage();
 
   return (
-    <div dir="rtl" className="flex h-[300px] sm:h-[460px] w-full bg-slate-100 text-[10px] sm:text-xs">
-      {/* MAIN CONTENT (left in RTL) */}
+    <div dir="rtl" className="flex h-[320px] sm:h-[480px] w-full bg-[#f9f9f9] text-[9px] sm:text-[11px] leading-tight">
+      {/* MAIN CONTENT (left in RTL = main area) */}
       <div className="flex-1 flex flex-col min-w-0">
-        {/* Top bar */}
         <TopBar />
-
-        {/* Quick access toolbar */}
-        <QuickAccessToolbar />
-
-        {/* Scrollable body */}
-        <div className="flex-1 overflow-hidden p-2.5 sm:p-3 space-y-2.5 sm:space-y-3">
-          {/* 4 KPI cards */}
-          <div className="grid grid-cols-4 gap-2 sm:gap-2.5">
-            <KpiCard
-              icon={<DollarSign className="h-3.5 w-3.5 sm:h-4 sm:w-4" />}
-              tone="emerald"
-              label={t.stats.stat1Label}
-              value={formatNumber("9,635.85")}
-              currency="؋"
-            />
-            <KpiCard
-              icon={<ShoppingCart className="h-3.5 w-3.5 sm:h-4 sm:w-4" />}
-              tone="rose"
-              label={t.audiences.tab1}
-              value={formatNumber("3,000")}
-              currency="؋"
-            />
-            <KpiCard
-              icon={<TrendingUp className="h-3.5 w-3.5 sm:h-4 sm:w-4" />}
-              tone="blue"
-              label={t.audiences.tab2}
-              value={formatNumber("32,850")}
-              currency="؋"
-            />
-            <KpiCard
-              icon={<Package className="h-3.5 w-3.5 sm:h-4 sm:w-4" />}
-              tone="amber"
-              label={t.features.card4Title}
-              value={formatNumber("-15,540")}
-              currency="؋"
-              negative
-            />
-          </div>
-
-          {/* Chart section with summary bars above */}
-          <div className="rounded-lg border border-slate-200 bg-white p-2 sm:p-2.5">
-            <div className="flex items-center justify-between mb-1.5 sm:mb-2">
-              <h4 className="text-[10px] sm:text-xs font-bold text-slate-700">
-                {t.features.card4Title2}
-              </h4>
-              <div className="flex items-center gap-1.5 sm:gap-2">
-                <span className="inline-flex items-center gap-1 text-[8px] sm:text-[10px] text-slate-500">
-                  <span className="h-2 w-2 rounded-sm bg-emerald-500" /> {t.solution.kpi1}
-                </span>
-                <span className="inline-flex items-center gap-1 text-[8px] sm:text-[10px] text-slate-500">
-                  <span className="h-2 w-2 rounded-sm bg-rose-500" /> {t.solution.kpi2}
-                </span>
-              </div>
-            </div>
-
-            {/* 4 summary bars */}
-            <div className="grid grid-cols-4 gap-1 sm:gap-1.5 mb-2 sm:mb-2.5">
-              <SummaryBar tone="bg-blue-500"     value={formatNumber("-15,540")} />
-              <SummaryBar tone="bg-rose-700"     value={formatNumber("-17,540")} />
-              <SummaryBar tone="bg-emerald-600"  value={formatNumber("34,450")} />
-              <SummaryBar tone="bg-teal-500"     value={formatNumber("16,910")} />
-            </div>
-
-            {/* Area chart with 2 lines */}
-            <div className="relative h-20 sm:h-28">
-              <DualLineChart />
-              {/* Y-axis labels */}
-              <div className="absolute right-0 top-0 bottom-0 flex flex-col justify-between text-[7px] sm:text-[9px] text-slate-400 num-fa pl-1">
-                <span>۱۸k</span>
-                <span>۱۴k</span>
-                <span>۹k</span>
-                <span>۵k</span>
-                <span>۰</span>
-              </div>
-              {/* X-axis labels */}
-              <div className="flex justify-between text-[7px] sm:text-[9px] text-slate-400 num-fa mt-1 pr-6">
-                <span>۰۲/۱۰</span>
-                <span>۰۲/۰۳</span>
-                <span>۰۹/۰۳</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Bottom 2 cards */}
-          <div className="grid grid-cols-2 gap-2 sm:gap-2.5">
-            <BottomCard
-              icon={<AlertCircle className="h-3.5 w-3.5" />}
-              tone="amber"
-              title={t.pain.card1Title}
-              value={formatNumber("2")}
-              sub={t.audiences.tab2}
-            />
-            <BottomCard
-              icon={<CheckCircle2 className="h-3.5 w-3.5" />}
-              tone="emerald"
-              title={t.testimonials.trust4Label}
-              value={formatNumber("100.0") + "٪"}
-              trend="up"
-            />
-          </div>
-        </div>
+        <MainContent />
       </div>
 
       {/* SIDEBAR (right in RTL) */}
@@ -259,293 +166,490 @@ function DashboardScreen() {
   );
 }
 
-/** Top bar — matches real AsanHesab layout */
+/* ---------- TOP BAR (blue, LTR inside) ---------- */
 function TopBar() {
   const t = useT();
-  const { formatNumber } = useLanguage();
 
   return (
-    <div className="flex items-center justify-between gap-2 px-2.5 sm:px-3 h-9 sm:h-11 bg-white border-b border-slate-200">
-      {/* Right side (RTL start) */}
+    <div
+      dir="ltr"
+      className="flex items-center justify-between gap-2 px-2 sm:px-3 h-8 sm:h-10 bg-[#007ADF] text-white shrink-0"
+    >
+      {/* LEFT: Logo + icons */}
       <div className="flex items-center gap-1.5 sm:gap-2">
-        <span className="inline-flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-lg bg-gradient-to-br from-blue-600 to-blue-700 text-white text-[10px] font-bold">
-          A
-        </span>
-        <span className="hidden sm:inline text-[10px] font-bold text-slate-700">{t.brand.name}</span>
-        <div className="relative">
-          <Bell className="h-3.5 w-3.5 text-slate-500" />
-          <span className="absolute -top-1 -right-1 inline-flex h-3 w-3 items-center justify-center rounded-full bg-rose-500 text-white text-[7px] font-bold">
-            ۶
+        <span className="text-[10px] sm:text-xs font-bold tracking-tight">AsanHesab</span>
+        {/* Window controls */}
+        <span className="mx-1 h-3 w-px bg-white/30" />
+        <button className="h-5 w-5 rounded hover:bg-white/20 flex items-center justify-center">
+          <span className="block h-0.5 w-2.5 bg-white" />
+        </button>
+        <button className="h-5 w-5 rounded hover:bg-white/20 flex items-center justify-center">
+          <span className="block h-2 w-2 border border-white" />
+        </button>
+        <button className="h-5 w-5 rounded hover:bg-white/20 flex items-center justify-center">
+          <span className="block text-[10px] leading-none">×</span>
+        </button>
+        <span className="mx-1 h-3 w-px bg-white/30" />
+        {/* Action icons */}
+        <TbIcon><RefreshCw className="h-3 w-3 sm:h-3.5 sm:w-3.5" /></TbIcon>
+        <TbIcon><Sun className="h-3 w-3 sm:h-3.5 sm:w-3.5" /></TbIcon>
+        <TbIcon><Shield className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-rose-300" /></TbIcon>
+        <TbIcon>
+          <span className="relative">
+            <Bell className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+            <span className="absolute -top-1 -right-1 inline-flex h-2.5 w-2.5 items-center justify-center rounded-full bg-rose-500 text-white text-[7px] font-bold ring-1 ring-[#007ADF]">
+              ۶
+            </span>
           </span>
-        </div>
-        <Shield className="h-3.5 w-3.5 text-slate-500" />
-        <RefreshCw className="h-3.5 w-3.5 text-slate-500" />
+        </TbIcon>
+        <TbIcon><ChevronDown className="h-3 w-3 sm:h-3.5 sm:w-3.5" /></TbIcon>
       </div>
 
-      {/* Center — date/time */}
-      <div className="hidden sm:flex flex-col items-center text-center">
-        <span className="text-[9px] text-slate-500 num-fa">
-          {formatNumber("1405")} {t.testimonials.t3Role.split(" · ")[0]} · {formatNumber("10")}
-        </span>
-        <span className="text-[9px] text-slate-400 num-fa">{formatNumber("17:33")} · {t.pain.transition}</span>
-      </div>
-
-      {/* Left side (RTL end) */}
+      {/* RIGHT: Search + user */}
       <div className="flex items-center gap-1.5 sm:gap-2">
-        <div className="hidden sm:flex items-center gap-1.5 h-7 px-2 rounded-md bg-slate-100 text-slate-500 w-24 lg:w-32">
-          <Search className="h-3 w-3" />
-          <span className="text-[9px] text-slate-400">{t.nav.features}…</span>
+        <div className="flex items-center gap-1.5 h-5 sm:h-6 px-2 rounded bg-white text-slate-500 w-24 sm:w-44">
+          <Search className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
+          <span className="text-[8px] sm:text-[10px] truncate" dir="rtl">{t.dashboard.topbar.search}</span>
         </div>
-        <div className="flex items-center gap-1.5">
-          <span className="hidden sm:inline text-[10px] font-bold text-slate-700">{t.testimonials.t1Name.split(" ").slice(0,2).join(" ")}</span>
-          <div className="h-6 w-6 sm:h-7 sm:w-7 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 ring-2 ring-white flex items-center justify-center text-white text-[9px] font-bold">
+        <span className="hidden sm:inline-flex items-center gap-1.5">
+          <span className="h-5 w-5 sm:h-6 sm:w-6 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 ring-2 ring-white flex items-center justify-center text-white text-[8px] font-bold">
             م
-          </div>
-        </div>
-        <button className="h-7 w-7 rounded-md bg-slate-100 flex items-center justify-center text-slate-500">
-          <Sun className="h-3.5 w-3.5" />
-        </button>
+          </span>
+          <span className="flex flex-col leading-tight">
+            <span className="text-[9px] font-bold text-white" dir="rtl">{t.dashboard.topbar.user}</span>
+            <span className="text-[8px] text-blue-100" dir="rtl">{t.dashboard.topbar.business}</span>
+          </span>
+        </span>
       </div>
     </div>
   );
 }
 
-/** Quick-access toolbar below top bar — action icons */
-function QuickAccessToolbar() {
-  // The real app has icons like Dashboard, Receive Payment, Record Payment, Record Expense, etc.
-  const actions = [
-    { icon: <Home className="h-3.5 w-3.5" />,        tone: "blue" },
-    { icon: <CreditCard className="h-3.5 w-3.5" />,  tone: "slate" },
-    { icon: <DollarSign className="h-3.5 w-3.5" />,  tone: "slate" },
-    { icon: <TrendingDown className="h-3.5 w-3.5" />,tone: "slate" },
-    { icon: <TrendingUp className="h-3.5 w-3.5" />,  tone: "slate" },
-    { icon: <FileText className="h-3.5 w-3.5" />,    tone: "slate" },
-    { icon: <ShoppingCart className="h-3.5 w-3.5" />,tone: "slate" },
-    { icon: <Package className="h-3.5 w-3.5" />,     tone: "slate" },
-  ];
+function TbIcon({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex items-center gap-1 px-2.5 sm:px-3 py-1.5 bg-white border-b border-slate-200 overflow-hidden">
-      {actions.map((a, i) => (
-        <button
-          key={i}
-          className={`inline-flex h-7 w-7 items-center justify-center rounded-md transition-colors ${
-            a.tone === "blue"
-              ? "bg-blue-50 text-blue-700"
-              : "text-slate-500 hover:bg-slate-100"
-          }`}
-        >
-          {a.icon}
-        </button>
-      ))}
-      <div className="mr-auto flex items-center gap-1.5">
-        <span className="text-[9px] text-slate-500">TEST BUSINESS</span>
-        <button className="inline-flex items-center gap-1 rounded-md bg-blue-600 text-white text-[9px] font-bold px-2 py-1">
-          <PenLine className="h-3 w-3" />
-          نوشتن
-        </button>
+    <button className="h-5 w-5 sm:h-6 sm:w-6 rounded hover:bg-white/20 flex items-center justify-center">
+      {children}
+    </button>
+  );
+}
+
+/* ---------- MAIN CONTENT ---------- */
+function MainContent() {
+  const t = useT();
+
+  return (
+    <div className="flex-1 overflow-hidden p-1.5 sm:p-2.5 space-y-1.5 sm:space-y-2">
+      {/* Greeting row */}
+      <div className="flex items-center justify-between text-[9px] sm:text-[11px]">
+        <div className="flex items-center gap-1.5">
+          <span className="font-bold text-slate-800" dir="rtl">{t.dashboard.greeting.goodDay}</span>
+          <span className="text-slate-400">·</span>
+          <span className="font-bold text-blue-700" dir="rtl">{t.dashboard.topbar.business}</span>
+          <span className="text-slate-400">·</span>
+          <span className="text-slate-500" dir="rtl">{t.dashboard.greeting.weekday}</span>
+        </div>
+        <div className="flex items-center gap-1.5 text-slate-500">
+          <span dir="rtl">{t.dashboard.greeting.date}</span>
+          <span className="text-slate-400">·</span>
+          <span dir="ltr">{t.dashboard.greeting.time}</span>
+        </div>
+      </div>
+
+      {/* 4 KPI cards */}
+      <div className="grid grid-cols-4 gap-1 sm:gap-1.5">
+        <KpiCard
+          icon={<DollarSign className="h-3 w-3 sm:h-3.5 sm:w-3.5" />}
+          tone="blue"
+          label={t.dashboard.kpi.cashBankLabel}
+          value={t.dashboard.kpi.cashBankValue}
+          sparkColor="#007ADF"
+        />
+        <KpiCard
+          icon={<TrendingUp className="h-3 w-3 sm:h-3.5 sm:w-3.5" />}
+          tone="emerald"
+          label={t.dashboard.kpi.incomeLabel}
+          value={t.dashboard.kpi.incomeValue}
+          sparkColor="#10b981"
+        />
+        <KpiCard
+          icon={<TrendingDown className="h-3 w-3 sm:h-3.5 sm:w-3.5" />}
+          tone="rose"
+          label={t.dashboard.kpi.expenseLabel}
+          value={t.dashboard.kpi.expenseValue}
+          sparkColor="#cc2929"
+        />
+        <KpiCard
+          icon={<Wallet className="h-3 w-3 sm:h-3.5 sm:w-3.5" />}
+          tone="amber"
+          label={t.dashboard.kpi.profitLabel}
+          value={t.dashboard.kpi.profitValue}
+          sparkColor="#d97706"
+          negative
+        />
+      </div>
+
+      {/* 7 Action buttons row */}
+      <div className="grid grid-cols-7 gap-0.5 sm:gap-1">
+        <ActionButton icon={<ShoppingCart className="h-3 w-3" />} label={t.dashboard.actions.newSale} tone="blue" />
+        <ActionButton icon={<Package className="h-3 w-3" />} label={t.dashboard.actions.newPurchase} tone="blue" />
+        <ActionButton icon={<Plus className="h-3 w-3" />} label={t.dashboard.actions.addExpense} tone="slate" />
+        <ActionButton icon={<Plus className="h-3 w-3" />} label={t.dashboard.actions.addCustomer} tone="slate" />
+        <ActionButton icon={<Plus className="h-3 w-3" />} label={t.dashboard.actions.addItem} tone="slate" />
+        <ActionButton icon={<Lock className="h-3 w-3" />} label={t.dashboard.actions.closeDay} tone="slate" />
+        <ActionButton icon={<FileText className="h-3 w-3" />} label={t.dashboard.actions.reports} tone="slate" />
+      </div>
+
+      {/* 4 Summary cards */}
+      <div className="grid grid-cols-4 gap-1 sm:gap-1.5">
+        <SummaryCard
+          label={t.dashboard.summary.totalIn}
+          value={t.dashboard.summary.totalInValue}
+          tone="emerald"
+        />
+        <SummaryCard
+          label={t.dashboard.summary.totalOut}
+          value={t.dashboard.summary.totalOutValue}
+          tone="rose"
+        />
+        <SummaryCard
+          label={t.dashboard.summary.netCashFlow}
+          value={t.dashboard.summary.netCashFlowValue}
+          tone="amber"
+        />
+        <SummaryCard
+          label={t.dashboard.summary.cashOnHand}
+          value={t.dashboard.summary.cashOnHandValue}
+          tone="blue"
+        />
+      </div>
+
+      {/* Chart with bottom 2 cards split */}
+      <div className="grid grid-cols-3 gap-1 sm:gap-1.5 flex-1 min-h-0">
+        {/* Chart (2/3 width) */}
+        <div className="col-span-2 rounded-md border border-slate-200 bg-white p-1.5 sm:p-2 flex flex-col">
+          <div className="flex items-center justify-between mb-1">
+            <span className="text-[8px] sm:text-[10px] font-bold text-slate-700" dir="rtl">{t.dashboard.chart.title}</span>
+            <div className="flex items-center gap-1.5">
+              <span className="inline-flex items-center gap-1 text-[7px] sm:text-[9px] text-slate-500">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#10b981]" /> {t.solution.kpi1}
+              </span>
+              <span className="inline-flex items-center gap-1 text-[7px] sm:text-[9px] text-slate-500">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#cc2929]" /> {t.solution.kpi2}
+              </span>
+            </div>
+          </div>
+          <Chart />
+        </div>
+
+        {/* 2 bottom cards (1/3 width, stacked) */}
+        <div className="flex flex-col gap-1 sm:gap-1.5">
+          <BottomAlertCard
+            icon={<AlertTriangle className="h-3 w-3" />}
+            title={t.dashboard.bottom.alertsTitle}
+            value={t.dashboard.bottom.alertsValue}
+            sub={t.dashboard.bottom.alertsSub}
+            tone="amber"
+          />
+          <BottomPerfCard
+            icon={<CheckCircle2 className="h-3 w-3" />}
+            title={t.dashboard.bottom.perfTitle}
+            value={t.dashboard.bottom.perfValue}
+            tone="emerald"
+          />
+        </div>
       </div>
     </div>
   );
 }
 
-/** Sidebar — right side in RTL with menu items */
+/* ---------- SIDEBAR (right in RTL) ---------- */
 function Sidebar() {
   const t = useT();
 
-  const menuItems = [
-    { icon: <Home className="h-4 w-4" />,          label: t.nav.download,        active: false },
-    { icon: <DollarSign className="h-4 w-4" />,    label: t.pricing.freeUnit,    active: false },
-    { icon: <ShoppingCart className="h-4 w-4" />,  label: t.audiences.tab1,      active: false },
-    { icon: <Package className="h-4 w-4" />,       label: t.audiences.tab2,      active: false },
-    { icon: <CreditCard className="h-4 w-4" />,    label: t.solution.kpi2,       active: false },
-    { icon: <Users className="h-4 w-4" />,         label: t.testimonials.t1Role.split(" · ")[0], active: false },
-    { icon: <BarChart3 className="h-4 w-4" />,     label: t.features.card4Title, active: true },
-    { icon: <FileText className="h-4 w-4" />,      label: t.features.card2Title, active: false },
-    { icon: <PieChart className="h-4 w-4" />,      label: t.audiences.eyebrow,   active: false },
-    { icon: <Settings className="h-4 w-4" />,      label: t.nav.themeLight,      active: false },
+  const items = [
+    { icon: <LayoutGrid className="h-3.5 w-3.5 sm:h-4 sm:w-4" />, label: t.dashboard.sidebar.dashboard, active: true },
+    { icon: <ShoppingCart className="h-3.5 w-3.5 sm:h-4 sm:w-4" />, label: t.dashboard.sidebar.sales },
+    { icon: <Package className="h-3.5 w-3.5 sm:h-4 sm:w-4" />, label: t.dashboard.sidebar.purchases },
+    { icon: <Boxes className="h-3.5 w-3.5 sm:h-4 sm:w-4" />, label: t.dashboard.sidebar.items },
+    { icon: <Truck className="h-3.5 w-3.5 sm:h-4 sm:w-4" />, label: t.dashboard.sidebar.suppliers },
+    { icon: <Wallet className="h-3.5 w-3.5 sm:h-4 sm:w-4" />, label: t.dashboard.sidebar.treasury },
+    { icon: <BarChart3 className="h-3.5 w-3.5 sm:h-4 sm:w-4" />, label: t.dashboard.sidebar.reports },
+    { icon: <HelpCircle className="h-3.5 w-3.5 sm:h-4 sm:w-4" />, label: t.dashboard.sidebar.help },
+    { icon: <Keyboard className="h-3.5 w-3.5 sm:h-4 sm:w-4" />, label: t.dashboard.sidebar.shortcuts },
+    { icon: <Flag className="h-3.5 w-3.5 sm:h-4 sm:w-4" />, label: t.dashboard.sidebar.reportIssue },
+    { icon: <Database className="h-3.5 w-3.5 sm:h-4 sm:w-4" />, label: t.dashboard.sidebar.changeDb },
   ];
 
   return (
-    <aside className="hidden sm:flex flex-col gap-0.5 w-12 lg:w-14 bg-white border-r border-slate-200 p-1.5">
-      {menuItems.map((item, i) => (
+    <aside className="hidden sm:flex flex-col gap-0 w-24 lg:w-32 bg-white border-r border-slate-200 py-1.5 px-1">
+      {items.map((item, i) => (
         <div
           key={i}
-          className={`flex flex-col items-center gap-0.5 py-1.5 rounded-md transition-colors ${
+          className={`flex items-center gap-1.5 px-1.5 py-1 rounded-md transition-colors text-[8px] lg:text-[9px] ${
             item.active
-              ? "bg-blue-50 text-blue-700"
-              : "text-slate-400"
+              ? "bg-blue-50 text-blue-700 border-r-2 border-blue-600"
+              : "text-slate-600 hover:bg-slate-50"
           }`}
           title={item.label}
         >
-          {item.icon}
-          {i === 0 && <span className="block h-0.5 w-4 rounded-full bg-blue-600" />}
+          <span className={item.active ? "text-blue-600" : "text-slate-400"}>
+            {item.icon}
+          </span>
+          <span className="truncate" dir="rtl">{item.label}</span>
         </div>
       ))}
     </aside>
   );
 }
 
-/** KPI Card — matches real app style: icon + label + value + currency */
+/* ---------- KPI CARD ---------- */
 function KpiCard({
   icon,
   tone,
   label,
   value,
-  currency,
+  sparkColor,
   negative,
 }: {
   icon: React.ReactNode;
-  tone: "emerald" | "rose" | "blue" | "amber";
+  tone: "blue" | "emerald" | "rose" | "amber";
   label: string;
   value: string;
-  currency: string;
+  sparkColor: string;
   negative?: boolean;
 }) {
+  const t = useT();
   const tones = {
-    emerald: { iconBg: "bg-emerald-100 text-emerald-600", valText: "text-emerald-700" },
-    rose:    { iconBg: "bg-rose-100 text-rose-600",       valText: "text-rose-700" },
-    blue:    { iconBg: "bg-blue-100 text-blue-600",       valText: "text-blue-700" },
-    amber:   { iconBg: "bg-amber-100 text-amber-600",     valText: "text-amber-700" },
+    blue:    "bg-blue-50 text-blue-600 border-blue-100",
+    emerald: "bg-emerald-50 text-emerald-600 border-emerald-100",
+    rose:    "bg-rose-50 text-rose-600 border-rose-100",
+    amber:   "bg-amber-50 text-amber-600 border-amber-100",
   } as const;
-  const t = tones[tone];
+  const toneCls = tones[tone];
+  const valueColor = negative ? "text-rose-600" : "text-slate-800";
 
   return (
-    <div className="rounded-lg border border-slate-200 bg-white p-1.5 sm:p-2 overflow-hidden">
-      <div className="flex items-center justify-between mb-1 sm:mb-1.5">
-        <span className={`inline-flex h-5 w-5 sm:h-6 sm:w-6 items-center justify-center rounded-md ${t.iconBg}`}>
+    <div className="rounded-md border border-slate-200 bg-white p-1 sm:p-1.5 overflow-hidden">
+      <div className="flex items-center justify-between mb-0.5">
+        <span className={`inline-flex h-4 w-4 sm:h-5 sm:w-5 items-center justify-center rounded ${toneCls} border`}>
           {icon}
         </span>
-        <span className="text-[7px] sm:text-[9px] text-slate-400 num-fa">۰.۰٪ —</span>
+        <span className="text-[6px] sm:text-[8px] text-slate-400" dir="ltr">{t.dashboard.kpi.trend}</span>
       </div>
-      <p className="text-[7px] sm:text-[9px] text-slate-500 truncate">{label}</p>
-      <p className={`text-[10px] sm:text-sm font-bold ${negative ? "text-rose-600" : t.valText} num-fa truncate`}>
-        {value} <span className="text-[8px] sm:text-[10px] opacity-70">{currency}</span>
+      <p className="text-[7px] sm:text-[9px] text-slate-500 truncate" dir="rtl">{label}</p>
+      <p className={`text-[9px] sm:text-xs font-bold ${valueColor} truncate`} dir="ltr">
+        {value} <span className="text-[7px] opacity-70">؋</span>
       </p>
       {/* Mini sparkline */}
-      <svg viewBox="0 0 60 12" className="mt-0.5 h-2 w-full" preserveAspectRatio="none" aria-hidden>
+      <svg viewBox="0 0 50 8" className="mt-0.5 h-1.5 w-full" preserveAspectRatio="none" aria-hidden>
         <path
-          d="M0 8 L10 6 L20 9 L30 4 L40 7 L50 3 L60 5"
+          d="M0 6 L8 5 L16 6 L24 3 L32 4 L40 2 L50 1"
           fill="none"
-          stroke="currentColor"
-          strokeWidth="1"
-          className={tone === "emerald" ? "text-emerald-400" : tone === "rose" ? "text-rose-400" : tone === "blue" ? "text-blue-400" : "text-amber-400"}
+          stroke={sparkColor}
+          strokeWidth="0.8"
+          strokeLinecap="round"
         />
       </svg>
     </div>
   );
 }
 
-/** Summary bar shown above the main chart */
-function SummaryBar({ tone, value }: { tone: string; value: string }) {
-  return (
-    <div className={`rounded-md ${tone} text-white px-1.5 py-1 text-center`}>
-      <p className="text-[7px] sm:text-[9px] opacity-90 num-fa leading-tight">{value}</p>
-    </div>
-  );
-}
-
-/** Dual-line area chart (income green, expense red) */
-function DualLineChart() {
-  return (
-    <svg viewBox="0 0 240 80" className="w-full h-full" preserveAspectRatio="none" aria-hidden>
-      <defs>
-        <linearGradient id="incomeFill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="rgb(16, 185, 129)" stopOpacity="0.25" />
-          <stop offset="100%" stopColor="rgb(16, 185, 129)" stopOpacity="0" />
-        </linearGradient>
-        <linearGradient id="expenseFill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="rgb(244, 63, 94)" stopOpacity="0.2" />
-          <stop offset="100%" stopColor="rgb(244, 63, 94)" stopOpacity="0" />
-        </linearGradient>
-      </defs>
-      {/* Grid lines */}
-      {[16, 32, 48, 64].map((y) => (
-        <line
-          key={y}
-          x1="0"
-          y1={y}
-          x2="240"
-          y2={y}
-          stroke="rgb(241, 245, 249)"
-          strokeWidth="1"
-        />
-      ))}
-      {/* Expense area + line (red) */}
-      <path
-        d="M0 50 L40 45 L80 55 L120 40 L160 50 L200 35 L240 30 L240 80 L0 80 Z"
-        fill="url(#expenseFill)"
-      />
-      <path
-        d="M0 50 L40 45 L80 55 L120 40 L160 50 L200 35 L240 30"
-        fill="none"
-        stroke="rgb(244, 63, 94)"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      {/* Income area + line (green) */}
-      <path
-        d="M0 65 L40 60 L80 55 L120 45 L160 35 L200 25 L240 15 L240 80 L0 80 Z"
-        fill="url(#incomeFill)"
-      />
-      <path
-        d="M0 65 L40 60 L80 55 L120 45 L160 35 L200 25 L240 15"
-        fill="none"
-        stroke="rgb(16, 185, 129)"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      {/* Data points */}
-      {[[0,65],[40,60],[80,55],[120,45],[160,35],[200,25],[240,15]].map(([x,y], i) => (
-        <circle key={`g${i}`} cx={x} cy={y} r="1.5" fill="rgb(5, 150, 105)" />
-      ))}
-      {[[0,50],[40,45],[80,55],[120,40],[160,50],[200,35],[240,30]].map(([x,y], i) => (
-        <circle key={`r${i}`} cx={x} cy={y} r="1.5" fill="rgb(225, 29, 72)" />
-      ))}
-    </svg>
-  );
-}
-
-/** Bottom card — Failed Receipts or Success Rate */
-function BottomCard({
+/* ---------- ACTION BUTTON ---------- */
+function ActionButton({
   icon,
+  label,
   tone,
-  title,
-  value,
-  sub,
-  trend,
 }: {
   icon: React.ReactNode;
-  tone: "amber" | "emerald";
-  title: string;
-  value: string;
-  sub?: string;
-  trend?: "up" | "down";
+  label: string;
+  tone: "blue" | "slate";
 }) {
   const tones = {
-    amber:   { bg: "bg-amber-50",    border: "border-amber-200",    icon: "bg-amber-100 text-amber-600",   valText: "text-amber-700" },
-    emerald: { bg: "bg-emerald-50",  border: "border-emerald-200",  icon: "bg-emerald-100 text-emerald-600",valText: "text-emerald-700" },
+    blue: "bg-blue-50 text-blue-700 hover:bg-blue-100",
+    slate: "bg-slate-50 text-slate-600 hover:bg-slate-100",
   } as const;
   const t = tones[tone];
 
   return (
-    <div className={`rounded-lg border ${t.border} ${t.bg} p-2 sm:p-2.5 flex items-center gap-2`}>
-      <span className={`relative inline-flex h-8 w-8 items-center justify-center rounded-lg ${t.icon}`}>
-        {icon}
-        {tone === "amber" && (
-          <span className="absolute -top-1 -right-1 inline-flex h-3 w-3 items-center justify-center rounded-full bg-rose-500 text-white text-[7px] font-bold">
+    <button className={`flex flex-col items-center gap-0.5 rounded-md ${t} p-1 transition-colors`}>
+      {icon}
+      <span className="text-[7px] sm:text-[8px] font-medium truncate w-full text-center" dir="rtl">{label}</span>
+    </button>
+  );
+}
+
+/* ---------- SUMMARY CARD ---------- */
+function SummaryCard({
+  label,
+  value,
+  tone,
+}: {
+  label: string;
+  value: string;
+  tone: "emerald" | "rose" | "amber" | "blue";
+}) {
+  const tones = {
+    emerald: { bar: "bg-emerald-500", text: "text-emerald-700" },
+    rose:    { bar: "bg-rose-500",    text: "text-rose-700" },
+    amber:   { bar: "bg-amber-500",   text: "text-amber-700" },
+    blue:    { bar: "bg-blue-500",    text: "text-blue-700" },
+  } as const;
+  const t = tones[tone];
+
+  return (
+    <div className="rounded-md border border-slate-200 bg-white p-1 sm:p-1.5 overflow-hidden relative">
+      <span className={`absolute top-0 right-0 h-full w-0.5 ${t.bar}`} />
+      <p className="text-[7px] sm:text-[8px] text-slate-500 truncate pr-1" dir="rtl">{label}</p>
+      <p className={`text-[8px] sm:text-[10px] font-bold ${t.text}`} dir="ltr">{value} ؋</p>
+    </div>
+  );
+}
+
+/* ---------- CHART (dual-line area chart) ---------- */
+function Chart() {
+  const t = useT();
+  // Y-axis labels from screenshot: 18k, 14k, 9k, 5k, 0
+  // X-axis labels: 02/10, 03/02, 03/09 (right to left in RTL)
+  const yLabels = [t.dashboard.chart.y18k, t.dashboard.chart.y14k, t.dashboard.chart.y9k, t.dashboard.chart.y5k, t.dashboard.chart.y0];
+
+  return (
+    <div className="flex-1 flex flex-col min-h-0">
+      <div className="flex-1 flex">
+        {/* Y-axis labels */}
+        <div className="flex flex-col justify-between text-[6px] sm:text-[8px] text-slate-400 py-1 pl-1 num-fa">
+          {yLabels.map((y, i) => (
+            <span key={i}>{y}</span>
+          ))}
+        </div>
+        {/* Chart SVG */}
+        <div className="flex-1 relative">
+          <svg viewBox="0 0 240 80" className="w-full h-full" preserveAspectRatio="none" aria-hidden>
+            <defs>
+              <linearGradient id="incomeFillArea" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="rgb(16, 185, 129)" stopOpacity="0.25" />
+                <stop offset="100%" stopColor="rgb(16, 185, 129)" stopOpacity="0" />
+              </linearGradient>
+              <linearGradient id="expenseFillArea" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="rgb(204, 41, 41)" stopOpacity="0.2" />
+                <stop offset="100%" stopColor="rgb(204, 41, 41)" stopOpacity="0" />
+              </linearGradient>
+            </defs>
+            {/* Grid lines */}
+            {[8, 24, 40, 56, 72].map((y) => (
+              <line
+                key={y}
+                x1="0"
+                y1={y}
+                x2="240"
+                y2={y}
+                stroke="rgb(241, 245, 249)"
+                strokeWidth="0.5"
+              />
+            ))}
+            {/* Expense area + line (red) */}
+            <path
+              d="M0 55 L40 50 L80 58 L120 45 L160 52 L200 38 L240 32 L240 80 L0 80 Z"
+              fill="url(#expenseFillArea)"
+            />
+            <path
+              d="M0 55 L40 50 L80 58 L120 45 L160 52 L200 38 L240 32"
+              fill="none"
+              stroke="rgb(204, 41, 41)"
+              strokeWidth="1"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              vectorEffect="non-scaling-stroke"
+            />
+            {/* Income area + line (green) */}
+            <path
+              d="M0 68 L40 62 L80 56 L120 46 L160 36 L200 26 L240 16 L240 80 L0 80 Z"
+              fill="url(#incomeFillArea)"
+            />
+            <path
+              d="M0 68 L40 62 L80 56 L120 46 L160 36 L200 26 L240 16"
+              fill="none"
+              stroke="rgb(5, 150, 105)"
+              strokeWidth="1"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              vectorEffect="non-scaling-stroke"
+            />
+            {/* Data points */}
+            {[[0,68],[40,62],[80,56],[120,46],[160,36],[200,26],[240,16]].map(([x,y], i) => (
+              <circle key={`g${i}`} cx={x} cy={y} r="1" fill="rgb(5, 150, 105)" />
+            ))}
+            {[[0,55],[40,50],[80,58],[120,45],[160,52],[200,38],[240,32]].map(([x,y], i) => (
+              <circle key={`r${i}`} cx={x} cy={y} r="1" fill="rgb(204, 41, 41)" />
+            ))}
+          </svg>
+        </div>
+      </div>
+      {/* X-axis labels */}
+      <div className="flex justify-between text-[6px] sm:text-[8px] text-slate-400 pt-0.5 pr-4 num-fa" dir="ltr">
+        <span>{t.dashboard.chart.x1}</span>
+        <span>{t.dashboard.chart.x2}</span>
+        <span>{t.dashboard.chart.x3}</span>
+      </div>
+    </div>
+  );
+}
+
+/* ---------- BOTTOM ALERT CARD (left of bottom row) ---------- */
+function BottomAlertCard({
+  icon,
+  title,
+  value,
+  sub,
+  tone,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  value: string;
+  sub: string;
+  tone: "amber";
+}) {
+  return (
+    <div className="rounded-md border border-slate-200 bg-white p-1.5 sm:p-2 flex-1 min-h-0 flex flex-col">
+      <div className="flex items-center gap-1.5 mb-1">
+        <span className="relative inline-flex h-4 w-4 sm:h-5 sm:w-5 items-center justify-center rounded bg-amber-100 text-amber-600">
+          {icon}
+          <span className="absolute -top-1 -right-1 inline-flex h-2.5 w-2.5 items-center justify-center rounded-full bg-rose-500 text-white text-[6px] font-bold ring-1 ring-white">
             ۶
           </span>
-        )}
-      </span>
-      <div className="min-w-0 flex-1">
-        <p className="text-[8px] sm:text-[10px] text-slate-500 truncate">{title}</p>
-        <div className="flex items-baseline gap-1">
-          <p className={`text-sm sm:text-base font-bold ${t.valText} num-fa truncate`}>{value}</p>
-          {sub && <p className="text-[7px] sm:text-[9px] text-slate-400 truncate">{sub}</p>}
-          {trend === "up" && <TrendingUp className="h-3 w-3 text-emerald-500 shrink-0" />}
-        </div>
+        </span>
+        <span className="text-[7px] sm:text-[9px] font-bold text-slate-700 truncate" dir="rtl">{title}</span>
+      </div>
+      <div className="flex items-baseline gap-1 mt-auto">
+        <span className="text-base sm:text-lg font-extrabold text-amber-700 num-fa">{value}</span>
+        <span className="text-[7px] sm:text-[8px] text-rose-600 font-bold bg-rose-50 px-1 py-0.5 rounded" dir="rtl">{sub}</span>
+      </div>
+    </div>
+  );
+}
+
+/* ---------- BOTTOM PERFORMANCE CARD (right of bottom row) ---------- */
+function BottomPerfCard({
+  icon,
+  title,
+  value,
+  tone,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  value: string;
+  tone: "emerald";
+}) {
+  return (
+    <div className="rounded-md border border-slate-200 bg-white p-1.5 sm:p-2 flex-1 min-h-0 flex flex-col">
+      <div className="flex items-center gap-1.5 mb-1">
+        <span className="inline-flex h-4 w-4 sm:h-5 sm:w-5 items-center justify-center rounded bg-emerald-100 text-emerald-600">
+          {icon}
+        </span>
+        <span className="text-[7px] sm:text-[9px] font-bold text-slate-700 truncate" dir="rtl">{title}</span>
+      </div>
+      <div className="flex items-baseline gap-1 mt-auto">
+        <TrendingUp className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-emerald-500" />
+        <span className="text-base sm:text-lg font-extrabold text-emerald-700 num-fa">{value}</span>
       </div>
     </div>
   );
