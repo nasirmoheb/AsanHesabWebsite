@@ -30,8 +30,7 @@ export default function Home() {
         {/* Trust bar — credibility right after hero */}
         <TrustBar />
 
-        {/* Social proof band */}
-        <StatsBand />
+       
 
         {/* Problem agitation */}
         <PainPoints />

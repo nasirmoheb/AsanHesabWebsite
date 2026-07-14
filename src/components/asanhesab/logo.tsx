@@ -32,8 +32,7 @@ export function AsanHesabLogo({
         priority
         className="h-full w-full object-cover"
       />
-      {/* Status dot overlay (emerald) */}
-      <span className="absolute -bottom-0.5 -left-0.5 h-2.5 w-2.5 rounded-full bg-emerald-400 ring-2 ring-white dark:ring-slate-900" />
+      
     </span>
   );
 }
