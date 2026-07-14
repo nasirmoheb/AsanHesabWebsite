@@ -32,12 +32,12 @@ export function TrustBar() {
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <Reveal>
-          <p className="text-center text-xs sm:text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+          <p className="text-center text-sm font-semibold text-slate-500 dark:text-slate-400 tracking-wide">
             {t.premium.trustBar.title}
           </p>
         </Reveal>
         <Reveal delay={80}>
-          <p className="text-center text-[11px] text-slate-400 dark:text-slate-500 mt-1 mb-6 sm:mb-8">
+          <p className="text-center text-xs text-slate-400 dark:text-slate-500 mt-1.5 mb-8 sm:mb-10">
             {t.premium.trustBar.subtitle} · {formatNumber("100")}+ {t.stats.stat1Label}
           </p>
         </Reveal>
@@ -46,12 +46,12 @@ export function TrustBar() {
             {industries.map((ind, i) => (
               <div
                 key={i}
-                className="group flex flex-col items-center gap-2 text-center"
+                className="group flex flex-col items-center gap-2.5 text-center"
               >
                 <span className="inline-flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 text-slate-500 dark:text-slate-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 group-hover:border-blue-200 dark:group-hover:border-blue-800 group-hover:scale-110 transition-all">
                   {ind.icon}
                 </span>
-                <span className="text-[10px] sm:text-xs font-medium text-slate-600 dark:text-slate-300 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
+                <span className="text-xs font-medium text-slate-600 dark:text-slate-300 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
                   {ind.label}
                 </span>
               </div>

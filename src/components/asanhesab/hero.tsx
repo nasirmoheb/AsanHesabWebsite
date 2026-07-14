@@ -5,6 +5,7 @@ import { Reveal } from "./reveal";
 import { useLanguage, useT } from "./i18n/language-context";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 /**
  * Modern Hero Section
@@ -233,19 +234,23 @@ function DashboardMockup() {
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
-  // Avoid hydration mismatch — only render the correct image after mount
   useEffect(() => { setMounted(true); }, []);
 
-  const src = !mounted || resolvedTheme !== "dark"
-    ? "/dashboard-light.avif"
-    : "/dashboard-dark.avif";
+  const isDark = mounted && resolvedTheme === "dark";
 
-  const alt = resolvedTheme === "dark"
-    ? "AsanHesab dashboard — dark mode"
-    : "AsanHesab dashboard — light mode";
+  const src = isDark ? "/dashboard-dark.avif" : "/dashboard-light.avif";
+
+  // Inline SVG blur placeholders — light: soft blue-gray, dark: deep navy
+  const blurLight = `data:image/svg+xml;base64,${Buffer.from(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="750"><rect width="1200" height="750" fill="#e8edf5"/></svg>`
+  ).toString("base64")}`;
+
+  const blurDark = `data:image/svg+xml;base64,${Buffer.from(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="750"><rect width="1200" height="750" fill="#0f172a"/></svg>`
+  ).toString("base64")}`;
 
   return (
-    <div className="relative mx-auto w-full max-w-6xl">
+    <div className="relative mx-auto w-full max-w-7xl">
       {/* Glow behind screen */}
       <div
         aria-hidden
@@ -263,13 +268,19 @@ function DashboardMockup() {
         />
         {/* Screen */}
         <div className="overflow-hidden rounded-[9px] border border-slate-300 dark:border-slate-800">
-          <img
+          <Image
             key={src}
             src={src}
-            alt={alt}
+            alt="AsanHesab dashboard"
+            width={1200}
+            height={750}
+            priority
+            placeholder="blur"
+            blurDataURL={isDark ? blurDark : blurLight}
+            sizes="100vw"
             className="w-full h-auto block"
-            loading="eager"
-            decoding="async"
+            style={{ width: "100%", height: "auto" }}
+            suppressHydrationWarning
           />
         </div>
       </div>
