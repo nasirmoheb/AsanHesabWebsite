@@ -25,10 +25,16 @@ export function Hero() {
       aria-labelledby="hero-headline"
     >
       {/* --- BACKGROUND EFFECTS --- */}
-      {/* 1. Subtle Grid Pattern with Radial Fade */}
-      <div 
-        className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none" 
-        aria-hidden 
+      {/* 1. Line grid — 48px spacing, radially faded from center */}
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none opacity-100"
+        style={{
+          backgroundImage: `linear-gradient(to right, rgba(99,102,241,0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(99,102,241,0.08) 1px, transparent 1px)`,
+          backgroundSize: "48px 48px",
+          maskImage: "radial-gradient(ellipse 90% 70% at 50% 40%, black 30%, transparent 80%)",
+          WebkitMaskImage: "radial-gradient(ellipse 90% 70% at 50% 40%, black 30%, transparent 80%)",
+        }}
       />
       
       {/* 2. Ambient Glowing Orbs */}
@@ -162,8 +168,52 @@ export function Hero() {
 
         {/* Laptop Mockup Presentation */}
         <Reveal delay={600} className="relative mt-15 sm:mt-20 w-full">
-          {/* Glow behind the laptop */}
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[300px] w-[60%] bg-blue-500/20 blur-[120px] rounded-full pointer-events-none" />
+
+          {/* ── Shape layer behind mockup ── */}
+          {/* 1. Main glow blob */}
+          <div
+            aria-hidden
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[420px] w-[85%] rounded-full blur-[100px] pointer-events-none
+              bg-blue-400/25 dark:bg-blue-500/20"
+          />
+          {/* 2. Secondary accent blobs */}
+          <div
+            aria-hidden
+            className="absolute left-[15%] top-[30%] h-48 w-48 rounded-full blur-[80px] pointer-events-none
+              bg-emerald-400/20 dark:bg-emerald-500/15"
+          />
+          <div
+            aria-hidden
+            className="absolute right-[15%] top-[30%] h-48 w-48 rounded-full blur-[80px] pointer-events-none
+              bg-violet-400/20 dark:bg-violet-500/15"
+          />
+          {/* 3. Dot grid platform — masked to a horizontal oval */}
+          <div
+            aria-hidden
+            className="absolute inset-x-0 top-[10%] bottom-0 pointer-events-none overflow-hidden"
+          >
+            <svg
+              className="absolute inset-0 w-full h-full opacity-[0.35] dark:opacity-[0.2]"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden
+            >
+              <defs>
+                <pattern id="dots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+                  <circle cx="1" cy="1" r="1" className="fill-slate-400 dark:fill-slate-600" />
+                </pattern>
+                <radialGradient id="dotFade" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stopColor="white" stopOpacity="1" />
+                  <stop offset="70%" stopColor="white" stopOpacity="0.6" />
+                  <stop offset="100%" stopColor="white" stopOpacity="0" />
+                </radialGradient>
+                <mask id="dotMask">
+                  <rect width="100%" height="100%" fill="url(#dotFade)" />
+                </mask>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#dots)" mask="url(#dotMask)" />
+            </svg>
+          </div>
+
           <DashboardMockup />
         </Reveal>
         
