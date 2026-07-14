@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Sparkles, ArrowLeft } from "lucide-react";
+import { Check, Sparkles, ArrowRight } from "lucide-react";
 import { Reveal } from "./reveal";
 import { useLanguage, useT } from "./i18n/language-context";
 
@@ -13,7 +13,7 @@ export function SolutionIntro() {
 
   return (
     <section
-      className="relative overflow-hidden bg-white dark:bg-slate-950 py-20 sm:py-28"
+      className="relative overflow-hidden bg-white dark:bg-slate-950 py-10 sm:py-10"
       aria-labelledby="solution-headline"
     >
       <div
@@ -63,11 +63,11 @@ export function SolutionIntro() {
 
             <Reveal delay={480}>
               <a
-                href="#download"
+                href="https://github.com/nasirmoheb/AsanHesab/releases/download/v1.0.0-beta/AsanHesab-1.0.0-Setup.exe"
                 className="mt-9 inline-flex items-center gap-2 rounded-xl bg-gradient-to-br from-blue-600 to-blue-700 px-6 py-3.5 text-base font-bold text-white shadow-premium-lg hover:shadow-blue-600/30 hover:-translate-y-0.5 transition-all duration-300"
               >
                 {t.solution.cta}
-                <ArrowLeft className="h-4 w-4 rtl:flip" style={{ transform: "scaleX(-1)" }} />
+                <ArrowRight className="h-4 w-4 rtl:rotate-180 transition-transform" />
               </a>
             </Reveal>
           </div>

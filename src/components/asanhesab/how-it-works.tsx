@@ -1,6 +1,6 @@
 "use client";
 
-import { Download, Settings, Rocket, ArrowLeft } from "lucide-react";
+import { Download, Settings, Rocket, ArrowRight } from "lucide-react";
 import { SectionHeading } from "./section-heading";
 import { Reveal } from "./reveal";
 import { useLanguage, useT } from "./i18n/language-context";
@@ -76,11 +76,11 @@ export function HowItWorks() {
         <Reveal delay={200}>
           <div className="mt-14 flex flex-col items-center gap-3">
             <a
-              href="#download"
+              href="https://github.com/nasirmoheb/AsanHesab/releases/download/v1.0.0-beta/AsanHesab-1.0.0-Setup.exe"
               className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-br from-blue-600 to-blue-700 px-7 py-3.5 text-base font-bold text-white shadow-premium-lg hover:shadow-blue-600/30 hover:-translate-y-0.5 transition-all duration-300"
             >
               {t.how.cta}
-              <ArrowLeft className="h-4 w-4" style={{ transform: "scaleX(-1)" }} />
+              <ArrowRight className="h-4 w-4 rtl:rotate-180 transition-transform" />
             </a>
             <p className="text-xs text-slate-500 dark:text-slate-400">
               {t.how.ctaReassurance}

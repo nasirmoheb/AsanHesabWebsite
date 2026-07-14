@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 import { Sun, Moon, Globe, ChevronDown, Menu, X, Download } from "lucide-react";
-import { WhatsAppIcon } from "./whatsapp-icon";
 import { AsanHesabLogo } from "./logo";
 import { useLanguage, useT } from "./i18n/language-context";
 import { LOCALES, type Locale } from "./i18n/dictionary";
@@ -104,7 +103,7 @@ export function Navbar() {
             {/* Scroll-triggered CTA (Desktop) */}
             <div className="hidden lg:block overflow-hidden">
               <a
-                href="#download"
+                href="https://github.com/nasirmoheb/AsanHesab/releases/download/v1.0.0-beta/AsanHesab-1.0.0-Setup.exe"
                 className={`inline-flex items-center gap-2 rounded-full bg-blue-600 px-5 py-2 text-sm font-semibold text-white transition-all duration-500 hover:bg-blue-700 hover:scale-105 active:scale-95 shadow-[0_0_20px_-5px_rgba(37,99,235,0.4)] ${
                   showCta
                     ? "opacity-100 translate-x-0 pointer-events-auto"
@@ -224,11 +223,11 @@ export function Navbar() {
               ))}
               <div className="h-px bg-slate-200/60 dark:bg-white/10 my-2" />
               <a
-                href="#download"
+                href="https://github.com/nasirmoheb/AsanHesab/releases/download/v1.0.0-beta/AsanHesab-1.0.0-Setup.exe"
                 onClick={() => setMobileOpen(false)}
                 className="mt-1 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-blue-600 text-sm font-semibold text-white shadow-md active:scale-95 transition-transform"
               >
-                <WhatsAppIcon className="h-5 w-5" />
+                <Download className="h-5 w-5" />
                 {t.nav.downloadMobile}
               </a>
             </div>

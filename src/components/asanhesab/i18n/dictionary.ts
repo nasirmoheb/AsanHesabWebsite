@@ -255,11 +255,16 @@ export const fa = {
     card1Feature2: "پشتیبانی از بارکدخوان و ترازوی دیجیتال",
     card1Feature3: "ثبت سریع با کلیدهای میانبر کیبورد",
     card2Title: "کتابچه دیجیتال قرض‌ها",
-    card2Body:
-      "قرض مشتریان و تامین‌کنندگان را شفاف ثبت کنید. یادآوری خودکار سر رسید، و راپور کامل بدهی/بستانکاری.",
+    card2Body:      "قرض مشتریان و تامین‌کنندگان را شفاف ثبت کنید. یادآوری خودکار سر رسید، و راپور کامل بدهی/بستانکاری.",
+    card2Feature1: "یادآوری خودکار سررسید قرض",
+    card2Feature2: "راپور کامل بدهی و بستانکاری",
+    card2Feature3: "ثبت قرض مشتری و تامین‌کننده",
     card3Title: "مدیریت هوشمند گدام",
     card3Body:
       "موجودی هر جنس را در لحظه ببینید. هشدار کمبود، انتقال بین شعبه‌ها، و تاریخ انقضای کالاها — همه خودکار.",
+    card3Feature1: "هشدار خودکار کمبود موجودی",
+    card3Feature2: "انتقال جنس بین شعبه‌ها",
+    card3Feature3: "هشدار تاریخ انقضای کالا",
     card4Title: "گزارش دقیق فایده و تاوان",
     card4Body:
       "با یک کلیک، فایده خالص، خرج‌ها، و تاوان ماهانه را به تفکیک جنس، مشتری، یا شعبه ببینید. خروجی PDF/Excel برای حسابدار یا بانک.",
@@ -715,9 +720,15 @@ export const ps: Dict = {
     card2Title: "د پورونو ډیجیټل دفتر",
     card2Body:
       "د پیرودونکو او تامینوونکو پورونه روښانه ثبت کړئ. د سررسید خودکار یاداوره، او بشپړ پور/بشپړونکي راپور.",
+    card2Feature1: "د پور د سررسید خودکار یاداوره",
+    card2Feature2: "بشپړ پور او بشپړونکي راپور",
+    card2Feature3: "د پیرودونکي او تامینوونکي پور ثبت",
     card3Title: "د گدام هوښیار مدیریت",
     card3Body:
       "د هر جنس موجودي په لحظه کې وګورئ. د کمښت خبرداری، د شعبو ترمنځ انتقال، او د توکو د انقضا نېټه — ټول خودکار.",
+    card3Feature1: "د موجودي د کمښت خودکار خبرداری",
+    card3Feature2: "د شعبو ترمنځ د جنس انتقال",
+    card3Feature3: "د توکو د انقضا نېټې خبرداری",
     card4Title: "د ګټې او تاوان دقیق راپور",
     card4Body:
       "یوه کلیک سره، خالص ګټه، لګښتونه، او میاشتنی تاوان د جنس، پیرودونکي، یا شعبې له مخې وګورئ. د حسابدار یا بانک لپاره PDF/Excel وتلی.",
@@ -1174,9 +1185,15 @@ export const en: Dict = {
     card2Title: "Digital debt notebook",
     card2Body:
       "Record customer and supplier debts transparently. Automatic due-date reminders, and a complete debtor/creditor report.",
+    card2Feature1: "Automatic due-date reminders",
+    card2Feature2: "Full debtor & creditor report",
+    card2Feature3: "Track customer & supplier debts",
     card3Title: "Smart warehouse management",
     card3Body:
       "See the stock of every product in real time. Low-stock alerts, inter-branch transfers, and product expiry dates — all automatic.",
+    card3Feature1: "Automatic low-stock alerts",
+    card3Feature2: "Inter-branch stock transfers",
+    card3Feature3: "Product expiry date warnings",
     card4Title: "Accurate profit & loss reports",
     card4Body:
       "With one click, see net profit, expenses, and monthly turnover broken down by product, customer, or branch. Export to PDF/Excel for your accountant or bank.",

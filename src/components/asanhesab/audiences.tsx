@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Store, Boxes, Pill, Check, ArrowLeft } from "lucide-react";
+import { Store, Boxes, Pill, Check, ArrowRight } from "lucide-react";
 import { Reveal } from "./reveal";
 import { useLanguage, useT } from "./i18n/language-context";
 
@@ -149,11 +149,11 @@ export function Audiences() {
                 ))}
               </ul>
               <a
-                href="#download"
+                href="https://github.com/nasirmoheb/AsanHesab/releases/download/v1.0.0-beta/AsanHesab-1.0.0-Setup.exe"
                 className="mt-8 inline-flex items-center gap-2 rounded-xl bg-gradient-to-br from-blue-600 to-blue-700 px-6 py-3.5 text-base font-bold text-white shadow-premium hover:shadow-blue-600/30 hover:-translate-y-0.5 transition-all duration-300"
               >
                 {activeTab.cta}
-                <ArrowLeft className="h-4 w-4" style={{ transform: "scaleX(-1)" }} />
+                <ArrowRight className="h-4 w-4 rtl:rotate-180 transition-transform" />
               </a>
             </div>
           </Reveal>

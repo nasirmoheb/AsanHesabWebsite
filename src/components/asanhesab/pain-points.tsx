@@ -44,7 +44,7 @@ export function PainPoints() {
         </div>
 
         <Reveal delay={200}>
-          <div className="mt-14 flex flex-col items-center gap-3">
+          <div className="mt-25 flex flex-col items-center gap-3">
             <div className="flex items-center gap-2 text-sm font-semibold text-slate-500 dark:text-slate-400">
               <span className="h-px w-8 bg-slate-300 dark:bg-slate-700" />
               {t.pain.transition}

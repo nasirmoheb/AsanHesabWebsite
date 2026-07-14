@@ -1,6 +1,6 @@
 "use client";
 
-import { Zap, ShieldCheck, Clock, Check, ArrowLeft, Download } from "lucide-react";
+import { Zap, ShieldCheck, Clock, Check, ArrowRight, Download } from "lucide-react";
 import { Reveal } from "./reveal";
 import { useT } from "./i18n/language-context";
 
@@ -97,7 +97,7 @@ export function FinalCTA() {
         <Reveal delay={180}>
           <div className="mt-10 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4">
             <a
-              href="https://wa.me/937000000000"
+              href="https://github.com/nasirmoheb/AsanHesab/releases/download/v1.0.0-beta/AsanHesab-1.0.0-Setup.exe"
               className="group relative inline-flex items-center justify-center gap-2.5 rounded-xl bg-white px-7 py-4 text-base sm:text-lg font-bold text-blue-700 shadow-premium-lg hover:-translate-y-1 transition-all duration-300 overflow-hidden"
             >
               {/* Shimmer */}
@@ -110,7 +110,7 @@ export function FinalCTA() {
               className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-white/30 bg-white/10 backdrop-blur-sm px-7 py-4 text-base sm:text-lg font-bold text-white hover:bg-white/20 hover:border-white/50 transition-all duration-300"
             >
               {t.finalCta.secondaryCta}
-              <ArrowLeft className="h-4 w-4" style={{ transform: "scaleX(-1)" }} />
+              <ArrowRight className="h-4 w-4 rtl:rotate-180 transition-transform" />
             </a>
           </div>
         </Reveal>

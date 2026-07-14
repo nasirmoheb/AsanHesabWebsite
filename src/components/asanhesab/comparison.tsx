@@ -1,35 +1,48 @@
 "use client";
 
-import { Check, X, Minus, FileSpreadsheet, Sparkles, Trophy } from "lucide-react";
+import { Check, X, Minus, Sparkles, Trophy, FileSpreadsheet } from "lucide-react";
 import { SectionHeading } from "./section-heading";
 import { Reveal } from "./reveal";
 import { useT } from "./i18n/language-context";
 
-/**
- * Comparison — compact comparison table.
- * AsanHesab vs QuickBooks (USA) vs Tally (India) vs HesabYar (Local).
- * Tighter rows, smaller cells, more scannable.
- */
 export function Comparison() {
   const t = useT();
 
-  const rows: { label: string; asan: boolean | "partial"; a: boolean | "partial"; b: boolean | "partial"; c: boolean | "partial" }[] = [
-    { label: t.comparison.row1, asan: true,  a: false,    b: "partial", c: "partial" },
-    { label: t.comparison.row2, asan: true,  a: false,    b: false,    c: "partial" },
-    { label: t.comparison.row3, asan: true,  a: false,    b: "partial", c: true },
-    { label: t.comparison.row4, asan: true,  a: false,    b: false,    c: "partial" },
-    { label: t.comparison.row5, asan: true,  a: false,    b: false,    c: false },
-    { label: t.comparison.row6, asan: true,  a: false,    b: false,    c: "partial" },
-    { label: t.comparison.row7, asan: true,  a: "partial", b: true,    c: true },
-    { label: t.comparison.row8, asan: true,  a: false,    b: false,    c: false },
+  const rows: {
+    label: string;
+    asan: boolean | "partial";
+    a: boolean | "partial";
+    b: boolean | "partial";
+    c: boolean | "partial";
+  }[] = [
+    { label: t.comparison.row1, asan: true,      a: false,     b: "partial", c: "partial" },
+    { label: t.comparison.row2, asan: true,      a: false,     b: false,     c: "partial" },
+    { label: t.comparison.row3, asan: true,      a: false,     b: "partial", c: true      },
+    { label: t.comparison.row4, asan: true,      a: false,     b: false,     c: "partial" },
+    { label: t.comparison.row5, asan: true,      a: false,     b: false,     c: false     },
+    { label: t.comparison.row6, asan: true,      a: false,     b: false,     c: "partial" },
+    { label: t.comparison.row7, asan: true,      a: "partial", b: true,      c: true      },
+    { label: t.comparison.row8, asan: true,      a: false,     b: false,     c: false     },
   ];
 
-  return (
-    <section
-      className="relative bg-white dark:bg-slate-950 py-20 sm:py-28"
+  const cols = [
+    { key: "asan", label: t.comparison.colAsan,  sub: t.comparison.colAsanTag, highlight: true  },
+    { key: "a",    label: t.comparison.colA,     sub: t.comparison.colA_sub,   highlight: false },
+    { key: "b",    label: t.comparison.colB,     sub: t.comparison.colB_sub,   highlight: false },
+    { key: "c",    label: t.comparison.colC,     sub: t.comparison.colC_sub,   highlight: false },
+  ] as const;
+
+  return (    <section
+      className="relative bg-slate-50 dark:bg-slate-900/50 py-20 sm:py-28 overflow-hidden"
       aria-labelledby="comparison-headline"
     >
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      {/* Subtle background glow */}
+      <div
+        aria-hidden
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-blue-400/10 dark:bg-blue-500/10 blur-[120px] rounded-full pointer-events-none"
+      />
+
+      <div className="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
           eyebrow={t.comparison.eyebrow}
           eyebrowIcon={FileSpreadsheet}
@@ -39,137 +52,200 @@ export function Comparison() {
           tone="blue"
         />
 
-        {/* Desktop table — compact */}
-        <Reveal delay={120}>
-          <div className="mt-12 hidden md:block overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700 shadow-premium">
-            <table className="w-full text-sm">
+        {/* ── Desktop table ── */}
+        <Reveal delay={120} className="mt-12 hidden md:block">
+          <div className="overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 shadow-premium-lg bg-white dark:bg-slate-950">
+            <table className="w-full">
+              {/* Header */}
               <thead>
-                <tr className="bg-slate-50/80 dark:bg-slate-900/60">
-                  <th scope="col" className="text-right p-3 font-bold text-slate-700 dark:text-slate-200 w-[40%]">
-                    {/* Empty top-left cell */}
-                  </th>
-                  <th scope="col" className="p-3 relative">
-                    <div className="flex flex-col items-center gap-1">
-                      <span className="relative inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-br from-blue-600 to-blue-700 text-white px-3 py-1 text-xs font-bold shadow-premium glow-blue">
-                        <Sparkles className="h-3.5 w-3.5" />
+                <tr>
+                  {/* Feature column */}
+                  <th className="w-[42%] px-6 py-4 text-start" />
+
+                  {/* AsanHesab — highlighted */}
+                  <th className="px-4 py-4 text-center relative">
+                    {/* Top accent bar */}
+                    <div className="absolute top-0 inset-x-0 h-0.5 bg-blue-600 dark:bg-blue-500 rounded-t-sm" />
+                    <div className="inline-flex flex-col items-center gap-1.5">
+                      <span className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 text-white px-3 py-1 text-xs font-bold shadow-sm">
+                        <Sparkles className="h-3 w-3" />
                         {t.comparison.colAsan}
                       </span>
-                      <span className="inline-flex items-center gap-1 text-[10px] text-amber-700 dark:text-amber-300 font-semibold">
+                      <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-amber-600 dark:text-amber-400">
                         <Trophy className="h-3 w-3 fill-amber-400 text-amber-500" />
                         {t.comparison.colAsanTag}
                       </span>
                     </div>
                   </th>
-                  <th scope="col" className="p-3">
-                    <div className="flex flex-col items-center gap-0.5">
-                      <span className="text-slate-700 dark:text-slate-200 text-xs font-bold">{t.comparison.colA}</span>
-                      <span className="text-[10px] text-slate-400 dark:text-slate-500">{t.comparison.colA_sub}</span>
-                    </div>
-                  </th>
-                  <th scope="col" className="p-3">
-                    <div className="flex flex-col items-center gap-0.5">
-                      <span className="text-slate-700 dark:text-slate-200 text-xs font-bold">{t.comparison.colB}</span>
-                      <span className="text-[10px] text-slate-400 dark:text-slate-500">{t.comparison.colB_sub}</span>
-                    </div>
-                  </th>
-                  <th scope="col" className="p-3">
-                    <div className="flex flex-col items-center gap-0.5">
-                      <span className="text-slate-700 dark:text-slate-200 text-xs font-bold">{t.comparison.colC}</span>
-                      <span className="text-[10px] text-slate-400 dark:text-slate-500">{t.comparison.colC_sub}</span>
-                    </div>
-                  </th>
+
+                  {/* Other columns */}
+                  {[
+                    { label: t.comparison.colA, sub: t.comparison.colA_sub },
+                    { label: t.comparison.colB, sub: t.comparison.colB_sub },
+                    { label: t.comparison.colC, sub: t.comparison.colC_sub },
+                  ].map((col) => (
+                    <th key={col.label} className="px-4 py-4 text-center">
+                      <div className="flex flex-col items-center gap-0.5">
+                        <span className="text-sm font-bold text-slate-700 dark:text-slate-200">{col.label}</span>
+                        <span className="text-[11px] text-slate-400 dark:text-slate-500">{col.sub}</span>
+                      </div>
+                    </th>
+                  ))}
                 </tr>
               </thead>
-              <tbody>
+
+              {/* Body */}
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                 {rows.map((row, i) => (
                   <tr
                     key={i}
-                    className={i % 2 === 0 ? "bg-white dark:bg-slate-950" : "bg-slate-50/40 dark:bg-slate-900/30"}
+                    className="group hover:bg-slate-50 dark:hover:bg-slate-900/60 transition-colors"
                   >
-                    <td className="p-3 text-right text-slate-700 dark:text-slate-200 font-medium text-xs sm:text-sm">
+                    {/* Feature label */}
+                    <td className="px-6 py-3.5 text-sm font-medium text-slate-700 dark:text-slate-200 text-start">
                       {row.label}
                     </td>
-                    <td className="p-3 text-center bg-blue-50/40 dark:bg-blue-950/20">
+
+                    {/* AsanHesab cell */}
+                    <td className="px-4 py-3.5 text-center bg-blue-50/50 dark:bg-blue-950/20">
                       <Cell value={row.asan} highlight />
                     </td>
-                    <td className="p-3 text-center">
-                      <Cell value={row.a} />
-                    </td>
-                    <td className="p-3 text-center">
-                      <Cell value={row.b} />
-                    </td>
-                    <td className="p-3 text-center">
-                      <Cell value={row.c} />
-                    </td>
+
+                    {/* Other cells */}
+                    <td className="px-4 py-3.5 text-center"><Cell value={row.a} /></td>
+                    <td className="px-4 py-3.5 text-center"><Cell value={row.b} /></td>
+                    <td className="px-4 py-3.5 text-center"><Cell value={row.c} /></td>
                   </tr>
                 ))}
               </tbody>
             </table>
+
+            {/* Legend */}
+            <div className="flex items-center justify-end gap-5 px-6 py-3 border-t border-slate-100 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/40">
+              <LegendItem icon="check"   label={t.comparison.yes}     />
+              <LegendItem icon="partial" label={t.comparison.partial} />
+              <LegendItem icon="x"       label={t.comparison.no}      />
+            </div>
           </div>
         </Reveal>
 
-        {/* Mobile: stacked compact cards */}
-        <div className="mt-8 md:hidden space-y-2.5">
-          {rows.map((row, i) => (
-            <Reveal key={i} delay={i * 30}>
-              <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-3 shadow-premium">
-                <p className="text-xs font-bold text-slate-800 dark:text-slate-100 mb-2">{row.label}</p>
-                <div className="grid grid-cols-4 gap-1.5 text-center">
-                  <div className="rounded-lg bg-blue-50 dark:bg-blue-950/40 p-1.5">
-                    <p className="text-[9px] font-bold text-blue-700 dark:text-blue-300 mb-1 truncate">{t.comparison.colAsan}</p>
-                    <Cell value={row.asan} highlight />
-                  </div>
-                  <div className="rounded-lg bg-slate-50 dark:bg-slate-800 p-1.5">
-                    <p className="text-[9px] font-bold text-slate-600 dark:text-slate-300 mb-1 truncate">{t.comparison.colA}</p>
-                    <Cell value={row.a} />
-                  </div>
-                  <div className="rounded-lg bg-slate-50 dark:bg-slate-800 p-1.5">
-                    <p className="text-[9px] font-bold text-slate-600 dark:text-slate-300 mb-1 truncate">{t.comparison.colB}</p>
-                    <Cell value={row.b} />
-                  </div>
-                  <div className="rounded-lg bg-slate-50 dark:bg-slate-800 p-1.5">
-                    <p className="text-[9px] font-bold text-slate-600 dark:text-slate-300 mb-1 truncate">{t.comparison.colC}</p>
-                    <Cell value={row.c} />
-                  </div>
-                </div>
-              </div>
-            </Reveal>
-          ))}
-        </div>
+        {/* ── Mobile: horizontally scrollable table ── */}
+        <Reveal delay={120} className="mt-8 md:hidden">
+          <div className="overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 shadow-premium bg-white dark:bg-slate-950">
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[380px]">
+                {/* Header */}
+                <thead>
+                  <tr>
+                    <th className="sticky start-0 z-10 bg-white dark:bg-slate-950 w-[40%] px-4 py-3 text-start" />
+
+                    {/* AsanHesab */}
+                    <th className="px-3 py-3 text-center relative min-w-[72px]">
+                      <div className="absolute top-0 inset-x-0 h-0.5 bg-blue-600 dark:bg-blue-500" />
+                      <div className="flex flex-col items-center gap-1 pt-1">
+                        <span className="inline-flex items-center gap-1 rounded-md bg-blue-600 text-white px-2 py-0.5 text-[10px] font-bold">
+                          <Sparkles className="h-2.5 w-2.5" />
+                          {t.comparison.colAsan}
+                        </span>
+                        <span className="text-[9px] font-semibold text-amber-600 dark:text-amber-400 flex items-center gap-0.5">
+                          <Trophy className="h-2.5 w-2.5 fill-amber-400 text-amber-500" />
+                          {t.comparison.colAsanTag}
+                        </span>
+                      </div>
+                    </th>
+
+                    {/* Other cols */}
+                    {[
+                      { label: t.comparison.colA, sub: t.comparison.colA_sub },
+                      { label: t.comparison.colB, sub: t.comparison.colB_sub },
+                      { label: t.comparison.colC, sub: t.comparison.colC_sub },
+                    ].map((col) => (
+                      <th key={col.label} className="px-3 py-3 text-center min-w-[72px]">
+                        <div className="flex flex-col items-center gap-0.5">
+                          <span className="text-[11px] font-bold text-slate-700 dark:text-slate-200">{col.label}</span>
+                          <span className="text-[9px] text-slate-400 dark:text-slate-500">{col.sub}</span>
+                        </div>
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+
+                {/* Body */}
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                  {rows.map((row, i) => (
+                    <tr key={i} className="hover:bg-slate-50 dark:hover:bg-slate-900/60 transition-colors">
+                      <td className="sticky start-0 z-10 bg-white dark:bg-slate-950 px-4 py-3 text-xs font-medium text-slate-700 dark:text-slate-200 text-start">
+                        {row.label}
+                      </td>
+                      <td className="px-3 py-3 text-center bg-blue-50/50 dark:bg-blue-950/20">
+                        <Cell value={row.asan} highlight />
+                      </td>
+                      <td className="px-3 py-3 text-center"><Cell value={row.a} /></td>
+                      <td className="px-3 py-3 text-center"><Cell value={row.b} /></td>
+                      <td className="px-3 py-3 text-center"><Cell value={row.c} /></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Legend */}
+            <div className="flex items-center justify-end gap-4 px-4 py-2.5 border-t border-slate-100 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/40">
+              <LegendItem icon="check"   label={t.comparison.yes}     />
+              <LegendItem icon="partial" label={t.comparison.partial} />
+              <LegendItem icon="x"       label={t.comparison.no}      />
+            </div>
+          </div>
+        </Reveal>
       </div>
     </section>
   );
 }
 
+/* ── Cell ── */
 function Cell({ value, highlight }: { value: boolean | "partial"; highlight?: boolean }) {
   if (value === true) {
     return (
       <span
-        className={`inline-flex h-5 w-5 items-center justify-center rounded-full ${
-          highlight ? "bg-emerald-500 text-white" : "bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-300"
+        className={`inline-flex h-6 w-6 items-center justify-center rounded-full ${
+          highlight
+            ? "bg-blue-600 text-white shadow-sm shadow-blue-500/30"
+            : "bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400"
         }`}
         aria-label="yes"
       >
-        <Check className="h-3 w-3" strokeWidth={3} />
+        <Check className="h-3.5 w-3.5" strokeWidth={3} />
       </span>
     );
   }
   if (value === "partial") {
     return (
       <span
-        className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900/50 text-amber-600 dark:text-amber-300"
+        className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400"
         aria-label="partial"
       >
-        <Minus className="h-3 w-3" strokeWidth={3} />
+        <Minus className="h-3.5 w-3.5" strokeWidth={3} />
       </span>
     );
   }
   return (
     <span
-      className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500"
+      className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-300 dark:text-slate-600"
       aria-label="no"
     >
-      <X className="h-3 w-3" strokeWidth={3} />
+      <X className="h-3.5 w-3.5" strokeWidth={2.5} />
     </span>
+  );
+}
+
+/* ── Legend item ── */
+function LegendItem({ icon, label }: { icon: "check" | "partial" | "x"; label: string }) {
+  return (
+    <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
+      {icon === "check"   && <span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400"><Check  className="h-2.5 w-2.5" strokeWidth={3} /></span>}
+      {icon === "partial" && <span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-amber-100  dark:bg-amber-900/40  text-amber-600  dark:text-amber-400" ><Minus  className="h-2.5 w-2.5" strokeWidth={3} /></span>}
+      {icon === "x"       && <span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-slate-100  dark:bg-slate-800       text-slate-400  dark:text-slate-500" ><X      className="h-2.5 w-2.5" strokeWidth={2.5} /></span>}
+      {label}
+    </div>
   );
 }

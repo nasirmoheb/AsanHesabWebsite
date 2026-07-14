@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Calculator, Clock, Banknote, TrendingUp, Sparkles, ArrowLeft } from "lucide-react";
+import { Calculator, Clock, Banknote, TrendingUp, Sparkles, ArrowRight } from "lucide-react";
 import { SectionHeading } from "./section-heading";
 import { Reveal } from "./reveal";
 import { useLanguage, useT } from "./i18n/language-context";
@@ -159,11 +159,11 @@ export function ROICalculator() {
 
                 {/* CTA */}
                 <a
-                  href="#download"
+                  href="https://github.com/nasirmoheb/AsanHesab/releases/download/v1.0.0-beta/AsanHesab-1.0.0-Setup.exe"
                   className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 px-6 py-3.5 text-base font-bold text-white shadow-premium glow-emerald hover:-translate-y-0.5 transition-all duration-300"
                 >
                   {t.premium.roi.cta}
-                  <ArrowLeft className="h-4 w-4" style={{ transform: "scaleX(-1)" }} />
+                  <ArrowRight className="h-4 w-4 rtl:rotate-180 transition-transform" />
                 </a>
               </div>
             </div>

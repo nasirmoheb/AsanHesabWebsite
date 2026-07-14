@@ -111,7 +111,7 @@ export function Hero() {
           <Reveal delay={300}>
             <div className="mt-10 flex flex-row items-center justify-center gap-3 w-full">
               <a
-                href="#download"
+                href="https://github.com/nasirmoheb/AsanHesab/releases/download/v1.0.0-beta/AsanHesab-1.0.0-Setup.exe"
                 className="group relative flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-b from-blue-500 to-blue-600 px-5 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base font-semibold text-white shadow-[0_0_40px_-10px_rgba(59,130,246,0.6)] transition-all hover:scale-[1.02] hover:shadow-[0_0_60px_-15px_rgba(59,130,246,0.7)] overflow-hidden border border-blue-400/50"
               >
                 {/* Shine effect */}

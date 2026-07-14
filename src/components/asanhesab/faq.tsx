@@ -109,7 +109,7 @@ export function FAQ() {
               {t.faq.contactBody}
             </p>
             <a
-              href="#download"
+              href="https://github.com/nasirmoheb/AsanHesab/releases/download/v1.0.0-beta/AsanHesab-1.0.0-Setup.exe"
               className="mt-4 inline-flex items-center gap-2 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 px-5 py-3 text-sm font-bold text-white shadow-premium hover:shadow-emerald-500/30 hover:-translate-y-0.5 transition-all duration-300"
             >
               <WhatsAppIcon className="h-4 w-4" />

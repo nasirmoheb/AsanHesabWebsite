@@ -6,7 +6,7 @@ import {
   Warehouse,
   BarChart3,
   TrendingUp,
-  ArrowLeft,
+  ArrowRight,
   CheckCircle2,
   Package,
   Boxes,
@@ -39,14 +39,14 @@ export function Features() {
           tone="blue"
         />
 
-        <div className="mt-12 sm:mt-16 grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
-          {/* Card 1 — Large POS card */}
-          <Reveal as="article" className="lg:row-span-2 group relative overflow-hidden rounded-2xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-premium p-6 sm:p-8 hover:shadow-premium-lg transition-all duration-300 h-full">
+        <div className="mt-12 sm:mt-16 grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6 items-stretch">
+          {/* Card 1 — POS */}
+          <Reveal as="article" className="group relative overflow-hidden rounded-2xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-premium p-6 sm:p-8 hover:shadow-premium-lg transition-all duration-300 flex flex-col">
             <div
               aria-hidden
               className="absolute -top-16 -left-16 h-48 w-48 bg-gradient-to-br from-blue-100 to-blue-50 dark:from-blue-900/30 dark:to-blue-950/10 rounded-full blur-2xl opacity-60 group-hover:opacity-80 transition-opacity"
             />
-            <div className="relative">
+            <div className="relative flex flex-col flex-1">
               <div className="flex items-center gap-3">
                 <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-600 to-blue-700 text-white shadow-premium">
                   <Barcode className="h-6 w-6" />
@@ -98,7 +98,7 @@ export function Features() {
                 </div>
               </div>
 
-              <ul className="mt-5 space-y-2">
+              <ul className="mt-auto pt-5 space-y-2">
                 {[t.features.card1Feature1, t.features.card1Feature2, t.features.card1Feature3].map((item) => (
                   <li key={item} className="flex items-start gap-2 text-sm text-slate-700 dark:text-slate-200">
                     <CheckCircle2 className="h-4 w-4 mt-0.5 text-emerald-500 dark:text-emerald-400 shrink-0" />
@@ -109,13 +109,13 @@ export function Features() {
             </div>
           </Reveal>
 
-          {/* Card 2 — Medium: Debt notebook */}
-          <Reveal as="article" delay={80} className="group relative overflow-hidden rounded-2xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-premium p-6 sm:p-7 hover:shadow-premium-lg transition-all duration-300 h-full">
+          {/* Card 2 — Debt notebook */}
+          <Reveal as="article" delay={80} className="group relative overflow-hidden rounded-2xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-premium p-6 sm:p-7 hover:shadow-premium-lg transition-all duration-300 flex flex-col">
             <div
               aria-hidden
               className="absolute -top-12 -left-12 h-32 w-32 bg-gradient-to-br from-amber-100 to-amber-50 dark:from-amber-900/30 dark:to-amber-950/10 rounded-full blur-2xl opacity-70 group-hover:opacity-100 transition-opacity"
             />
-            <div className="relative">
+            <div className="relative flex flex-col flex-1">
               <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-500 to-amber-600 text-white shadow-premium">
                 <BookOpen className="h-5 w-5" />
               </span>
@@ -139,16 +139,24 @@ export function Features() {
                   </div>
                 ))}
               </div>
+              <ul className="mt-auto pt-4 space-y-2">
+                {[t.features.card2Feature1, t.features.card2Feature2, t.features.card2Feature3].map((item) => (
+                  <li key={item} className="flex items-start gap-2 text-sm text-slate-700 dark:text-slate-200">
+                    <CheckCircle2 className="h-4 w-4 mt-0.5 text-amber-500 dark:text-amber-400 shrink-0" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           </Reveal>
 
-          {/* Card 3 — Medium: Smart warehouse */}
-          <Reveal as="article" delay={160} className="group relative overflow-hidden rounded-2xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-premium p-6 sm:p-7 hover:shadow-premium-lg transition-all duration-300 h-full">
+          {/* Card 3 — Smart warehouse */}
+          <Reveal as="article" delay={160} className="group relative overflow-hidden rounded-2xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-premium p-6 sm:p-7 hover:shadow-premium-lg transition-all duration-300 flex flex-col">
             <div
               aria-hidden
               className="absolute -top-12 -left-12 h-32 w-32 bg-gradient-to-br from-emerald-100 to-emerald-50 dark:from-emerald-900/30 dark:to-emerald-950/10 rounded-full blur-2xl opacity-70 group-hover:opacity-100 transition-opacity"
             />
-            <div className="relative">
+            <div className="relative flex flex-col flex-1">
               <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 text-white shadow-premium">
                 <Warehouse className="h-5 w-5" />
               </span>
@@ -178,6 +186,14 @@ export function Features() {
                   </div>
                 ))}
               </div>
+              <ul className="mt-auto pt-4 space-y-2">
+                {[t.features.card3Feature1, t.features.card3Feature2, t.features.card3Feature3].map((item) => (
+                  <li key={item} className="flex items-start gap-2 text-sm text-slate-700 dark:text-slate-200">
+                    <CheckCircle2 className="h-4 w-4 mt-0.5 text-emerald-500 dark:text-emerald-400 shrink-0" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           </Reveal>
 
@@ -203,7 +219,7 @@ export function Features() {
                   className="mt-5 inline-flex items-center gap-1.5 text-sm font-bold text-blue-700 dark:text-blue-300 hover:text-blue-800 dark:hover:text-blue-200 group/link"
                 >
                   {t.features.card4Link}
-                  <ArrowLeft className="h-4 w-4 transition-transform group-hover/link:-translate-x-1 rtl:flip" style={{ transform: "scaleX(-1)" }} />
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover/link:translate-x-1 rtl:rotate-180 rtl:group-hover/link:-translate-x-1" />
                 </a>
               </div>
 
