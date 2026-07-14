@@ -34,7 +34,7 @@ export function SectionHeading({
   const alignCls = align === "center" ? "text-center mx-auto items-center" : "text-start items-start";
 
   return (
-    <div className={`flex flex-col ${alignCls} max-w-3xl ${align === "center" ? "mx-auto" : ""}`}>
+    <div className={`flex flex-col ${alignCls} max-w-4xl ${align === "center" ? "mx-auto" : ""}`}>
       {eyebrow && (
         <Reveal>
           <span

@@ -1,7 +1,6 @@
 "use client";
 
-import { Zap, Clock, Shield, Headphones, Monitor, Play, ChevronDown, Sparkles, Star } from "lucide-react";
-import { WhatsAppIcon } from "./whatsapp-icon";
+import { Zap, Clock, Shield, Headphones, Monitor, Play, ChevronDown, Sparkles, Star, Download } from "lucide-react";
 import { LaptopMockup } from "./laptop-mockup";
 import { Reveal } from "./reveal";
 import { useLanguage, useT } from "./i18n/language-context";
@@ -64,7 +63,7 @@ export function Hero() {
                     <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 animate-ping-soft" />
                     <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
                   </span>
-                  <span className="text-[10px] text-emerald-700 dark:text-emerald-300">{formatNumber("۵٬۰۰۰")}+ {t.stats.stat1Label}</span>
+                  <span className="text-[10px] text-emerald-700 dark:text-emerald-300">{formatNumber("100")}+ {t.stats.stat1Label}</span>
                 </span>
               </span>
             </div>
@@ -123,7 +122,7 @@ export function Hero() {
               >
                 {/* Shimmer overlay */}
                 <span className="absolute inset-0 shimmer opacity-0 group-hover:opacity-100 transition-opacity" aria-hidden />
-                <WhatsAppIcon className="h-5 w-5 relative" />
+                <Download className="h-5 w-5 relative" />
                 <span className="relative">{t.hero.primaryCta}</span>
               </a>
               <a

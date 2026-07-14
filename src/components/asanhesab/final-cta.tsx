@@ -1,7 +1,6 @@
 "use client";
 
-import { Zap, ShieldCheck, Clock, Check, ArrowLeft } from "lucide-react";
-import { WhatsAppIcon } from "./whatsapp-icon";
+import { Zap, ShieldCheck, Clock, Check, ArrowLeft, Download } from "lucide-react";
 import { Reveal } from "./reveal";
 import { useT } from "./i18n/language-context";
 
@@ -103,7 +102,7 @@ export function FinalCTA() {
             >
               {/* Shimmer */}
               <span className="absolute inset-0 shimmer opacity-0 group-hover:opacity-100 transition-opacity" aria-hidden />
-              <WhatsAppIcon className="h-5 w-5 text-emerald-600 relative" />
+              <Download className="h-5 w-5 text-emerald-600 relative" />
               <span className="relative">{t.finalCta.primaryCta}</span>
             </a>
             <a

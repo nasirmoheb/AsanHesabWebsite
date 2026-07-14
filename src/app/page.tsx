@@ -51,8 +51,7 @@ export default function Home() {
         {/* Differentiation vs alternatives */}
         <Comparison />
 
-        {/* Interactive ROI calculator */}
-        <ROICalculator />
+
 
         {/* Pricing — desire + action */}
         <Pricing />
@@ -63,8 +62,6 @@ export default function Home() {
         {/* More social proof */}
         <Testimonials />
 
-        {/* Security & trust */}
-        <SecuritySection />
 
         {/* Objection handling */}
         <FAQ />

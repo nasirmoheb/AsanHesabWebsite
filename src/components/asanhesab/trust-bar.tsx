@@ -38,7 +38,7 @@ export function TrustBar() {
         </Reveal>
         <Reveal delay={80}>
           <p className="text-center text-[11px] text-slate-400 dark:text-slate-500 mt-1 mb-6 sm:mb-8">
-            {t.premium.trustBar.subtitle} · {formatNumber("۵٬۰۰۰")}+ {t.stats.stat1Label}
+            {t.premium.trustBar.subtitle} · {formatNumber("100")}+ {t.stats.stat1Label}
           </p>
         </Reveal>
         <Reveal delay={140}>

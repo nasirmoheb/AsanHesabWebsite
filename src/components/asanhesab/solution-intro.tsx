@@ -119,7 +119,7 @@ function BeforeAfter({
   return (
     <div className="relative">
       {/* Before card (faded, slightly rotated) */}
-      <div className="absolute -top-4 -right-2 sm:-right-6 w-[88%] rotate-3 z-0">
+      <div className="absolute -top-30 -right-2 sm:-right-6 w-[88%] rotate-3 z-0">
         <div className="rounded-2xl border border-rose-200 dark:border-rose-900/50 bg-rose-50/40 dark:bg-rose-950/20 p-5 shadow-premium opacity-90">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-bold text-rose-700 dark:text-rose-300 bg-rose-100 dark:bg-rose-900/40 px-2 py-0.5 rounded-full">
@@ -145,7 +145,7 @@ function BeforeAfter({
       </div>
 
       {/* After card (vibrant, on top) */}
-      <div className="relative mt-12 sm:mt-16 z-10">
+      <div className="relative mt-24 sm:mt-28 z-10">
         <div className="rounded-3xl border-2 border-blue-200 dark:border-blue-700 bg-white dark:bg-slate-900 p-6 shadow-premium-lg">
           <div className="flex items-center justify-between mb-4">
             <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-900/40 px-2.5 py-1 rounded-full">
