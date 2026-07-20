@@ -54,28 +54,25 @@ export function Hero() {
       {/* Single ambient glow — center only */}
       <div
         aria-hidden
-        className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-200 h-150 bg-blue-500/20 dark:bg-blue-600/10 blur-[120px] rounded-full pointer-events-none"
+        className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-blue-500/20 dark:bg-blue-600/10 blur-[120px] rounded-full pointer-events-none"
       />
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center text-center">
           {/* Badges — split: offline claim + active shop count */}
           <Reveal>
-            <div className="flex flex-wrap items-center justify-center gap-2">
-              <div className="inline-flex items-center gap-2 rounded-full border border-blue-200/60 dark:border-blue-800/50 bg-white/60 dark:bg-slate-900/50 px-3 py-1.5 backdrop-blur-md shadow-sm">
-                <span className="flex items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900 p-1">
-                  <Zap className="h-3 w-3 text-blue-600 dark:text-blue-400 fill-blue-600 dark:fill-blue-400" />
-                </span>
-                <span className="text-xs sm:text-sm font-medium text-slate-800 dark:text-slate-200">
-                  {t.hero.offlineBadge}
-                </span>
+            <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-sm font-medium text-slate-700 dark:text-slate-300">
+              <div className="flex items-center gap-2">
+                <Zap className="h-4 w-4 text-blue-500 fill-blue-500" />
+                <span>{t.hero.offlineBadge}</span>
               </div>
-              <div className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200/60 dark:border-emerald-800/50 bg-white/60 dark:bg-slate-900/50 px-3 py-1.5 backdrop-blur-md shadow-sm">
-                <span className="relative flex h-2 w-2" aria-hidden>
-                  <span className="absolute inline-flex h-full w-full motion-safe:animate-ping motion-reduce:animate-none rounded-full bg-emerald-400 opacity-75" />
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+              <div className="hidden sm:block h-4 w-px bg-slate-300 dark:bg-slate-700" aria-hidden />
+              <div className="flex items-center gap-2">
+                <span className="relative flex h-2.5 w-2.5 items-center justify-center" aria-hidden>
+                  <span className="absolute inline-flex h-full w-full motion-safe:animate-ping motion-reduce:animate-none rounded-full bg-emerald-400 opacity-60" />
+                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
                 </span>
-                <span className="text-xs sm:text-sm font-semibold text-emerald-800 dark:text-emerald-400 num-fa">
+                <span className="num-fa font-bold text-slate-900 dark:text-white">
                   {formatNumber("100")}+ {t.stats.stat1Label}
                 </span>
               </div>
@@ -84,28 +81,23 @@ export function Hero() {
 
           {/* Main Headline */}
           <Reveal delay={100}>
+            <style>{`
+              @keyframes drawPath {
+                to { stroke-dashoffset: 0; }
+              }
+            `}</style>
             <h1
               id="hero-headline"
-              className="mt-8 mx-auto max-w-4xl text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-foreground leading-[1.1] sm:leading-[1.15]"
-              style={{ textWrap: "balance" } as React.CSSProperties}
+              className="mt-8 mx-auto max-w-4xl text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.1] sm:leading-[1.15] text-balance drop-shadow-sm"
             >
               {t.hero.headlineLead}{" "}
-              <span className="relative inline-block">
-                <span className="text-primary">{t.hero.headlineHighlight}</span>
-                <svg
-                  className="absolute -bottom-2 sm:-bottom-3 left-0 w-full h-3 sm:h-4 text-primary/25"
-                  viewBox="0 0 200 12"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-hidden
-                >
-                  <path
-                    d="M2 9.5C65 -2.5 135 -2.5 198 9.5"
-                    stroke="currentColor"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                  />
-                </svg>
+              <span className="relative inline-flex flex-col items-center justify-center px-1 sm:px-3 py-1 mx-1 group">
+                <span className="absolute inset-0 bg-blue-100/80 dark:bg-blue-900/40 rounded-xl sm:rounded-2xl -skew-x-6 -skew-y-2 transform transition-transform duration-700 group-hover:skew-x-0 group-hover:skew-y-0 group-hover:scale-105" aria-hidden />
+                <span className="absolute inset-0 bg-blue-500/10 dark:bg-blue-400/10 rounded-xl sm:rounded-2xl translate-y-1.5 translate-x-1.5 -z-10" aria-hidden />
+                <span className="relative text-blue-700 dark:text-blue-300 italic tracking-normal pr-1">
+                  {t.hero.headlineHighlight}
+                </span>
+                
               </span>{" "}
               {t.hero.headlineTail}
             </h1>
@@ -114,8 +106,7 @@ export function Hero() {
           {/* Sub-headline */}
           <Reveal delay={200}>
             <p
-              className="mt-8 max-w-2xl text-lg sm:text-xl text-slate-700 dark:text-slate-300 leading-relaxed"
-              style={{ textWrap: "pretty" } as React.CSSProperties}
+              className="mt-8 mx-auto max-w-2xl text-lg sm:text-xl text-slate-600 dark:text-slate-300 leading-relaxed text-pretty"
             >
               {t.hero.subheadline}
             </p>
@@ -124,16 +115,12 @@ export function Hero() {
           {/* CTAs */}
           <Reveal delay={300}>
             <div className="mt-10 flex flex-col items-center gap-3 w-full max-w-lg">
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 w-full">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-4 w-full">
                 <a
                   href={DOWNLOAD_URL}
                   onClick={handleDownloadClick}
-                  className="group relative flex flex-1 items-center justify-center gap-2 rounded-2xl bg-linear-to-b from-blue-500 to-blue-600 px-5 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base font-semibold text-white shadow-[0_0_40px_-10px_rgba(59,130,246,0.6)] transition-all duration-200 hover:scale-[1.02] hover:shadow-[0_0_60px_-15px_rgba(59,130,246,0.7)] active:scale-[0.98] overflow-hidden border border-blue-400/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-background min-h-11"
+                  className="group flex flex-1 items-center justify-center gap-2.5 rounded-2xl bg-blue-600 px-5 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base font-bold text-white shadow-premium transition-all duration-300 hover:bg-blue-700 hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 min-h-11"
                 >
-                  <span
-                    aria-hidden
-                    className="pointer-events-none absolute inset-0 -translate-x-full skew-x-[-20deg] bg-white/20 transition-transform duration-500 group-hover:translate-x-[150%] motion-reduce:transition-none motion-reduce:group-hover:translate-x-[-100%]"
-                  />
                   <Download className="h-4 w-4 sm:h-5 sm:w-5 transition-transform group-hover:-translate-y-0.5 shrink-0" />
                   <span>{t.hero.primaryCta}</span>
                 </a>
@@ -142,9 +129,9 @@ export function Hero() {
                   href={WHATSAPP_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex flex-1 items-center justify-center gap-2 rounded-2xl bg-white/70 dark:bg-slate-800/50 px-5 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base font-semibold text-slate-900 dark:text-white ring-1 ring-slate-200 dark:ring-slate-700 backdrop-blur-md transition-all duration-200 hover:bg-white dark:hover:bg-slate-800 hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background min-h-11"
+                  className="group flex flex-1 items-center justify-center gap-2.5 rounded-2xl bg-slate-100 dark:bg-slate-800 px-5 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base font-bold text-slate-900 dark:text-white transition-all duration-300 hover:bg-slate-200 dark:hover:bg-slate-700 hover:-translate-y-0.5 active:translate-y-0 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 min-h-11"
                 >
-                  <span className="flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 transition-colors group-hover:bg-emerald-50 dark:group-hover:bg-emerald-900/70 shrink-0">
+                  <span className="flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 shrink-0">
                     <WhatsAppIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   </span>
                   <span>{t.hero.secondaryCta}</span>
@@ -184,19 +171,19 @@ export function Hero() {
                 </span>
               </div>
 
-              <span className="hidden sm:block h-4 w-px bg-slate-200 dark:bg-slate-700" aria-hidden />
+              <span className="hidden sm:block h-4 w-px bg-slate-300 dark:bg-slate-600" aria-hidden />
 
-              <div className="flex flex-wrap items-center justify-center gap-2 text-sm text-slate-700 dark:text-slate-200">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-white dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 px-3 py-1">
-                  <Clock className="h-3.5 w-3.5 text-blue-500 shrink-0" aria-hidden />
+              <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-sm font-medium text-slate-600 dark:text-slate-400">
+                <span className="flex items-center gap-1.5">
+                  <Clock className="h-4 w-4 text-blue-500" aria-hidden />
                   {t.hero.trust1}
                 </span>
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-white dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 px-3 py-1">
-                  <Shield className="h-3.5 w-3.5 text-emerald-500 shrink-0" aria-hidden />
+                <span className="flex items-center gap-1.5">
+                  <Shield className="h-4 w-4 text-emerald-500" aria-hidden />
                   {t.hero.trust2}
                 </span>
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-white dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 px-3 py-1">
-                  <Monitor className="h-3.5 w-3.5 text-slate-500 shrink-0" aria-hidden />
+                <span className="flex items-center gap-1.5">
+                  <Monitor className="h-4 w-4 text-slate-500" aria-hidden />
                   {formatNumber(t.hero.trust4)}
                 </span>
               </div>

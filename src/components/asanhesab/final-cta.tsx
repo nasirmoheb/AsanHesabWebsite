@@ -2,23 +2,31 @@
 
 import { Zap, ShieldCheck, Clock, Check, ArrowRight, Download } from "lucide-react";
 import { Reveal } from "./reveal";
-import { useT } from "./i18n/language-context";
+import { useLanguage, useT } from "./i18n/language-context";
 
 /**
  * FinalCTA — closing argument with urgency.
- * Enhanced with:
- *  - Animated gradient mesh background
- *  - Floating confetti particles
- *  - Glow ring around primary CTA
- *  - Pulse halo behind badge
+ *
+ * Polish pass:
+ *  - Gradient text on titleHighlight removed (banned: bg-clip-text + gradient).
+ *    Using text-amber-300 instead — warm amber against the dark blue drenched
+ *    background reads urgent/warm without needing a gradient to say it.
+ *  - bg-gradient-to-br → bg-linear-to-br (Tailwind v4).
+ *  - Primary CTA: focus-visible ring + active:scale-[0.98] added.
+ *  - Secondary CTA: focus-visible ring + active:scale-[0.98] added.
+ *  - dir from language context.
+ *  - Glass badge and glass reassurance pills kept — purposeful on a drenched
+ *    background, not decorative default glassmorphism.
  */
 export function FinalCTA() {
   const t = useT();
+  const { dir } = useLanguage();
 
   return (
     <section
       id="download"
-      className="relative overflow-hidden bg-gradient-to-br from-blue-700 via-blue-800 to-slate-900 dark:from-blue-800 dark:via-blue-900 dark:to-slate-950 py-24 sm:py-32"
+      dir={dir}
+      className="relative overflow-hidden bg-linear-to-br from-blue-700 via-blue-800 to-slate-900 dark:from-blue-800 dark:via-blue-900 dark:to-slate-950 py-24 sm:py-32"
       aria-labelledby="final-cta-headline"
     >
       {/* Animated gradient mesh */}
@@ -27,10 +35,11 @@ export function FinalCTA() {
         className="absolute inset-0 opacity-40"
         style={{
           backgroundImage:
-            "radial-gradient(circle at 20% 30%, rgba(255,255,255,0.3) 0, transparent 35%), radial-gradient(circle at 80% 70%, rgba(16, 185, 129, 0.3) 0, transparent 40%), radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.2) 0, transparent 45%)",
+            "radial-gradient(circle at 20% 30%, rgba(255,255,255,0.3) 0, transparent 35%), radial-gradient(circle at 80% 70%, rgba(16,185,129,0.3) 0, transparent 40%), radial-gradient(circle at 50% 50%, rgba(139,92,246,0.2) 0, transparent 45%)",
         }}
       />
-      {/* Grid overlay */}
+
+      {/* Grid texture */}
       <div
         aria-hidden
         className="absolute inset-0 opacity-10"
@@ -46,13 +55,13 @@ export function FinalCTA() {
       {/* Floating confetti particles */}
       <div aria-hidden className="absolute inset-0 pointer-events-none overflow-hidden">
         {[
-          { left: "10%", top: "20%", delay: "0s",   size: "h-2 w-2",  color: "bg-amber-300",   shape: "rounded-full" },
-          { left: "85%", top: "15%", delay: "0.5s", size: "h-3 w-3",  color: "bg-emerald-300", shape: "rounded-sm" },
-          { left: "15%", top: "70%", delay: "1s",   size: "h-2 w-2",  color: "bg-violet-300",  shape: "rounded-full" },
-          { left: "75%", top: "75%", delay: "1.5s", size: "h-2.5 w-2.5", color: "bg-blue-300",  shape: "rounded-sm" },
-          { left: "50%", top: "10%", delay: "2s",   size: "h-1.5 w-1.5", color: "bg-rose-300", shape: "rounded-full" },
-          { left: "30%", top: "85%", delay: "2.5s", size: "h-2 w-2",  color: "bg-amber-300",   shape: "rounded-sm" },
-          { left: "90%", top: "50%", delay: "3s",   size: "h-2 w-2",  color: "bg-emerald-300", shape: "rounded-full" },
+          { left: "10%", top: "20%", delay: "0s",    size: "h-2 w-2",     color: "bg-amber-300",   shape: "rounded-full" },
+          { left: "85%", top: "15%", delay: "0.5s",  size: "h-3 w-3",     color: "bg-emerald-300", shape: "rounded-sm"   },
+          { left: "15%", top: "70%", delay: "1s",    size: "h-2 w-2",     color: "bg-violet-300",  shape: "rounded-full" },
+          { left: "75%", top: "75%", delay: "1.5s",  size: "h-2.5 w-2.5", color: "bg-blue-300",    shape: "rounded-sm"   },
+          { left: "50%", top: "10%", delay: "2s",    size: "h-1.5 w-1.5", color: "bg-rose-300",    shape: "rounded-full" },
+          { left: "30%", top: "85%", delay: "2.5s",  size: "h-2 w-2",     color: "bg-amber-300",   shape: "rounded-sm"   },
+          { left: "90%", top: "50%", delay: "3s",    size: "h-2 w-2",     color: "bg-emerald-300", shape: "rounded-full" },
         ].map((p, i) => (
           <span
             key={i}
@@ -63,17 +72,19 @@ export function FinalCTA() {
       </div>
 
       <div className="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 text-center">
+
+        {/* Badge */}
         <Reveal>
           <div className="relative inline-flex">
-            {/* Pulse halo */}
             <span aria-hidden className="absolute inset-0 rounded-full bg-amber-400/30 blur-md animate-pulse-ring" />
             <span className="relative inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 backdrop-blur-xl px-4 py-1.5 text-xs sm:text-sm font-semibold text-white">
-              <Zap className="h-3.5 w-3.5 fill-amber-300 text-amber-300" />
-              <span>{t.finalCta.badge}</span>
+              <Zap className="h-3.5 w-3.5 fill-amber-300 text-amber-300" aria-hidden />
+              {t.finalCta.badge}
             </span>
           </div>
         </Reveal>
 
+        {/* Headline */}
         <Reveal delay={60}>
           <h2
             id="final-cta-headline"
@@ -81,49 +92,62 @@ export function FinalCTA() {
             style={{ textWrap: "balance" } as React.CSSProperties}
           >
             {t.finalCta.titleLead}{" "}
-            <span className="bg-gradient-to-l from-amber-300 via-emerald-300 to-amber-300 bg-clip-text text-transparent">
-              {t.finalCta.titleHighlight}
-            </span>
+            {/*
+             * Gradient text removed (absolute ban: bg-clip-text + gradient).
+             * text-amber-300 reads urgent/warm against the dark blue drenched
+             * background — same semantic intent, no gradient needed.
+             */}
+            <span className="text-amber-300">{t.finalCta.titleHighlight}</span>
             {t.finalCta.titleTail}
           </h2>
         </Reveal>
 
+        {/* Body */}
         <Reveal delay={120}>
-          <p className="mt-6 text-base sm:text-lg lg:text-xl text-blue-100 max-w-2xl mx-auto leading-relaxed">
+          <p
+            className="mt-6 text-base sm:text-lg lg:text-xl text-blue-100 max-w-2xl mx-auto leading-relaxed"
+            style={{ textWrap: "pretty" } as React.CSSProperties}
+          >
             {t.finalCta.body}
           </p>
         </Reveal>
 
+        {/* CTAs */}
         <Reveal delay={180}>
           <div className="mt-10 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4">
+            {/* Primary */}
             <a
               href="https://github.com/nasirmoheb/AsanHesab/releases/download/v1.0.0-beta/AsanHesab-1.0.0-Setup.exe"
-              className="group relative inline-flex items-center justify-center gap-2.5 rounded-xl bg-white px-7 py-4 text-base sm:text-lg font-bold text-blue-700 shadow-premium-lg hover:-translate-y-1 transition-all duration-300 overflow-hidden"
+              className="group relative inline-flex items-center justify-center gap-2.5 rounded-xl bg-white px-7 py-4 text-base sm:text-lg font-bold text-blue-700 shadow-premium-lg hover:-translate-y-1 active:scale-[0.98] transition-all duration-300 overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-blue-700"
             >
-              {/* Shimmer */}
               <span className="absolute inset-0 shimmer opacity-0 group-hover:opacity-100 transition-opacity" aria-hidden />
-              <Download className="h-5 w-5 text-emerald-600 relative" />
+              <Download className="h-5 w-5 text-emerald-600 relative" aria-hidden />
               <span className="relative">{t.finalCta.primaryCta}</span>
             </a>
+
+            {/* Secondary */}
             <a
               href="#features"
-              className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-white/30 bg-white/10 backdrop-blur-sm px-7 py-4 text-base sm:text-lg font-bold text-white hover:bg-white/20 hover:border-white/50 transition-all duration-300"
+              className="group inline-flex items-center justify-center gap-2 rounded-xl border-2 border-white/30 bg-white/10 backdrop-blur-sm px-7 py-4 text-base sm:text-lg font-bold text-white hover:bg-white/20 hover:border-white/50 active:scale-[0.98] transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-blue-800"
             >
               {t.finalCta.secondaryCta}
-              <ArrowRight className="h-4 w-4 rtl:rotate-180 transition-transform" />
+              <ArrowRight className="h-4 w-4 rtl:rotate-180 transition-transform duration-200 group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5" aria-hidden />
             </a>
           </div>
         </Reveal>
 
-        {/* Reassurance row with refined styling */}
+        {/* Reassurance strip */}
         <Reveal delay={240}>
-          <div className="mt-12 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-xs sm:text-sm text-blue-100">
+          <div className="mt-12 flex flex-wrap items-center justify-center gap-x-4 gap-y-3 text-xs sm:text-sm text-blue-100">
             {[
-              { icon: <Check className="h-4 w-4 text-emerald-300" strokeWidth={3} />, label: t.finalCta.reassurance1 },
-              { icon: <ShieldCheck className="h-4 w-4 text-emerald-300" />,           label: t.finalCta.reassurance2 },
-              { icon: <Clock className="h-4 w-4 text-emerald-300" />,                 label: t.finalCta.reassurance3 },
+              { icon: <Check className="h-4 w-4 text-emerald-300 shrink-0" strokeWidth={3} aria-hidden />, label: t.finalCta.reassurance1 },
+              { icon: <ShieldCheck className="h-4 w-4 text-emerald-300 shrink-0" aria-hidden />,           label: t.finalCta.reassurance2 },
+              { icon: <Clock className="h-4 w-4 text-emerald-300 shrink-0" aria-hidden />,                 label: t.finalCta.reassurance3 },
             ].map((item, i) => (
-              <span key={i} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
+              <span
+                key={i}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm"
+              >
                 {item.icon}
                 {item.label}
               </span>
