@@ -15,6 +15,7 @@ export function SectionHeading({
   subtitle,
   align = "center",
   tone = "blue",
+  headlineId,
 }: {
   eyebrow?: string;
   eyebrowIcon?: React.ComponentType<{ className?: string }>;
@@ -24,6 +25,7 @@ export function SectionHeading({
   subtitle?: string;
   align?: "center" | "start";
   tone?: "blue" | "emerald" | "amber" | "violet";
+  headlineId?: string;
 }) {
   const tones = {
     blue:    "border-blue-200 dark:border-blue-800 bg-blue-50/80 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300",
@@ -46,7 +48,10 @@ export function SectionHeading({
         </Reveal>
       )}
       <Reveal delay={60}>
-        <h2 className="mt-4 text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.2]">
+        <h2
+          id={headlineId}
+          className="mt-4 text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.2]"
+        >
           {title} {highlight && <span className={highlightClass}>{highlight}</span>}
         </h2>
       </Reveal>
