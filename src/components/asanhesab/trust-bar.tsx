@@ -1,6 +1,6 @@
 "use client";
 
-import { Store, Building2, Pill, Factory, ShoppingBag, Truck } from "lucide-react";
+import { Store, Building2, Smartphone, Factory, ShoppingBag, Truck } from "lucide-react";
 import { Reveal } from "./reveal";
 import { useLanguage, useT } from "./i18n/language-context";
 
@@ -31,7 +31,7 @@ export function TrustBar() {
   const industries = [
     { id: "grocery",       icon: <Store        className="h-5 w-5" aria-hidden />, label: t.premium.trustBar.ind1 },
     { id: "wholesale",     icon: <Building2    className="h-5 w-5" aria-hidden />, label: t.premium.trustBar.ind2 },
-    { id: "pharmacy",      icon: <Pill         className="h-5 w-5" aria-hidden />, label: t.premium.trustBar.ind3 },
+    { id: "mobile",        icon: <Smartphone   className="h-5 w-5" aria-hidden />, label: t.premium.trustBar.ind3 },
     { id: "manufacturing", icon: <Factory      className="h-5 w-5" aria-hidden />, label: t.premium.trustBar.ind4 },
     { id: "clothing",      icon: <ShoppingBag  className="h-5 w-5" aria-hidden />, label: t.premium.trustBar.ind5 },
     { id: "logistics",     icon: <Truck        className="h-5 w-5" aria-hidden />, label: t.premium.trustBar.ind6 },
