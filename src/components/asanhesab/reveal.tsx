@@ -21,7 +21,6 @@ export function useReveal<T extends HTMLElement = HTMLDivElement>(
     if (!el) return;
     // Fallback for environments without IntersectionObserver (SSR/old browsers).
     if (typeof IntersectionObserver === "undefined") {
-      // Use rAF to avoid a synchronous setState within the effect body.
       const id = requestAnimationFrame(() => setVisible(true));
       return () => cancelAnimationFrame(id);
     }
@@ -46,8 +45,16 @@ export function useReveal<T extends HTMLElement = HTMLDivElement>(
 }
 
 /**
- * Reveal — wrapper component that applies fade-up reveal on scroll.
- * Honors prefers-reduced-motion.
+ * Reveal — wrapper that applies a fade-up entrance on scroll.
+ *
+ * Content is VISIBLE by default (no `opacity-0` before JS runs).
+ * The animation is progressive enhancement: when JS fires and the
+ * component mounts, it briefly "arms" the hidden state and then
+ * triggers the entrance as soon as the element enters the viewport.
+ * This prevents content from shipping blank on slow JS, backgrounded
+ * tabs, or headless renderers.
+ *
+ * Reduced motion: collapses to a simple opacity crossfade (no translate).
  */
 export function Reveal({
   children,
@@ -61,15 +68,33 @@ export function Reveal({
   as?: React.ElementType;
 }) {
   const { ref, visible } = useReveal<HTMLDivElement>();
+  // "armed" becomes true after first paint so we never flash hidden on SSR.
+  const [armed, setArmed] = useState(false);
+
+  useEffect(() => {
+    // Arm on the next animation frame so the element paints once at full
+    // opacity before we apply the entrance state.
+    const id = requestAnimationFrame(() => setArmed(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
+
   return (
     <Tag
       ref={ref}
-      className={`transition-all duration-700 ease-out ${
-        visible
-          ? "opacity-100 translate-y-0"
-          : "opacity-0 translate-y-6"
-      } ${className}`}
-      style={{ transitionDelay: `${delay}ms` }}
+      className={[
+        // Motion-reduced: crossfade only, no translate
+        "motion-reduce:transition-opacity motion-reduce:duration-500",
+        // Standard motion
+        "motion-safe:transition-[opacity,transform] motion-safe:duration-700 motion-safe:ease-out",
+        // State: armed+invisible → armed+visible | not armed (SSR) → fully visible
+        armed && !visible
+          ? "opacity-0 motion-safe:translate-y-6"
+          : "opacity-100 motion-safe:translate-y-0",
+        className,
+      ]
+        .filter(Boolean)
+        .join(" ")}
+      style={{ transitionDelay: armed ? `${delay}ms` : "0ms" }}
     >
       {children}
     </Tag>
