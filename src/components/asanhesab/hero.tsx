@@ -1,6 +1,6 @@
 "use client";
 
-import { Zap, Clock, Shield, Monitor, Star, Download } from "lucide-react";
+import { Clock, Shield, Monitor, Star, Download, RefreshCw } from "lucide-react";
 import { Reveal } from "./reveal";
 import { useLanguage, useT } from "./i18n/language-context";
 import { useTheme } from "next-themes";
@@ -51,30 +51,25 @@ export function Hero() {
         }}
       />
 
-      {/* Single ambient glow — center only */}
+      {/* Clean ambient glow */}
       <div
         aria-hidden
-        className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[600px] bg-blue-500/20 dark:bg-blue-600/10 blur-[120px] rounded-full pointer-events-none"
+        className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-blue-500/10 dark:bg-blue-500/5 blur-[120px] rounded-full pointer-events-none"
       />
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center text-center">
-          {/* Badges — split: offline claim + active shop count */}
+          {/* Badges */}
           <Reveal>
             <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-sm font-medium text-slate-700 dark:text-slate-300">
               <div className="flex items-center gap-2">
-                <Zap className="h-4 w-4 text-blue-500 fill-blue-500" />
-                <span>{t.hero.offlineBadge}</span>
+                <RefreshCw className="h-4 w-4 text-blue-500 shrink-0" aria-hidden />
+                <span>{t.hero.badgeDualMode}</span>
               </div>
               <div className="hidden sm:block h-4 w-px bg-slate-300 dark:bg-slate-700" aria-hidden />
               <div className="flex items-center gap-2">
-                <span className="relative flex h-2.5 w-2.5 items-center justify-center" aria-hidden>
-                  <span className="absolute inline-flex h-full w-full motion-safe:animate-ping motion-reduce:animate-none rounded-full bg-emerald-400 opacity-60" />
-                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                </span>
-                <span className="num-fa font-bold text-slate-900 dark:text-white">
-                  {formatNumber("100")}+ {t.stats.stat1Label}
-                </span>
+                <Star className="h-4 w-4 text-amber-400 shrink-0" aria-hidden />
+                <span>{t.hero.badgeTrust}</span>
               </div>
             </div>
           </Reveal>
@@ -88,18 +83,18 @@ export function Hero() {
             `}</style>
             <h1
               id="hero-headline"
-              className="mt-8 mx-auto max-w-4xl text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.1] sm:leading-[1.15] text-balance drop-shadow-sm"
+              className="mt-8 mx-auto w-full max-w-none sm:max-w-7xl text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.3] sm:leading-[1.4]"
             >
-              {t.hero.headlineLead}{" "}
-              <span className="relative inline-flex flex-col items-center justify-center px-1 sm:px-3 py-1 mx-1 group">
-                <span className="absolute inset-0 bg-blue-100/80 dark:bg-blue-900/40 rounded-xl sm:rounded-2xl -skew-x-6 -skew-y-2 transform transition-transform duration-700 group-hover:skew-x-0 group-hover:skew-y-0 group-hover:scale-105" aria-hidden />
-                <span className="absolute inset-0 bg-blue-500/10 dark:bg-blue-400/10 rounded-xl sm:rounded-2xl translate-y-1.5 translate-x-1.5 -z-10" aria-hidden />
-                <span className="relative text-blue-700 dark:text-blue-300 italic tracking-normal pr-1">
-                  {t.hero.headlineHighlight}
+              <span className="block mb-2 sm:mb-4 px-2 xl:whitespace-nowrap">{t.hero.headlineLead}</span>
+              <span className="block mt-2">
+                {t.hero.headlineTail}{" "}
+                <span className="relative inline-block px-2 pb-1 group">
+                  <span className="absolute left-0 bottom-1 w-full h-3 sm:h-4 bg-gradient-to-r from-blue-200/60 to-indigo-200/60 dark:from-blue-800/40 dark:to-indigo-800/40 -rotate-1 rounded-sm transition-all duration-500 ease-out group-hover:h-[calc(100%-4px)] group-hover:-rotate-0 group-hover:bottom-1" aria-hidden />
+                  <span className="relative text-blue-700 dark:text-blue-300 font-black z-10 drop-shadow-sm transition-colors duration-500 group-hover:text-blue-900 dark:group-hover:text-blue-100">
+                    {t.hero.headlineHighlight}
+                  </span>
                 </span>
-                
-              </span>{" "}
-              {t.hero.headlineTail}
+              </span>
             </h1>
           </Reveal>
 
@@ -115,26 +110,24 @@ export function Hero() {
           {/* CTAs */}
           <Reveal delay={300}>
             <div className="mt-10 flex flex-col items-center gap-3 w-full max-w-lg">
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-4 w-full">
+              <div className="flex flex-row items-center justify-center gap-3 w-full">
                 <a
                   href={DOWNLOAD_URL}
                   onClick={handleDownloadClick}
-                  className="group flex flex-1 items-center justify-center gap-2.5 rounded-2xl bg-blue-600 px-5 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base font-bold text-white shadow-premium transition-all duration-300 hover:bg-blue-700 hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 min-h-11"
+                  className="group flex flex-1 items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base font-medium text-white shadow-sm transition-all duration-200 hover:bg-blue-700 hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 min-h-11"
                 >
                   <Download className="h-4 w-4 sm:h-5 sm:w-5 transition-transform group-hover:-translate-y-0.5 shrink-0" />
-                  <span>{t.hero.primaryCta}</span>
+                  <span className="whitespace-nowrap">{t.hero.primaryCta}</span>
                 </a>
 
                 <a
                   href={WHATSAPP_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex flex-1 items-center justify-center gap-2.5 rounded-2xl bg-slate-100 dark:bg-slate-800 px-5 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base font-bold text-slate-900 dark:text-white transition-all duration-300 hover:bg-slate-200 dark:hover:bg-slate-700 hover:-translate-y-0.5 active:translate-y-0 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 min-h-11"
+                  className="group flex flex-1 items-center justify-center gap-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-4 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base font-medium text-slate-700 dark:text-slate-200 transition-all duration-200 hover:bg-slate-50 dark:hover:bg-slate-700 hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 min-h-11"
                 >
-                  <span className="flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 shrink-0">
-                    <WhatsAppIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                  </span>
-                  <span>{t.hero.secondaryCta}</span>
+                  <WhatsAppIcon className="h-4 w-4 sm:h-5 sm:w-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                  <span className="whitespace-nowrap">{t.hero.secondaryCta}</span>
                 </a>
               </div>
 
@@ -191,16 +184,16 @@ export function Hero() {
           </Reveal>
         </div>
 
-        {/* Laptop Mockup */}
-        <Reveal delay={600} className="relative mt-16 sm:mt-20 w-full">
+        {/* Laptop Mockup — no Reveal wrapper; loads immediately as LCP element */}
+        <div className="relative mt-16 sm:mt-20 w-full">
           <div
             aria-hidden
             className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-105 w-[85%] rounded-full blur-[100px] pointer-events-none bg-blue-400/25 dark:bg-blue-500/20"
           />
 
           <DotGridOverlay />
-          <DashboardMockup />
-        </Reveal>
+          <DashboardMockup t={t} />
+        </div>
       </div>
 
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-linear-to-t from-background to-transparent pointer-events-none" aria-hidden />
@@ -243,7 +236,7 @@ function DotGridOverlay() {
   );
 }
 
-function DashboardMockup() {
+function DashboardMockup({ t }: { t: ReturnType<typeof useT> }) {
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
@@ -264,7 +257,7 @@ function DashboardMockup() {
   return (
     <figure
       className="relative mx-auto w-full max-w-7xl"
-      aria-label="تصویر داشبورد آسان حساب در لپ‌تاپ"
+      aria-label={t.hero.dashboardAria}
     >
       <div
         aria-hidden
@@ -280,7 +273,7 @@ function DashboardMockup() {
           <Image
             key={src}
             src={src}
-            alt="داشبورد آسان حساب — نمای کلی فروش، گدام و گزارش مالی"
+            alt={t.hero.dashboardAlt}
             width={1200}
             height={750}
             priority
