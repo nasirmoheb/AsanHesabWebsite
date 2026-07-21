@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, X, Star, Download, ShieldCheck, Zap, Lock, Gift } from "lucide-react";
+import { Check, X, Star, Download, ShieldCheck, Zap, Lock, Gift, SlidersHorizontal } from "lucide-react";
 import { WhatsAppIcon } from "./whatsapp-icon";
 import { Reveal } from "./reveal";
 import { CountdownTimer } from "./countdown-timer";
@@ -41,7 +41,7 @@ export function Pricing() {
         className="absolute top-0 left-1/2 -translate-x-1/2 h-72 w-200 bg-blue-100/30 dark:bg-blue-500/10 blur-3xl rounded-full pointer-events-none"
       />
 
-      <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
         {/* Inline heading — avoids SectionHeading gradient-text default */}
         <div className="flex flex-col items-center text-center max-w-3xl mx-auto">
@@ -70,7 +70,7 @@ export function Pricing() {
           <CountdownTimer />
         </div>
 
-        <div className="mt-12 sm:mt-16 grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6 items-stretch">
+        <div className="mt-12 sm:mt-16 grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-6 items-stretch">
           <Reveal>
             <PricingCard
               tier={t.pricing.freeTier}
@@ -126,7 +126,33 @@ export function Pricing() {
                 icon: <WhatsAppIcon className="h-4 w-4" />,
                 variant: "solid",
                 // WhatsApp link — label explicitly says واتساپ
-                href: "https://wa.me/93700000000",
+                href: "https://wa.me/93799422717",
+              }}
+            />
+          </Reveal>
+
+          <Reveal delay={180}>
+            <PricingCard
+              tier={t.pricing.customTier}
+              price={t.pricing.customPrice}
+              unit={t.pricing.customUnit}
+              tagline={t.pricing.customTagline}
+              icon={<SlidersHorizontal className="h-5 w-5" />}
+              iconTone="violet"
+              compactPrice
+              features={[
+                { label: t.pricing.customFeature1, included: true },
+                { label: t.pricing.customFeature2, included: true },
+                { label: t.pricing.customFeature3, included: true },
+                { label: t.pricing.customFeature4, included: true },
+                { label: t.pricing.customFeature5, included: true },
+                { label: t.pricing.customFeature6, included: true },
+              ]}
+              cta={{
+                label: t.pricing.customCta,
+                icon: <WhatsAppIcon className="h-4 w-4" />,
+                variant: "ghost",
+                href: "https://wa.me/93799422717",
               }}
             />
           </Reveal>
@@ -189,8 +215,9 @@ export function Pricing() {
  * string to generate the gradient stop utilities.
  */
 const ICON_TONES = {
-  blue:  "bg-linear-to-br from-blue-600 to-blue-700",
-  slate: "bg-linear-to-br from-slate-600 to-slate-700",
+  blue:   "bg-linear-to-br from-blue-600 to-blue-700",
+  slate:  "bg-linear-to-br from-slate-600 to-slate-700",
+  violet: "bg-linear-to-br from-violet-600 to-violet-700",
 } as const;
 
 function PricingCard({
@@ -205,6 +232,7 @@ function PricingCard({
   highlighted,
   popularBadge,
   bonusNote,
+  compactPrice,
 }: {
   tier: string;
   price: string;
@@ -217,6 +245,7 @@ function PricingCard({
   highlighted?: boolean;
   popularBadge?: boolean;
   bonusNote?: string;
+  compactPrice?: boolean;
 }) {
   const t = useT();
 
@@ -265,7 +294,9 @@ function PricingCard({
          * Highlighted card → text-primary; free card → slate.
          */}
         <span
-          className={`text-4xl sm:text-5xl font-extrabold ${
+          className={`font-extrabold ${
+            compactPrice ? "text-2xl sm:text-3xl" : "text-4xl sm:text-5xl"
+          } ${
             highlighted ? "text-primary" : "text-slate-900 dark:text-white"
           }`}
         >
