@@ -11,7 +11,6 @@ import {
   CheckCircle2,
   Package,
   CircleDollarSign,
-  Layers,
   AlertCircle,
 } from "lucide-react";
 import { Reveal } from "./reveal";
@@ -74,8 +73,6 @@ export function Features() {
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
           headlineId="features-headline"
-          eyebrow={f.eyebrow}
-          eyebrowIcon={Layers}
           title={f.title}
           highlight={f.highlight}
           subtitle={f.subtitle}

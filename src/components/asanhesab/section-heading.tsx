@@ -11,7 +11,7 @@ export function SectionHeading({
   eyebrowIcon: Icon,
   title,
   highlight,
-  highlightClass = "text-gradient-blue",
+  highlightClass,
   subtitle,
   align = "center",
   tone = "blue",
@@ -33,6 +33,16 @@ export function SectionHeading({
     amber:   "border-amber-200 dark:border-amber-800 bg-amber-50/80 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300",
     violet:  "border-violet-200 dark:border-violet-800 bg-violet-50/80 dark:bg-violet-950/40 text-violet-700 dark:text-violet-300",
   } as const;
+
+  // Default highlight color per tone — solid colors, no gradient text
+  const defaultHighlightColors = {
+    blue:    "text-blue-700 dark:text-blue-400",
+    emerald: "text-emerald-700 dark:text-emerald-400",
+    amber:   "text-amber-700 dark:text-amber-400",
+    violet:  "text-violet-700 dark:text-violet-400",
+  } as const;
+
+  const resolvedHighlightClass = highlightClass ?? defaultHighlightColors[tone];
   const alignCls = align === "center" ? "text-center mx-auto items-center" : "text-start items-start";
 
   return (
@@ -50,14 +60,14 @@ export function SectionHeading({
       <Reveal delay={60}>
         <h2
           id={headlineId}
-          className="mt-4 text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.2]"
+          className="mt-4 text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight text-balance"
         >
-          {title} {highlight && <span className={highlightClass}>{highlight}</span>}
+          {title} {highlight && <span className={resolvedHighlightClass}>{highlight}</span>}
         </h2>
       </Reveal>
       {subtitle && (
         <Reveal delay={120}>
-          <p className="mt-4 text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
+          <p className="mt-4 max-w-2xl text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed text-pretty">
             {subtitle}
           </p>
         </Reveal>

@@ -6,7 +6,7 @@ import { PainPoints } from "@/components/asanhesab/pain-points";
 import { SolutionIntro } from "@/components/asanhesab/solution-intro";
 import { Features } from "@/components/asanhesab/features";
 import { HowItWorks } from "@/components/asanhesab/how-it-works";
-import { Audiences } from "@/components/asanhesab/audiences";
+import { InvoicePreview } from "@/components/asanhesab/invoice-preview";
 import { Comparison } from "@/components/asanhesab/comparison";
 import { ROICalculator } from "@/components/asanhesab/roi-calculator";
 import { Pricing } from "@/components/asanhesab/pricing";
@@ -44,8 +44,8 @@ export default function Home() {
         {/* How it works — reduce effort anxiety */}
         <HowItWorks />
 
-        {/* Personalization — speak to each audience */}
-        <Audiences />
+        {/* Invoice preview - showcase professional invoice design */}
+        <InvoicePreview />
 
         {/* Differentiation vs alternatives */}
         <Comparison />
