@@ -198,7 +198,7 @@ export function Features() {
                   {f.card4Body}
                 </p>
                 <a
-                  href="#pricing"
+                  href="/reports"
                   className="group/link mt-5 inline-flex min-h-11 items-center gap-1.5 rounded-xl px-1 py-2 text-sm font-bold text-blue-700 transition-colors hover:text-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background dark:text-blue-300 dark:hover:text-blue-200"
                 >
                   {f.card4Link}
