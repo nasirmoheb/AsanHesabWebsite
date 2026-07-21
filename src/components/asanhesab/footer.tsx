@@ -23,11 +23,12 @@ export function Footer() {
   const { dir } = useLanguage();
 
   const navLinks = [
-    { label: t.footer.linkFeatures,  href: "#features"  },
-    { label: t.footer.linkHow,       href: "#how"        },
-    { label: t.footer.linkAudiences, href: "#audiences"  },
-    { label: t.footer.linkPricing,   href: "#pricing"    },
-    { label: t.footer.linkFaq,       href: "#faq"        },
+    { label: t.footer.linkFeatures,   href: "#features" },
+    { label: t.footer.linkHow,        href: "#how" },
+    { label: t.footer.linkInvoices,   href: "#invoice-preview" },
+    { label: t.footer.linkComparison, href: "#comparison" },
+    { label: t.footer.linkPricing,    href: "#pricing" },
+    { label: t.footer.linkFaq,        href: "#faq" },
   ];
 
   return (

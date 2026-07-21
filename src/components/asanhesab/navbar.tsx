@@ -84,6 +84,15 @@ export function Navbar() {
     setLangOpen(false);
   }, [setLocale]);
 
+  const navLinks = [
+    { href: "#features",        label: t.nav.features },
+    { href: "#how",             label: t.nav.how },
+    { href: "#invoice-preview", label: t.nav.invoices },
+    { href: "#comparison",      label: t.nav.comparison },
+    { href: "#pricing",         label: t.nav.pricing },
+    { href: "#faq",             label: t.nav.faq },
+  ] as const;
+
   return (
     <header
       className={`fixed top-0 inset-x-0 z-50 w-full transition-all duration-500 ${
@@ -123,18 +132,12 @@ export function Navbar() {
           </a>
 
           {/* ── Desktop Nav Links ── */}
-          <div className="hidden lg:flex items-center gap-1">
-            {[
-              { href: "#features", label: t.nav.features },
-              { href: "#how",      label: t.nav.how },
-              { href: "#audiences",label: t.nav.audiences },
-              { href: "#pricing",  label: t.nav.pricing },
-              { href: "#faq",      label: t.nav.faq },
-            ].map((link) => (
+          <div className="hidden lg:flex items-center gap-0.5 xl:gap-1">
+            {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
-                className="relative px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 transition-colors duration-300 hover:text-slate-900 dark:hover:text-white rounded-full hover:bg-slate-100/50 dark:hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1"
+                className="relative px-2.5 xl:px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 transition-colors duration-300 hover:text-slate-900 dark:hover:text-white rounded-full hover:bg-slate-100/50 dark:hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1"
               >
                 {link.label}
               </a>
@@ -273,13 +276,7 @@ export function Navbar() {
             className="lg:hidden absolute left-4 right-4 top-full mt-2 rounded-2xl border border-slate-200/60 dark:border-white/10 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl p-3 shadow-2xl animate-in slide-in-from-top-4 fade-in duration-300 z-50"
           >
             <div className="flex flex-col gap-1">
-              {[
-                { href: "#features", label: t.nav.features },
-                { href: "#how",      label: t.nav.how },
-                { href: "#audiences",label: t.nav.audiences },
-                { href: "#pricing",  label: t.nav.pricing },
-                { href: "#faq",      label: t.nav.faq },
-              ].map((item) => (
+              {navLinks.map((item) => (
                 <a
                   key={item.href}
                   href={item.href}

@@ -58,6 +58,7 @@ export function Comparison() {
 
   return (
     <section
+      id="comparison"
       dir={dir}
       className="relative bg-slate-50 dark:bg-slate-900/50 py-20 sm:py-28 overflow-hidden"
       aria-labelledby="comparison-headline"
