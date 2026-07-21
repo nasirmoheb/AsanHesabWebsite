@@ -34,18 +34,7 @@ export function FloatingActions() {
 
   return (
     <>
-      {/* Back-to-top button (all viewports) */}
-      <button
-        type="button"
-        onClick={scrollTop}
-        aria-label={t.premium.backToTop}
-        className={`fixed bottom-24 sm:bottom-6 right-4 sm:right-6 z-50 inline-flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 shadow-premium-lg hover:bg-blue-50 dark:hover:bg-blue-950/50 hover:text-blue-700 dark:hover:text-blue-300 hover:-translate-y-0.5 transition-all duration-300 ${
-          showTop ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"
-        }`}
-      >
-        <ArrowUp className="h-5 w-5" />
-      </button>
-
+      
       {/* Mobile sticky bottom CTA bar */}
       <div
         dir="rtl"

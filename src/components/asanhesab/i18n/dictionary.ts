@@ -561,6 +561,12 @@ export const fa = {
     patriotic: "تجارت شما ارزش پیشرفت را دارد. با افتخار ساخته شده در افغانستان 🇦🇫",
     copyright: "© ۱۴۰۵ دانا سیستم. تمام حقوق محفوظ است.",
   },
+  notFound: {
+    title: "۴۰۴",
+    heading: "صفحه پیدا نشد",
+    description: "متأسفیم، صفحه‌ای که به دنبال آن هستید وجود ندارد یا منتقل شده است.",
+    backHome: "بازگشت به صفحه اصلی",
+  },
 } as const;
 
 export const ps: Dict = {
@@ -1108,6 +1114,12 @@ export const ps: Dict = {
     patriotic: "ستاسو سوداګري د پرمختګ ارزښت لري. په ویاړ سره په افغانستان کې جوړ شوی 🇦🇫",
     copyright: "© ۱۴۰۵ دانا سیسټم. ټول حقوق خوندي دي.",
   },
+  notFound: {
+    title: "۴۰۴",
+    heading: "پاڼه ونه موندل شوه",
+    description: "بخښنه غواړو، هغه پاڼه چې تاسو یې په لټه کې یاست شتون نلري یا لیږدول شوې ده.",
+    backHome: "اصلي پاڼې ته ستنېدل",
+  },
 };
 
 export const en: Dict = {
@@ -1636,6 +1648,12 @@ export const en: Dict = {
     contactSupport: "WhatsApp support · 8 AM to 10 PM",
     patriotic: "Your business deserves to grow. Proudly built in Afghanistan 🇦🇫",
     copyright: "© 1405 Dana System. All rights reserved.",
+  },
+  notFound: {
+    title: "404",
+    heading: "Page Not Found",
+    description: "Sorry, the page you are looking for doesn't exist or has been moved.",
+    backHome: "Back to Home",
   },
 };
 

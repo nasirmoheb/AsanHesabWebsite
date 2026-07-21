@@ -61,22 +61,17 @@ export function Hero() {
 
           {/* Main Headline */}
           <Reveal delay={100}>
-            <style>{`
-              @keyframes drawPath {
-                to { stroke-dashoffset: 0; }
-              }
-            `}</style>
             <h1
               id="hero-headline"
-              className="mt-8 mx-auto w-full max-w-none sm:max-w-7xl text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.3] sm:leading-[1.4]"
+              className="mt-8 mx-auto w-full max-w-5xl text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-snug text-balance"
             >
-              <span className="block mb-2 sm:mb-4 px-2 xl:whitespace-nowrap">{t.hero.headlineLead}</span>
-              <span className="block mt-2">
+              <span className="block mb-2 sm:mb-3">{t.hero.headlineLead}</span>
+              <span className="block">
                 {t.hero.headlineTail}{" "}
                 <span className="relative inline-block mx-1 group whitespace-nowrap">
-                  <span className="absolute inset-0 bg-blue-100 dark:bg-blue-900/50 rounded-lg -skew-x-12 -rotate-2 transition-transform duration-500 ease-out group-hover:skew-x-0 group-hover:rotate-0" aria-hidden />
-                  <span className="absolute inset-0 border border-blue-200/80 dark:border-blue-800/80 rounded-lg -skew-x-12 -rotate-2 transition-transform duration-500 ease-out group-hover:skew-x-0 group-hover:rotate-0" aria-hidden />
-                  <span className="relative z-10 text-blue-800 dark:text-blue-200 px-4 py-0.5 block font-extrabold tracking-tight">
+                  <span className="absolute inset-0 bg-blue-100 dark:bg-blue-900/50 rounded-lg -skew-x-6 transition-transform duration-500 ease-out group-hover:skew-x-0" aria-hidden />
+                  <span className="absolute inset-0 border border-blue-200 dark:border-blue-800/80 rounded-lg -skew-x-6 transition-transform duration-500 ease-out group-hover:skew-x-0" aria-hidden />
+                  <span className="relative z-10 text-blue-800 dark:text-blue-200 px-3 py-0.5 block font-extrabold">
                     {t.hero.headlineHighlight}
                   </span>
                 </span>
@@ -100,9 +95,9 @@ export function Hero() {
                 <a
                   href={DOWNLOAD_URL}
                   onClick={handleDownloadClick}
-                  className="group flex flex-1 items-center justify-center gap-2 rounded-xl bg-primary px-4 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base font-medium text-primary-foreground shadow-premium transition-all duration-200 hover:bg-primary/90 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 min-h-11"
+                  className="group flex flex-1 items-center justify-center gap-2 rounded-xl bg-primary px-4 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base font-medium text-primary-foreground shadow-premium transition-[transform,box-shadow,background-color] duration-200 ease-out hover:bg-primary/90 hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 min-h-11"
                 >
-                  <Download className="h-4 w-4 sm:h-5 sm:w-5 shrink-0 transition-transform group-hover:-translate-y-0.5" />
+                  <Download className="h-4 w-4 sm:h-5 sm:w-5 shrink-0 transition-transform duration-200 group-hover:-translate-y-0.5" />
                   <span className="whitespace-nowrap">{t.hero.primaryCta}</span>
                 </a>
 
@@ -110,7 +105,7 @@ export function Hero() {
                   href={WHATSAPP_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex flex-1 items-center justify-center gap-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-4 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base font-medium text-slate-700 dark:text-slate-200 shadow-sm transition-all duration-200 hover:bg-slate-50 dark:hover:bg-slate-800 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 min-h-11"
+                  className="group flex flex-1 items-center justify-center gap-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-4 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base font-medium text-slate-700 dark:text-slate-200 shadow-sm transition-[transform,box-shadow,background-color,border-color] duration-200 ease-out hover:bg-slate-50 dark:hover:bg-slate-800 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 min-h-11"
                 >
                   <WhatsAppIcon className="h-4 w-4 sm:h-5 sm:w-5 text-emerald-600 dark:text-emerald-500 shrink-0" />
                   <span className="whitespace-nowrap">{t.hero.secondaryCta}</span>
@@ -124,7 +119,7 @@ export function Hero() {
               {nonWindowsWarning && (
                 <p
                   role="alert"
-                  className="rounded-xl border border-amber-200 dark:border-amber-800/50 bg-amber-50 dark:bg-amber-950/30 px-4 py-2.5 text-xs sm:text-sm text-amber-900 dark:text-amber-200 leading-relaxed"
+                  className="w-full rounded-xl border border-amber-200 dark:border-amber-800/50 bg-amber-50 dark:bg-amber-950/30 px-4 py-2.5 text-xs sm:text-sm text-amber-900 dark:text-amber-200 leading-relaxed animate-soft-fade-up"
                 >
                   {t.hero.downloadNonWindows}
                 </p>
@@ -240,12 +235,14 @@ function DashboardMockup({ t }: { t: ReturnType<typeof useT> }) {
       className="relative mx-auto w-full max-w-7xl hover-lift"
       aria-label={t.hero.dashboardAria}
     >
-      <div className="rounded-t-xl bg-slate-200 dark:bg-slate-900 p-1.5 sm:p-2 shadow-premium-lg border border-slate-300 dark:border-slate-800">
+      {/* Laptop lid / screen chrome */}
+      <div className="rounded-t-lg sm:rounded-t-xl bg-slate-200 dark:bg-slate-900 px-0.5 pt-1 pb-0 sm:px-2 sm:pt-2.5 shadow-premium-lg border border-b-0 border-slate-300 dark:border-slate-800">
+        {/* Webcam notch */}
         <div
           aria-hidden
-          className="absolute left-1/2 top-1 h-0.5 w-0.5 -translate-x-1/2 rounded-full bg-slate-400 dark:bg-slate-700"
+          className="mx-auto mb-0.5 sm:mb-1.5 h-1 w-1 sm:h-1.5 sm:w-1.5 rounded-full bg-slate-400 dark:bg-slate-600"
         />
-        <div className="overflow-hidden rounded-[9px] border border-slate-300 dark:border-slate-800">
+        <div className="overflow-hidden rounded-t-[3px] sm:rounded-t-[6px] border border-b-0 border-slate-300 dark:border-slate-700">
           <Image
             key={src}
             src={src}
@@ -263,8 +260,13 @@ function DashboardMockup({ t }: { t: ReturnType<typeof useT> }) {
         </div>
       </div>
 
-      <div className="h-1 bg-slate-300 dark:bg-slate-950 rounded-b-lg" />
-      <div className="mx-auto h-1 w-24 sm:w-32 rounded-b-lg bg-slate-200 dark:bg-slate-800" />
+      {/* Laptop hinge bar */}
+      <div className="h-1 sm:h-2 bg-slate-300 dark:bg-slate-800 border-x border-b border-slate-300 dark:border-slate-700 rounded-b-sm" aria-hidden />
+      {/* Laptop base / stand */}
+      <div className="relative h-1.5 sm:h-3" aria-hidden>
+        <div className="absolute inset-x-0 top-0 h-1.5 sm:h-3 bg-slate-200 dark:bg-slate-900 rounded-b-xl sm:rounded-b-2xl border-x border-b border-slate-300 dark:border-slate-800" />
+        <div className="absolute left-1/2 -translate-x-1/2 top-0 w-20 sm:w-36 h-1.5 sm:h-3 bg-slate-300/60 dark:bg-slate-700/60 rounded-b-xl sm:rounded-b-2xl" />
+      </div>
     </figure>
   );
 }
