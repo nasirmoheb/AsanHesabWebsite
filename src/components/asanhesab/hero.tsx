@@ -46,14 +46,14 @@ export function Hero() {
         <div className="flex flex-col items-center text-center">
           {/* Badges */}
           <Reveal>
-            <div className="inline-flex items-center gap-3 sm:gap-4 rounded-full border border-slate-200 bg-slate-50 px-4 py-1.5 text-sm font-medium text-slate-700 dark:border-slate-800 dark:bg-slate-900/80 dark:text-slate-300">
-              <div className="flex items-center gap-2">
-                <RefreshCw className="h-4 w-4 text-blue-600 dark:text-blue-500 shrink-0" aria-hidden />
+            <div className="inline-flex items-center gap-1.5 sm:gap-4 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-0.5 sm:px-4 sm:py-1.5 text-[10px] sm:text-sm font-medium text-slate-700 dark:border-slate-800 dark:bg-slate-900/80 dark:text-slate-300">
+              <div className="flex items-center gap-1 sm:gap-2">
+                <RefreshCw className="h-2.5 w-2.5 sm:h-4 sm:w-4 text-blue-600 dark:text-blue-500 shrink-0" aria-hidden />
                 <span>{t.hero.badgeDualMode}</span>
               </div>
-              <div className="h-4 w-px bg-slate-300 dark:bg-slate-700" aria-hidden />
-              <div className="flex items-center gap-2">
-                <Star className="h-4 w-4 text-amber-500 shrink-0" aria-hidden />
+              <div className="h-2.5 sm:h-4 w-px bg-slate-300 dark:bg-slate-700" aria-hidden />
+              <div className="flex items-center gap-1 sm:gap-2">
+                <Star className="h-2.5 w-2.5 sm:h-4 sm:w-4 text-amber-500 shrink-0" aria-hidden />
                 <span>{t.hero.badgeTrust}</span>
               </div>
             </div>
@@ -63,7 +63,7 @@ export function Hero() {
           <Reveal delay={100}>
             <h1
               id="hero-headline"
-              className="mt-8 mx-auto w-full max-w-5xl text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-snug text-balance"
+              className="mt-6 sm:mt-8 mx-auto w-full max-w-5xl text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-snug text-balance"
             >
               <span className="block mb-2 sm:mb-3">{t.hero.headlineLead}</span>
               <span className="block">
@@ -82,7 +82,7 @@ export function Hero() {
           {/* Sub-headline */}
           <Reveal delay={200}>
             <p
-              className="mt-8 mx-auto max-w-2xl text-lg sm:text-xl text-slate-600 dark:text-slate-300 leading-relaxed text-pretty"
+              className="mt-5 sm:mt-8 mx-auto max-w-2xl text-base sm:text-xl text-slate-600 dark:text-slate-300 leading-relaxed text-pretty"
             >
               {t.hero.subheadline}
             </p>

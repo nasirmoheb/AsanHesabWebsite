@@ -61,21 +61,21 @@ export function Footer() {
             {/* Social icons */}
             <div className="mt-5 flex items-center gap-2.5">
               <a
-                href="https://wa.me/937000000000"
+                href="https://wa.me/93799422717"
                 aria-label="WhatsApp"
                 className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               >
                 <WhatsAppIcon className="h-4 w-4" aria-hidden />
               </a>
               <a
-                href="tel:+937000000000"
+                href="tel:+93799422717"
                 aria-label={t.footer.colContact}
                 className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               >
                 <Phone className="h-4 w-4" aria-hidden />
               </a>
               <a
-                href="mailto:hello@asanhesab.af"
+                href="mailto:hello@asanhesab.app"
                 aria-label="Email"
                 className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               >
@@ -120,11 +120,11 @@ export function Footer() {
                  * Eastern Arabic digits break tel: links and dialers.
                  * dir="ltr" keeps the number visually correct in RTL layout.
                  */}
-                <span dir="ltr">+93 70 000 0000</span>
+                <span dir="ltr">+93 799 422 717</span>
               </li>
               <li className="flex items-start gap-2.5">
                 <Mail className="h-4 w-4 mt-0.5 text-blue-600 dark:text-blue-400 shrink-0" aria-hidden />
-                <span dir="ltr">hello@asanhesab.af</span>
+                <span dir="ltr">hello@asanhesab.app</span>
               </li>
               <li className="flex items-start gap-2.5">
                 <MessageCircle className="h-4 w-4 mt-0.5 text-emerald-600 dark:text-emerald-400 shrink-0" aria-hidden />
