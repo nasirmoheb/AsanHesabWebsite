@@ -36,39 +36,24 @@ export function Hero() {
 
   return (
     <section
-      className="relative flex flex-col items-center justify-center overflow-hidden bg-background pt-24 pb-20 sm:pt-32 sm:pb-28"
+      className="relative flex flex-col items-center justify-center overflow-hidden bg-background bg-soft-radial pt-24 pb-20 sm:pt-32 sm:pb-28"
       aria-labelledby="hero-headline"
     >
-      {/* Line grid — radially faded from center */}
-      <div
-        aria-hidden
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          backgroundImage: `linear-gradient(to right, rgba(99,102,241,0.07) 1px, transparent 1px), linear-gradient(to bottom, rgba(99,102,241,0.07) 1px, transparent 1px)`,
-          backgroundSize: "48px 48px",
-          maskImage: "radial-gradient(ellipse 90% 70% at 50% 40%, black 30%, transparent 80%)",
-          WebkitMaskImage: "radial-gradient(ellipse 90% 70% at 50% 40%, black 30%, transparent 80%)",
-        }}
-      />
-
-      {/* Clean ambient glow */}
-      <div
-        aria-hidden
-        className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-blue-500/10 dark:bg-blue-500/5 blur-[120px] rounded-full pointer-events-none"
-      />
+      {/* Clean premium background overlay */}
+      <div className="absolute inset-0 bg-grid-soft pointer-events-none" aria-hidden />
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center text-center">
           {/* Badges */}
           <Reveal>
-            <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-sm font-medium text-slate-700 dark:text-slate-300">
+            <div className="inline-flex items-center gap-3 sm:gap-4 rounded-full border border-slate-200 bg-slate-50 px-4 py-1.5 text-sm font-medium text-slate-700 dark:border-slate-800 dark:bg-slate-900/80 dark:text-slate-300">
               <div className="flex items-center gap-2">
-                <RefreshCw className="h-4 w-4 text-blue-500 shrink-0" aria-hidden />
+                <RefreshCw className="h-4 w-4 text-blue-600 dark:text-blue-500 shrink-0" aria-hidden />
                 <span>{t.hero.badgeDualMode}</span>
               </div>
-              <div className="hidden sm:block h-4 w-px bg-slate-300 dark:bg-slate-700" aria-hidden />
+              <div className="h-4 w-px bg-slate-300 dark:bg-slate-700" aria-hidden />
               <div className="flex items-center gap-2">
-                <Star className="h-4 w-4 text-amber-400 shrink-0" aria-hidden />
+                <Star className="h-4 w-4 text-amber-500 shrink-0" aria-hidden />
                 <span>{t.hero.badgeTrust}</span>
               </div>
             </div>
@@ -88,9 +73,10 @@ export function Hero() {
               <span className="block mb-2 sm:mb-4 px-2 xl:whitespace-nowrap">{t.hero.headlineLead}</span>
               <span className="block mt-2">
                 {t.hero.headlineTail}{" "}
-                <span className="relative inline-block px-2 pb-1 group">
-                  <span className="absolute left-0 bottom-1 w-full h-3 sm:h-4 bg-gradient-to-r from-blue-200/60 to-indigo-200/60 dark:from-blue-800/40 dark:to-indigo-800/40 -rotate-1 rounded-sm transition-all duration-500 ease-out group-hover:h-[calc(100%-4px)] group-hover:-rotate-0 group-hover:bottom-1" aria-hidden />
-                  <span className="relative text-blue-700 dark:text-blue-300 font-black z-10 drop-shadow-sm transition-colors duration-500 group-hover:text-blue-900 dark:group-hover:text-blue-100">
+                <span className="relative inline-block mx-1 group whitespace-nowrap">
+                  <span className="absolute inset-0 bg-blue-100 dark:bg-blue-900/50 rounded-lg -skew-x-12 -rotate-2 transition-transform duration-500 ease-out group-hover:skew-x-0 group-hover:rotate-0" aria-hidden />
+                  <span className="absolute inset-0 border border-blue-200/80 dark:border-blue-800/80 rounded-lg -skew-x-12 -rotate-2 transition-transform duration-500 ease-out group-hover:skew-x-0 group-hover:rotate-0" aria-hidden />
+                  <span className="relative z-10 text-blue-800 dark:text-blue-200 px-4 py-0.5 block font-extrabold tracking-tight">
                     {t.hero.headlineHighlight}
                   </span>
                 </span>
@@ -110,13 +96,13 @@ export function Hero() {
           {/* CTAs */}
           <Reveal delay={300}>
             <div className="mt-10 flex flex-col items-center gap-3 w-full max-w-lg">
-              <div className="flex flex-row items-center justify-center gap-3 w-full">
+              <div className="flex flex-row items-center justify-center gap-4 w-full">
                 <a
                   href={DOWNLOAD_URL}
                   onClick={handleDownloadClick}
-                  className="group flex flex-1 items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base font-medium text-white shadow-sm transition-all duration-200 hover:bg-blue-700 hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 min-h-11"
+                  className="group flex flex-1 items-center justify-center gap-2 rounded-xl bg-primary px-4 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base font-medium text-primary-foreground shadow-premium transition-all duration-200 hover:bg-primary/90 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 min-h-11"
                 >
-                  <Download className="h-4 w-4 sm:h-5 sm:w-5 transition-transform group-hover:-translate-y-0.5 shrink-0" />
+                  <Download className="h-4 w-4 sm:h-5 sm:w-5 shrink-0 transition-transform group-hover:-translate-y-0.5" />
                   <span className="whitespace-nowrap">{t.hero.primaryCta}</span>
                 </a>
 
@@ -124,9 +110,9 @@ export function Hero() {
                   href={WHATSAPP_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex flex-1 items-center justify-center gap-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-4 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base font-medium text-slate-700 dark:text-slate-200 transition-all duration-200 hover:bg-slate-50 dark:hover:bg-slate-700 hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 min-h-11"
+                  className="group flex flex-1 items-center justify-center gap-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-4 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base font-medium text-slate-700 dark:text-slate-200 shadow-sm transition-all duration-200 hover:bg-slate-50 dark:hover:bg-slate-800 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 min-h-11"
                 >
-                  <WhatsAppIcon className="h-4 w-4 sm:h-5 sm:w-5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                  <WhatsAppIcon className="h-4 w-4 sm:h-5 sm:w-5 text-emerald-600 dark:text-emerald-500 shrink-0" />
                   <span className="whitespace-nowrap">{t.hero.secondaryCta}</span>
                 </a>
               </div>
@@ -185,12 +171,7 @@ export function Hero() {
         </div>
 
         {/* Laptop Mockup — no Reveal wrapper; loads immediately as LCP element */}
-        <div className="relative mt-16 sm:mt-20 w-full">
-          <div
-            aria-hidden
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-105 w-[85%] rounded-full blur-[100px] pointer-events-none bg-blue-400/25 dark:bg-blue-500/20"
-          />
-
+        <div className="relative mt-16 sm:mt-24 w-full">
           <DotGridOverlay />
           <DashboardMockup t={t} />
         </div>
@@ -256,15 +237,10 @@ function DashboardMockup({ t }: { t: ReturnType<typeof useT> }) {
 
   return (
     <figure
-      className="relative mx-auto w-full max-w-7xl"
+      className="relative mx-auto w-full max-w-7xl hover-lift"
       aria-label={t.hero.dashboardAria}
     >
-      <div
-        aria-hidden
-        className="absolute -inset-x-10 -top-10 bottom-0 -z-10 rounded-full blur-3xl bg-linear-to-b from-blue-100/60 via-blue-50/40 to-transparent dark:from-blue-500/20 dark:to-transparent"
-      />
-
-      <div className="rounded-t-xl bg-slate-200 dark:bg-slate-950 p-0.5 shadow-premium-lg ring-1 ring-slate-300/80 dark:ring-white/5">
+      <div className="rounded-t-xl bg-slate-200 dark:bg-slate-900 p-1.5 sm:p-2 shadow-premium-lg border border-slate-300 dark:border-slate-800">
         <div
           aria-hidden
           className="absolute left-1/2 top-1 h-0.5 w-0.5 -translate-x-1/2 rounded-full bg-slate-400 dark:bg-slate-700"
