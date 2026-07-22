@@ -161,7 +161,7 @@ export default function ReportsPage() {
           {/* Decorative orb */}
           <div
             aria-hidden
-            className="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 h-[500px] w-[700px] rounded-full bg-blue-100/40 dark:bg-blue-900/20 blur-3xl"
+            className="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 h-125 w-175 rounded-full bg-blue-100/40 dark:bg-blue-900/20 blur-3xl"
           />
 
           <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -342,7 +342,7 @@ function ReportCategory({
       {/* Decorative orb */}
       <div
         aria-hidden
-        className={`pointer-events-none absolute top-0 end-0 h-64 w-64 rounded-full blur-3xl opacity-60 ${styles.orb}`}
+        className={`pointer-events-none absolute top-0 inset-e-0 h-64 w-64 rounded-full blur-3xl opacity-60 ${styles.orb}`}
       />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -425,7 +425,7 @@ function ReportCard({
       {/* Subtle background tint on hover */}
       <div
         aria-hidden
-        className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${styles.orb} blur-2xl -z-0 rounded-2xl`}
+        className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${styles.orb} blur-2xl z-0 rounded-2xl`}
       />
 
       {/* Icon + tag row */}
