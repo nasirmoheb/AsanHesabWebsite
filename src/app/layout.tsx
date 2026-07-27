@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Vazirmatn } from "next/font/google";
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/next";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/asanhesab/theme-provider";
 import { LanguageProvider } from "@/components/asanhesab/i18n/language-context";
@@ -60,6 +61,7 @@ export default function RootLayout({
           <LanguageProvider>{children}</LanguageProvider>
         </ThemeProvider>
         <Toaster />
+        <Analytics />
       </body>
     </html>
   );
