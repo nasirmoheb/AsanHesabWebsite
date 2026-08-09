@@ -7,6 +7,7 @@ import { useTheme } from "next-themes";
 import { useEffect, useState, useId, useCallback } from "react";
 import Image from "next/image";
 import { WhatsAppIcon } from "./whatsapp-icon";
+import { DownloadLink } from "./download-link";
 
 const DOWNLOAD_URL =
   "https://github.com/nasirmoheb/AsanHesab/releases/download/v1.0.0-beta/AsanHesab-1.0.0-Setup.exe";
@@ -92,14 +93,14 @@ export function Hero() {
           <Reveal delay={300}>
             <div className="mt-10 flex flex-col items-center gap-3 w-full max-w-lg">
               <div className="flex flex-row items-center justify-center gap-4 w-full">
-                <a
+                <DownloadLink
                   href={DOWNLOAD_URL}
                   onClick={handleDownloadClick}
                   className="group flex flex-1 items-center justify-center gap-2 rounded-xl bg-primary px-4 sm:px-8 py-3.5 sm:py-4 text-sm sm:text-base font-medium text-primary-foreground shadow-premium transition-[transform,box-shadow,background-color] duration-200 ease-out hover:bg-primary/90 hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 min-h-11"
                 >
                   <Download className="h-4 w-4 sm:h-5 sm:w-5 shrink-0 transition-transform duration-200 group-hover:-translate-y-0.5" />
                   <span className="whitespace-nowrap">{t.hero.primaryCta}</span>
-                </a>
+                </DownloadLink>
 
                 <a
                   href={WHATSAPP_URL}

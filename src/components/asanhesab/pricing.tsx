@@ -2,6 +2,7 @@
 
 import { Check, X, Star, Download, ShieldCheck, Zap, Lock, Gift, SlidersHorizontal } from "lucide-react";
 import { WhatsAppIcon } from "./whatsapp-icon";
+import { DownloadLink } from "./download-link";
 import { Reveal } from "./reveal";
 import { CountdownTimer } from "./countdown-timer";
 import { useLanguage, useT } from "./i18n/language-context";
@@ -344,21 +345,21 @@ function PricingCard({
       {/* CTA */}
       <div className="mt-8">
         {cta.variant === "solid" ? (
-          <a
+          <DownloadLink
             href={cta.href}
             className="group inline-flex w-full items-center justify-center gap-2 rounded-xl bg-linear-to-br from-blue-600 to-blue-700 px-6 py-3.5 text-base font-bold text-white shadow-premium hover:shadow-[0_0_40px_-8px_rgba(37,99,235,0.5)] hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             {cta.icon}
             <span>{cta.label}</span>
-          </a>
+          </DownloadLink>
         ) : (
-          <a
+          <DownloadLink
             href={cta.href}
             className="group inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-6 py-3.5 text-base font-bold text-slate-700 dark:text-slate-200 hover:border-blue-300 dark:hover:border-blue-600 hover:text-blue-700 dark:hover:text-blue-300 active:scale-[0.98] transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             {cta.icon}
             <span>{cta.label}</span>
-          </a>
+          </DownloadLink>
         )}
       </div>
     </article>

@@ -38,7 +38,7 @@ export function Footer() {
       className="relative mt-auto bg-white dark:bg-slate-950 border-t border-slate-100 dark:border-slate-800"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-10">
 
           {/* Brand column */}
           <div className="sm:col-span-2 lg:col-span-2">
@@ -103,6 +103,31 @@ export function Footer() {
               ))}
             </ul>
           </nav>
+
+          {/* Legal links */}
+          <div>
+            <h3 className="text-sm font-bold text-slate-900 dark:text-white">
+              {t.footer.colLegal}
+            </h3>
+            <ul className="mt-4 space-y-2.5 text-sm">
+              <li>
+                <a
+                  href="/privacy"
+                  className="text-slate-600 dark:text-slate-300 hover:text-blue-700 dark:hover:text-blue-300 transition-colors rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1"
+                >
+                  {t.footer.linkPrivacy}
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/terms"
+                  className="text-slate-600 dark:text-slate-300 hover:text-blue-700 dark:hover:text-blue-300 transition-colors rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1"
+                >
+                  {t.footer.linkTerms}
+                </a>
+              </li>
+            </ul>
+          </div>
 
           {/* Contact details */}
           <div>

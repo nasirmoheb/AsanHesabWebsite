@@ -1,6 +1,7 @@
 "use client";
 
 import { Zap, ShieldCheck, Clock, Check, ArrowRight, Download } from "lucide-react";
+import { DownloadLink } from "./download-link";
 import { Reveal } from "./reveal";
 import { useLanguage, useT } from "./i18n/language-context";
 
@@ -116,14 +117,14 @@ export function FinalCTA() {
         <Reveal delay={180}>
           <div className="mt-10 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4">
             {/* Primary */}
-            <a
+            <DownloadLink
               href="https://github.com/nasirmoheb/AsanHesab/releases/download/v1.0.0-beta/AsanHesab-1.0.0-Setup.exe"
               className="group relative inline-flex items-center justify-center gap-2.5 rounded-xl bg-white px-7 py-4 text-base sm:text-lg font-bold text-blue-700 shadow-premium-lg hover:-translate-y-1 active:scale-[0.98] transition-all duration-300 overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-blue-700"
             >
               <span className="absolute inset-0 shimmer opacity-0 group-hover:opacity-100 transition-opacity" aria-hidden />
               <Download className="h-5 w-5 text-emerald-600 relative" aria-hidden />
               <span className="relative">{t.finalCta.primaryCta}</span>
-            </a>
+            </DownloadLink>
 
             {/* Secondary */}
             <a

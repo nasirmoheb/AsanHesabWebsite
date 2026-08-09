@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { useTheme } from "next-themes";
 import { Sun, Moon, Globe, ChevronDown, Menu, X, Download } from "lucide-react";
 import { AsanHesabLogo } from "./logo";
+import { DownloadLink } from "./download-link";
 import { useLanguage, useT } from "./i18n/language-context";
 import { LOCALES, type Locale } from "./i18n/dictionary";
 
@@ -153,7 +154,7 @@ export function Navbar() {
              * Divider is always rendered as an invisible element when CTA is
              * hidden — prevents layout shift when CTA slides in.
              */}
-            <a
+            <DownloadLink
               href="https://github.com/nasirmoheb/AsanHesab/releases/download/v1.0.0-beta/AsanHesab-1.0.0-Setup.exe"
               className={`hidden lg:inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground transition-all duration-500 hover:opacity-90 hover:scale-105 active:scale-95 shadow-[0_0_20px_-5px_rgba(37,99,235,0.4)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
                 showCta
@@ -163,7 +164,7 @@ export function Navbar() {
             >
               <Download className="h-4 w-4" />
               {t.nav.download}
-            </a>
+            </DownloadLink>
 
             {/* Always-present divider — invisible when CTA is hidden; no layout shift */}
             <div
@@ -287,14 +288,14 @@ export function Navbar() {
                 </a>
               ))}
               <div className="h-px bg-slate-200/60 dark:bg-white/10 my-2" aria-hidden />
-              <a
+              <DownloadLink
                 href="https://github.com/nasirmoheb/AsanHesab/releases/download/v1.0.0-beta/AsanHesab-1.0.0-Setup.exe"
                 onClick={() => setMobileOpen(false)}
                 className="mt-1 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary text-sm font-semibold text-primary-foreground shadow-md active:scale-95 transition-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               >
                 <Download className="h-5 w-5" aria-hidden />
                 {t.nav.downloadMobile}
-              </a>
+              </DownloadLink>
             </div>
           </div>
         )}
