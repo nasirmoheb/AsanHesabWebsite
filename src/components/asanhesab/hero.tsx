@@ -18,6 +18,11 @@ function isWindows(): boolean {
   return /Windows/i.test(navigator.userAgent);
 }
 
+function isMobileDevice(): boolean {
+  if (typeof navigator === "undefined") return false;
+  return /Android|iPhone|iPad|iPod|Mobile|Silk/i.test(navigator.userAgent);
+}
+
 export function Hero() {
   const t = useT();
   const { formatNumber } = useLanguage();
@@ -25,7 +30,7 @@ export function Hero() {
 
   const handleDownloadClick = useCallback(
     (e: React.MouseEvent<HTMLAnchorElement>) => {
-      if (isWindows()) {
+      if (isWindows() || isMobileDevice()) {
         setNonWindowsWarning(false);
         return;
       }
