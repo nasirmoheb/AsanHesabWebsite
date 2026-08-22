@@ -21,6 +21,7 @@ import {
 import { Navbar } from "@/components/asanhesab/navbar";
 import { Footer } from "@/components/asanhesab/footer";
 import { DownloadLink } from "@/components/asanhesab/download-link";
+import { INSTALLER_URL } from "@/lib/installer";
 import { FloatingWhatsApp } from "@/components/asanhesab/floating-whatsapp";
 import { FloatingActions } from "@/components/asanhesab/floating-actions";
 import { Reveal } from "@/components/asanhesab/reveal";
@@ -208,7 +209,7 @@ export default function ReportsPage() {
 
               <Reveal delay={180}>
                 <DownloadLink
-                  href="https://github.com/nasirmoheb/AsanHesab/releases/download/v1.0.0-beta/AsanHesab-1.0.0-Setup.exe"
+                  href={INSTALLER_URL}
                   className="mt-8 inline-flex items-center gap-2.5 rounded-2xl bg-primary px-7 py-3.5 text-base font-bold text-primary-foreground shadow-[0_0_30px_-6px_rgba(37,99,235,0.4)] hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                 >
                   <Download className="h-5 w-5" aria-hidden />
@@ -300,7 +301,7 @@ export default function ReportsPage() {
             </Reveal>
             <Reveal delay={140}>
               <DownloadLink
-                href="https://github.com/nasirmoheb/AsanHesab/releases/download/v1.0.0-beta/AsanHesab-1.0.0-Setup.exe"
+                href={INSTALLER_URL}
                 className="mt-8 inline-flex items-center gap-2.5 rounded-2xl bg-white px-8 py-4 text-base font-bold text-blue-700 hover:bg-blue-50 active:scale-[0.98] transition-all duration-300 shadow-[0_8px_30px_rgba(0,0,0,0.15)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-blue-600"
               >
                 <Download className="h-5 w-5" aria-hidden />

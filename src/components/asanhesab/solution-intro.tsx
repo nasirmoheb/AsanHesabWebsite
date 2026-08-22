@@ -3,6 +3,7 @@
 import { Check, ArrowRight } from "lucide-react";
 import { useId } from "react";
 import { DownloadLink } from "./download-link";
+import { INSTALLER_URL } from "@/lib/installer";
 import { Reveal } from "./reveal";
 import { useLanguage, useT } from "./i18n/language-context";
 
@@ -72,7 +73,7 @@ export function SolutionIntro() {
 
             <Reveal delay={440}>
               <DownloadLink
-                href="https://github.com/nasirmoheb/AsanHesab/releases/download/v1.0.0-beta/AsanHesab-1.0.0-Setup.exe"
+                href={INSTALLER_URL}
                 className="group mt-9 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-linear-to-br from-blue-600 to-blue-700 px-6 py-3.5 text-base font-bold text-white shadow-premium-lg transition-[transform,box-shadow,background-color] duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_36px_-10px_rgba(37,99,235,0.55)] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background motion-reduce:transform-none sm:w-auto"
               >
                 {t.solution.cta}

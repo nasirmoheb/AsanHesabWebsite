@@ -1,0 +1,495 @@
+.viewport {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.scaleBox {
+  position: relative;
+}
+
+.desktop {
+  --anim-time: 12s;
+  width: 820px;
+  height: 540px;
+  background: radial-gradient(circle at 75% 25%, #1b497d 0%, #0c233c 55%, #05101d 100%);
+  position: relative;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  direction: ltr;
+  transform-origin: top center;
+  user-select: none;
+  font-family: "Segoe UI", Tahoma, var(--font-vazirmatn), sans-serif;
+  margin: 0 auto;
+}
+
+.desktop * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.guideOverlay {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(18, 24, 38, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(0, 150, 255, 0.5);
+  border-radius: 12px;
+  width: min(620px, calc(100% - 32px));
+  min-height: 55px;
+  padding: 10px 18px;
+  z-index: 200;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+  direction: rtl;
+  display: grid;
+  place-items: center;
+}
+
+.guideText {
+  grid-area: 1 / 1;
+  font-size: 14.5px;
+  font-weight: 500;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  opacity: 0;
+  visibility: hidden;
+  width: 100%;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.stepBadge {
+  background: var(--primary, #2563eb);
+  color: white;
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.desktopIcon {
+  position: absolute;
+  top: 35px;
+  left: 35px;
+  width: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 4px;
+  border-radius: 4px;
+  animation: iconHighlight var(--anim-time) infinite;
+}
+
+.iconBox {
+  width: 46px;
+  height: 46px;
+  background: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+}
+
+.iconImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.iconTitle {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 1);
+  text-align: center;
+}
+
+.smartscreenDialog {
+  position: absolute;
+  top: 105px;
+  left: 150px;
+  width: 520px;
+  height: 330px;
+  background-color: var(--win-blue, #005a9e);
+  color: #ffffff;
+  padding: 35px 30px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+  z-index: 10;
+  opacity: 0;
+  visibility: hidden;
+  animation: dialogDisplay var(--anim-time) infinite;
+}
+
+.dialogClose {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+.smartscreenDialog h2 {
+  margin: 0 0 14px 0;
+  font-size: 22px;
+  font-weight: 400;
+}
+
+.smartscreenDialog p {
+  font-size: 13.5px;
+  line-height: 1.5;
+  margin: 0 0 14px 0;
+}
+
+.moreInfoLink {
+  position: absolute;
+  top: 140px;
+  left: 30px;
+  color: #bce2ff;
+  text-decoration: underline;
+  font-size: 13.5px;
+  cursor: pointer;
+  animation: hideMoreInfo var(--anim-time) infinite;
+}
+
+.appDetails {
+  position: absolute;
+  top: 140px;
+  left: 30px;
+  opacity: 0;
+  visibility: hidden;
+  font-size: 13px;
+  line-height: 1.8;
+  animation: showDetails var(--anim-time) infinite;
+}
+
+.btn {
+  height: 32px;
+  padding: 6px 20px;
+  font-size: 13.5px;
+  border-radius: 0;
+  border: 1px solid #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btnDontrun {
+  width: 118px;
+  background: #ffffff;
+  color: #000000;
+}
+
+.btnRun {
+  width: 132px;
+  background: transparent;
+  color: #ffffff;
+}
+
+.actionsBefore {
+  position: absolute;
+  bottom: 25px;
+  right: 30px;
+  display: flex;
+  animation: hideActionsBefore var(--anim-time) infinite;
+}
+
+.actionsAfter {
+  position: absolute;
+  bottom: 25px;
+  right: 30px;
+  display: flex;
+  gap: 12px;
+  opacity: 0;
+  visibility: hidden;
+  animation: showActionsAfter var(--anim-time) infinite;
+}
+
+.actionsAfter .btnRun {
+  animation: runBtnClickFX var(--anim-time) infinite;
+}
+
+.setupWizard {
+  position: absolute;
+  top: 100px;
+  left: 160px;
+  width: 500px;
+  height: 340px;
+  background: #f0f0f0;
+  border: 1px solid #777;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  visibility: hidden;
+  animation: wizardDisplay var(--anim-time) infinite;
+}
+
+.wizardTitlebar {
+  height: 32px;
+  background: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  font-size: 12px;
+  color: #333;
+}
+
+.wizardMain {
+  flex: 1;
+  display: flex;
+  background: #fff;
+}
+
+.wizardBanner {
+  width: 150px;
+  background: linear-gradient(180deg, #0b4f8c, #072a4d);
+  color: #fff;
+  padding: 20px 15px;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 1.5;
+}
+
+.wizardBannerLogo {
+  display: block;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35);
+}
+
+.wizardBody {
+  flex: 1;
+  padding: 24px;
+  font-size: 13px;
+  color: #333;
+}
+
+.wizardBody h3 {
+  margin: 0 0 15px 0;
+  font-size: 16px;
+  color: #000;
+}
+
+.wizardFooter {
+  height: 48px;
+  background: #f7f7f7;
+  border-top: 1px solid #e5e5e5;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 16px;
+  gap: 8px;
+}
+
+.btnWiz {
+  height: 28px;
+  padding: 5px 20px;
+  font-size: 12px;
+  border: 1px solid #acacac;
+  background: #e1e1e1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btnWizPrimary {
+  width: 92px;
+  border-color: #0078d7;
+  background: #e5f1fb;
+}
+
+.wizardFooter .btnWiz:not(.btnWizPrimary) {
+  width: 84px;
+}
+
+.mouseCursor {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  z-index: 300;
+  pointer-events: none;
+  transform-origin: top left;
+  filter: drop-shadow(1px 2px 4px rgba(0, 0, 0, 0.5));
+  animation: cursorPath var(--anim-time) infinite cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.clickFx {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.6);
+  transform: translate(-50%, -50%) scale(0);
+  pointer-events: none;
+  z-index: 290;
+  animation: clickPulse var(--anim-time) infinite;
+}
+
+.step1 {
+  animation: showStep1 var(--anim-time) infinite;
+}
+
+.step2 {
+  animation: showStep2 var(--anim-time) infinite;
+}
+
+.step3 {
+  animation: showStep3 var(--anim-time) infinite;
+}
+
+.step4 {
+  animation: showStep4 var(--anim-time) infinite;
+}
+
+@keyframes showStep1 {
+  0%, 19.9% { opacity: 1; visibility: visible; }
+  20%, 100% { opacity: 0; visibility: hidden; }
+}
+
+@keyframes showStep2 {
+  0%, 19.9% { opacity: 0; visibility: hidden; }
+  20%, 44.9% { opacity: 1; visibility: visible; }
+  45%, 100% { opacity: 0; visibility: hidden; }
+}
+
+@keyframes showStep3 {
+  0%, 44.9% { opacity: 0; visibility: hidden; }
+  45%, 65.9% { opacity: 1; visibility: visible; }
+  66%, 100% { opacity: 0; visibility: hidden; }
+}
+
+@keyframes showStep4 {
+  0%, 65.9% { opacity: 0; visibility: hidden; }
+  66%, 100% { opacity: 1; visibility: visible; }
+}
+
+@keyframes iconHighlight {
+  0%, 12% { background: transparent; }
+  13%, 20% { background: rgba(255, 255, 255, 0.22); outline: 1px dotted rgba(255, 255, 255, 0.5); }
+  21%, 100% { background: transparent; outline: none; }
+}
+
+@keyframes dialogDisplay {
+  0%, 19.9% { opacity: 0; visibility: hidden; transform: scale(0.96); }
+  20%, 65.9% { opacity: 1; visibility: visible; transform: scale(1); }
+  66%, 100% { opacity: 0; visibility: hidden; transform: scale(0.96); }
+}
+
+@keyframes hideMoreInfo {
+  0%, 44.9% { opacity: 1; visibility: visible; }
+  45%, 100% { opacity: 0; visibility: hidden; }
+}
+
+@keyframes showDetails {
+  0%, 44.9% { opacity: 0; visibility: hidden; }
+  45%, 100% { opacity: 1; visibility: visible; }
+}
+
+@keyframes hideActionsBefore {
+  0%, 44.9% { opacity: 1; visibility: visible; }
+  45%, 100% { opacity: 0; visibility: hidden; }
+}
+
+@keyframes showActionsAfter {
+  0%, 44.9% { opacity: 0; visibility: hidden; }
+  45%, 100% { opacity: 1; visibility: visible; }
+}
+
+@keyframes runBtnClickFX {
+  64%, 66% { background: rgba(255, 255, 255, 0.25); }
+}
+
+@keyframes wizardDisplay {
+  0%, 65.9% { opacity: 0; visibility: hidden; transform: scale(0.96); }
+  66%, 95% { opacity: 1; visibility: visible; transform: scale(1); }
+  98%, 100% { opacity: 0; visibility: hidden; }
+}
+
+@keyframes cursorPath {
+  0%     { top: 450px; left: 700px; transform: scale(1); }
+  12.5%  { top: 66px;  left: 75px;  transform: scale(1); }
+  14%    { top: 66px;  left: 75px;  transform: scale(0.85); }
+  16%    { top: 66px;  left: 75px;  transform: scale(1); }
+  18%    { top: 66px;  left: 75px;  transform: scale(0.85); }
+  20%    { top: 66px;  left: 75px;  transform: scale(1); }
+  42%    { top: 255px; left: 200px; transform: scale(1); }
+  44%    { top: 255px; left: 200px; transform: scale(0.85); }
+  46%    { top: 255px; left: 200px; transform: scale(1); }
+  63%    { top: 394px; left: 444px; transform: scale(1); }
+  65%    { top: 394px; left: 444px; transform: scale(0.85); }
+  67%    { top: 394px; left: 444px; transform: scale(1); }
+  85%    { top: 416px; left: 506px; transform: scale(1); }
+  87%    { top: 416px; left: 506px; transform: scale(0.85); }
+  89%    { top: 416px; left: 506px; transform: scale(1); }
+  100%   { top: 450px; left: 700px; transform: scale(1); }
+}
+
+@keyframes clickPulse {
+  13% { left: 75px;  top: 66px;  transform: translate(-50%, -50%) scale(0); opacity: 0.8; }
+  15% { left: 75px;  top: 66px;  transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
+  17% { left: 75px;  top: 66px;  transform: translate(-50%, -50%) scale(0); opacity: 0.8; }
+  19% { left: 75px;  top: 66px;  transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
+  43% { left: 200px; top: 255px; transform: translate(-50%, -50%) scale(0); opacity: 0.8; }
+  45% { left: 200px; top: 255px; transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
+  64% { left: 444px; top: 394px; transform: translate(-50%, -50%) scale(0); opacity: 0.8; }
+  66% { left: 444px; top: 394px; transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
+  86% { left: 506px; top: 416px; transform: translate(-50%, -50%) scale(0); opacity: 0.8; }
+  88% { left: 506px; top: 416px; transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
+  0%, 12%, 20%, 42%, 46%, 63%, 67%, 85%, 89%, 100% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mouseCursor,
+  .clickFx,
+  .guideOverlay {
+    display: none;
+  }
+
+  .desktopIcon,
+  .smartscreenDialog,
+  .moreInfoLink,
+  .appDetails,
+  .actionsBefore,
+  .actionsAfter,
+  .actionsAfter .btnRun,
+  .setupWizard {
+    animation: none !important;
+  }
+
+  .desktopIcon {
+    background: transparent !important;
+    outline: none !important;
+  }
+
+  .smartscreenDialog,
+  .appDetails,
+  .actionsAfter,
+  .setupWizard {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+  }
+
+  .moreInfoLink,
+  .actionsBefore {
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
+}

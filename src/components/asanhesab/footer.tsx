@@ -3,6 +3,7 @@
 import { Phone, Mail, MapPin, MessageCircle } from "lucide-react";
 import { WhatsAppIcon } from "./whatsapp-icon";
 import { AsanHesabLogo } from "./logo";
+import { useSectionNavigation } from "./use-section-navigation";
 import { useLanguage, useT } from "./i18n/language-context";
 
 /**
@@ -21,6 +22,7 @@ import { useLanguage, useT } from "./i18n/language-context";
 export function Footer() {
   const t = useT();
   const { dir } = useLanguage();
+  const handleSectionClick = useSectionNavigation();
 
   const navLinks = [
     { label: t.footer.linkFeatures,   href: "#features" },
@@ -43,7 +45,7 @@ export function Footer() {
           {/* Brand column */}
           <div className="sm:col-span-2 lg:col-span-2">
             <a
-              href="#"
+              href="/"
               className="inline-flex items-center gap-2.5 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               aria-label={t.brand.name}
             >
@@ -95,6 +97,7 @@ export function Footer() {
                 <li key={l.label}>
                   <a
                     href={l.href}
+                    onClick={handleSectionClick(l.href)}
                     className="text-slate-600 dark:text-slate-300 hover:text-blue-700 dark:hover:text-blue-300 transition-colors rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1"
                   >
                     {l.label}

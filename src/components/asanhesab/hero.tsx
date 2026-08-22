@@ -8,9 +8,9 @@ import { useEffect, useState, useId, useCallback } from "react";
 import Image from "next/image";
 import { WhatsAppIcon } from "./whatsapp-icon";
 import { DownloadLink } from "./download-link";
+import { INSTALLER_URL } from "@/lib/installer";
 
-const DOWNLOAD_URL =
-  "https://github.com/nasirmoheb/AsanHesab/releases/download/v1.0.0-beta/AsanHesab-1.0.0-Setup.exe";
+const DOWNLOAD_URL = INSTALLER_URL;
 const WHATSAPP_URL = "https://wa.me/93799422717";
 
 function isWindows(): boolean {

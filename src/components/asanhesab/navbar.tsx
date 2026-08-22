@@ -5,6 +5,11 @@ import { useTheme } from "next-themes";
 import { Sun, Moon, Globe, ChevronDown, Menu, X, Download } from "lucide-react";
 import { AsanHesabLogo } from "./logo";
 import { DownloadLink } from "./download-link";
+import { INSTALLER_URL } from "@/lib/installer";
+import {
+  useSectionNavigation,
+  usePendingSectionScroll,
+} from "./use-section-navigation";
 import { useLanguage, useT } from "./i18n/language-context";
 import { LOCALES, type Locale } from "./i18n/dictionary";
 
@@ -40,6 +45,9 @@ export function Navbar() {
 
   // Prevent hydration mismatch
   useEffect(() => { setMounted(true); }, []);
+
+  const handleSectionClick = useSectionNavigation();
+  usePendingSectionScroll();
 
   // Scroll effects
   useEffect(() => {
@@ -110,7 +118,7 @@ export function Navbar() {
 
           {/* ── Logo ── */}
           <a
-            href="#"
+            href="/"
             className="flex items-center gap-3 group shrink-0 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             aria-label={`${t.brand.name} — خانه`}
           >
@@ -138,6 +146,7 @@ export function Navbar() {
               <a
                 key={link.href}
                 href={link.href}
+                onClick={handleSectionClick(link.href)}
                 className="relative px-2.5 xl:px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 transition-colors duration-300 hover:text-slate-900 dark:hover:text-white rounded-full hover:bg-slate-100/50 dark:hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1"
               >
                 {link.label}
@@ -155,7 +164,7 @@ export function Navbar() {
              * hidden — prevents layout shift when CTA slides in.
              */}
             <DownloadLink
-              href="https://github.com/nasirmoheb/AsanHesab/releases/download/v1.0.0-beta/AsanHesab-1.0.0-Setup.exe"
+              href={INSTALLER_URL}
               className={`hidden lg:inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground transition-all duration-500 hover:opacity-90 hover:scale-105 active:scale-95 shadow-[0_0_20px_-5px_rgba(37,99,235,0.4)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
                 showCta
                   ? "opacity-100 translate-x-0 pointer-events-auto"
@@ -281,7 +290,10 @@ export function Navbar() {
                 <a
                   key={item.href}
                   href={item.href}
-                  onClick={() => setMobileOpen(false)}
+                  onClick={(e) => {
+                    setMobileOpen(false);
+                    handleSectionClick(item.href)(e);
+                  }}
                   className="px-4 py-3 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset"
                 >
                   {item.label}
@@ -289,7 +301,7 @@ export function Navbar() {
               ))}
               <div className="h-px bg-slate-200/60 dark:bg-white/10 my-2" aria-hidden />
               <DownloadLink
-                href="https://github.com/nasirmoheb/AsanHesab/releases/download/v1.0.0-beta/AsanHesab-1.0.0-Setup.exe"
+                href={INSTALLER_URL}
                 onClick={() => setMobileOpen(false)}
                 className="mt-1 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary text-sm font-semibold text-primary-foreground shadow-md active:scale-95 transition-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               >

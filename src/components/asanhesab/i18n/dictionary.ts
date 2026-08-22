@@ -419,6 +419,7 @@ export const fa = {
     highlight: "لوگوی دکان شما",
     subtitle:
       "سه قالب A4، حرارتی و کلاسیک — هر بل همراه با لوگو، تاریخ شمسی و جزئیات کامل. آماده چاپ بلافاصله پس از هر فروش.",
+    tablistLabel: "انتخاب قالب بل",
     tabA4: "بل A4",
     tabThermal: "رسید حرارتی",
     tabClassic: "بل کلاسیک",
@@ -779,7 +780,31 @@ export const fa = {
     heroCta: "دریافت رایگان سیستم",
     heroCtaSub: "ویندوز ۱۰ و ۱۱ · همیشه رایگان",
   },
-} as const;
+  guide: {
+    metaTitle: "راهنمای نصب آسان حساب — رفع خطای SmartScreen",
+    badge: "راهنمای نصب",
+    title: "آسان حساب را در چند دقیقه نصب کنید",
+    subtitle:
+      "بعد از دانلود، ممکن است ویندوز پنجره آبی‌رنگ «Windows protected your PC» نشان دهد. نگران نباشید — این پیام برای هر برنامه‌ای که امضای دیجیتال معتبر نداشته باشد نمایش داده می‌شود. با ۴ مرحله ساده زیر، نصب را کامل کنید.",
+    downloadStartedTitle: "دانلود شما آغاز شد",
+    downloadStartedDesc:
+      "فایل فشرده AsanHesab-1.0.0-Setup.zip به‌صورت خودکار دانلود می‌شود. اگر شروع نشد، دکمه زیر را بزنید؛ سپس فایل را Extract کرده و مراحل زیر را دنبال کنید.",
+    downloadAgain: "دانلود مستقیم فایل نصبی",
+    demoCaption: "نمایش زنده مراحل نصب — دوباره تکرار می‌شود",
+    stepsTitle: "مراحل به‌صورت خلاصه",
+    stepWord: "گام",
+    step1Text: "فایل ZIP دانلودشده را Extract کنید، سپس روی فایل نصبی AsanHesab.exe دو بار کلیک کنید.",
+    step2Text: "در پنجره آبی‌رنگ، فقط روی گزینه More info کلیک کنید.",
+    step3Text: "اکنون دکمه Run anyway کنار دکمه دیگر ظاهر می‌شود؛ روی آن کلیک کنید.",
+    step4Text: "پنجره نصب با موفقیت باز شد؛ روی Next بزنید.",
+    noteTitle: "چرا این پیام نمایش داده می‌شود؟",
+    noteDesc:
+      "پیام SmartScreen برای هر برنامه‌ای که «امضای دیجیتال» معتبر نداشته باشد ظاهر می‌شود. آسان حساب یک برنامه کاملاً آفلاین است؛ تمام داده‌های شما فقط روی همان رایانه ذخیره می‌شود و هیچ اطلاعاتی به بیرون فرستاده نمی‌شود.",
+    helpTitle: "در نصب مشکل دارید؟",
+    helpDesc: "تیم پشتیبانی ما در واتساپ پاسخگوی شماست — در کمتر از ۱۰ دقیقه.",
+    helpCta: "تماس با پشتیبانی واتساپ",
+  },
+};
 
 export const ps: Dict = {
   meta: {
@@ -1184,6 +1209,7 @@ export const ps: Dict = {
     highlight: "ستاسو دکان په لوګو سره",
     subtitle:
       "درې بڼې: A4، حرارتي او کلاسیک — هر بل د شمسی نېټې، لوګو او بشپړو جزئیاتو سره. د هر پلور وروسته یوازې د چاپ تڼۍ.",
+    tablistLabel: "د بل فورمې ټاکل",
     tabA4: "A4 بل",
     tabThermal: "حرارتي رسید",
     tabClassic: "کلاسیک بل",
@@ -1539,6 +1565,30 @@ export const ps: Dict = {
     heroCta: "وړیا سیسټم ترلاسه کړئ",
     heroCtaSub: "وینډوز ۱۰ او ۱۱ · تل وړیا",
   },
+  guide: {
+    metaTitle: "د نصبولو لارښود — د SmartScreen پیغام حل",
+    badge: "د نصبولو لارښود",
+    title: "آسان حساب په څو دقیقو کې نصب کړئ",
+    subtitle:
+      "له ډاونلوډ وروسته، کیدای شي وینډوز آبي کړکۍ «Windows protected your PC» وښيي. اندیښنه مه کوی — دا پیغام د هر هغه پروګرام لپاره ښکاري چې معتبر ډیجیټل لاسلیک نلري. په لاندې ۴ ساده مرحلو نصب بشپړ کړئ.",
+    downloadStartedTitle: "ستاسو ډاونلوډ پیل شو",
+    downloadStartedDesc:
+      "د AsanHesab-1.0.0-Setup.zip فشارل شوی فایل په اتوماتيک ډول ډاونلوډیږي. که پیل نشو، لاندې تڼۍ کېکاږئ؛ بیا فایل Extract کړئ او لاندې مرحلې تعقیب کړئ.",
+    downloadAgain: "د نصبولو فایل مستقیم ډاونلوډ",
+    demoCaption: "د نصبولو مرحلې ژوندۍ ښودنه — بیا بیا تکراریږي",
+    stepsTitle: "مرحلې په لنډ ډول",
+    stepWord: "ګام",
+    step1Text: "لومړی ډاونلوډ شوی ZIP فایل Extract کړئ، بیا پر نصبولو فایل AsanHesab.exe دوه ځله کلیک وکړئ.",
+    step2Text: "په آبي کړکۍ کې یوازې پر More info کلیک وکړئ.",
+    step3Text: "اوس د Run anyway تڼۍ د بلې تڼۍ ترڅنګ ښکاري؛ پرې کلیک وکړئ.",
+    step4Text: "د نصبولو کړکۍ په بریالیتوب سره پرانیستل شوه؛ پر Next کلیک وکړئ.",
+    noteTitle: "ولې دا پیغام ښکاري؟",
+    noteDesc:
+      "د SmartScreen پیغام د هر هغه پروګرام لپاره راځي چې معتبر «ډیجیټل لاسلیک» نلري. آسان حساب یو بشپړ آفلاین پروګرام دی؛ ستاسو ټوله معلومات یوازې پر همدې کمپیوټر خوندي کیږي او هیڅ معلومات بهر نه لیږل کیږي.",
+    helpTitle: "پر نصبولو کې ستونزه لرئ؟",
+    helpDesc: "زموږ د ملاتړ ټیم په واټساپ کې ستاسو ته ځواب ویلي — په کمتر له ۱۰ دقیقو.",
+    helpCta: "د ملاتړ ټیم سره اړیکه",
+  },
 };
 
 export const en: Dict = {
@@ -1858,6 +1908,24 @@ export const en: Dict = {
     step3Badge: "Ready to sell",
     cta: "Start today — it's free",
     ctaReassurance: "No commitment · Upgrade anytime",
+    step1PanelFile: "AsanHesab-Setup.zip",
+    step1PanelSize: "85 MB",
+    step1PanelOs: "Windows 10 & 11",
+    step1PanelStatus: "Ready to download",
+    step2PanelTitle: "Business information",
+    step2PanelField1: "Shop / company name",
+    step2PanelValue1: "Ahmad Store",
+    step2PanelField2: "Address",
+    step2PanelValue2: "Kabul, Shahr-e Naw",
+    step2PanelProgress: "Installing 60%",
+    step3PanelSale: "Invoice #1",
+    step3PanelItem: "Mazar rice 5 kg",
+    step3PanelTotal: "Total",
+    step3PanelAmount: "1,200",
+    step3PanelReceipt: "Receipt printed",
+    ctaMeta: "85 MB · Windows 10 & 11 · Free forever",
+    downloadNonWindows:
+      "AsanHesab is for Windows 10 and 11 only. Get in touch with us on WhatsApp to receive the download link.",
   },
   audiences: {
     eyebrow: "Built for you",
@@ -1926,6 +1994,7 @@ export const en: Dict = {
     highlight: "your shop logo",
     subtitle:
       "Three templates — A4, thermal, and classic. Every receipt includes your logo, Jalali date, and full details. Print instantly after every sale.",
+    tablistLabel: "Invoice format",
     tabA4: "A4 invoice",
     tabThermal: "Thermal receipt",
     tabClassic: "Classic invoice",
@@ -2280,6 +2349,30 @@ export const en: Dict = {
     auditTrailTag: "Internal controls",
     heroCta: "Get the free app",
     heroCtaSub: "Windows 10 & 11 · Free forever",
+  },
+  guide: {
+    metaTitle: "Installation Guide — Fix the SmartScreen Warning | AsanHesab",
+    badge: "Installation guide",
+    title: "Install AsanHesab in just a few minutes",
+    subtitle:
+      "After downloading, Windows may show a blue \"Windows protected your PC\" window. Don't worry — this message appears for any app without a verified digital signature. Complete the installation with the 4 simple steps below.",
+    downloadStartedTitle: "Your download has started",
+    downloadStartedDesc:
+      "The compressed AsanHesab-1.0.0-Setup.zip file downloads automatically. If it doesn't start, press the button below; then extract the ZIP and follow the steps.",
+    downloadAgain: "Download the installer directly",
+    demoCaption: "Live walkthrough of the install steps — repeats automatically",
+    stepsTitle: "Steps at a glance",
+    stepWord: "Step",
+    step1Text: "Extract the downloaded ZIP file, then double-click the AsanHesab.exe installer.",
+    step2Text: "In the blue window, click More info only.",
+    step3Text: "Now the Run anyway button appears next to the other button; click it.",
+    step4Text: "The setup window opened successfully; click Next.",
+    noteTitle: "Why does this message appear?",
+    noteDesc:
+      "SmartScreen shows this warning for any program without a verified digital signature. AsanHesab is a fully offline application; all of your data is stored only on that computer and nothing is sent externally.",
+    helpTitle: "Trouble installing?",
+    helpDesc: "Our support team answers on WhatsApp — usually within 10 minutes.",
+    helpCta: "Contact WhatsApp support",
   },
 };
 

@@ -3,6 +3,7 @@
 import { Check, X, Star, Download, ShieldCheck, Zap, Lock, Gift, SlidersHorizontal } from "lucide-react";
 import { WhatsAppIcon } from "./whatsapp-icon";
 import { DownloadLink } from "./download-link";
+import { INSTALLER_URL } from "@/lib/installer";
 import { Reveal } from "./reveal";
 import { CountdownTimer } from "./countdown-timer";
 import { useLanguage, useT } from "./i18n/language-context";
@@ -95,7 +96,7 @@ export function Pricing() {
                 label: t.pricing.freeCta,
                 icon: <Download className="h-4 w-4" />,
                 variant: "ghost",
-                href: "https://github.com/nasirmoheb/AsanHesab/releases/download/v1.0.0-beta/AsanHesab-1.0.0-Setup.exe",
+                href: INSTALLER_URL,
               }}
             />
           </Reveal>

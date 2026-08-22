@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { ArrowUp, Download } from "lucide-react";
 import { DownloadLink } from "./download-link";
+import { INSTALLER_URL } from "@/lib/installer";
 import { useT } from "./i18n/language-context";
 
 /**
@@ -54,7 +55,7 @@ export function FloatingActions() {
               </p>
             </div>
             <DownloadLink
-              href="https://github.com/nasirmoheb/AsanHesab/releases/download/v1.0.0-beta/AsanHesab-1.0.0-Setup.exe"
+              href={INSTALLER_URL}
               className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-gradient-to-br from-blue-600 to-blue-700 px-4 py-2.5 text-sm font-bold text-white shadow-premium glow-blue shrink-0"
             >
               <Download className="h-4 w-4" />
