@@ -788,7 +788,7 @@ export const fa = {
       "بعد از دانلود، ممکن است ویندوز پنجره آبی‌رنگ «Windows protected your PC» نشان دهد. نگران نباشید — این پیام برای هر برنامه‌ای که امضای دیجیتال معتبر نداشته باشد نمایش داده می‌شود. با ۴ مرحله ساده زیر، نصب را کامل کنید.",
     downloadStartedTitle: "دانلود شما آغاز شد",
     downloadStartedDesc:
-      "فایل فشرده AsanHesab-1.0.0-Setup.zip به‌صورت خودکار دانلود می‌شود. اگر شروع نشد، دکمه زیر را بزنید؛ سپس فایل را Extract کرده و مراحل زیر را دنبال کنید.",
+      "فایل فشرده AsanHesab-1.1.0-Setup.zip به‌صورت خودکار دانلود می‌شود. اگر شروع نشد، دکمه زیر را بزنید؛ سپس فایل را Extract کرده و مراحل زیر را دنبال کنید.",
     downloadAgain: "دانلود مستقیم فایل نصبی",
     demoCaption: "نمایش زنده مراحل نصب — دوباره تکرار می‌شود",
     stepsTitle: "مراحل به‌صورت خلاصه",
@@ -1573,7 +1573,7 @@ export const ps: Dict = {
       "له ډاونلوډ وروسته، کیدای شي وینډوز آبي کړکۍ «Windows protected your PC» وښيي. اندیښنه مه کوی — دا پیغام د هر هغه پروګرام لپاره ښکاري چې معتبر ډیجیټل لاسلیک نلري. په لاندې ۴ ساده مرحلو نصب بشپړ کړئ.",
     downloadStartedTitle: "ستاسو ډاونلوډ پیل شو",
     downloadStartedDesc:
-      "د AsanHesab-1.0.0-Setup.zip فشارل شوی فایل په اتوماتيک ډول ډاونلوډیږي. که پیل نشو، لاندې تڼۍ کېکاږئ؛ بیا فایل Extract کړئ او لاندې مرحلې تعقیب کړئ.",
+      "د AsanHesab-1.1.0-Setup.zip فشارل شوی فایل په اتوماتيک ډول ډاونلوډیږي. که پیل نشو، لاندې تڼۍ کېکاږئ؛ بیا فایل Extract کړئ او لاندې مرحلې تعقیب کړئ.",
     downloadAgain: "د نصبولو فایل مستقیم ډاونلوډ",
     demoCaption: "د نصبولو مرحلې ژوندۍ ښودنه — بیا بیا تکراریږي",
     stepsTitle: "مرحلې په لنډ ډول",
@@ -2358,7 +2358,7 @@ export const en: Dict = {
       "After downloading, Windows may show a blue \"Windows protected your PC\" window. Don't worry — this message appears for any app without a verified digital signature. Complete the installation with the 4 simple steps below.",
     downloadStartedTitle: "Your download has started",
     downloadStartedDesc:
-      "The compressed AsanHesab-1.0.0-Setup.zip file downloads automatically. If it doesn't start, press the button below; then extract the ZIP and follow the steps.",
+      "The compressed AsanHesab-1.1.0-Setup.zip file downloads automatically. If it doesn't start, press the button below; then extract the ZIP and follow the steps.",
     downloadAgain: "Download the installer directly",
     demoCaption: "Live walkthrough of the install steps — repeats automatically",
     stepsTitle: "Steps at a glance",
